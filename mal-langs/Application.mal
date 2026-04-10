@@ -1,0 +1,315 @@
+#id: "tno-appLang"
+#version: "1.0.0"
+
+
+category Component {
+
+    asset Application
+    {     
+        | interactWithApplication @entrypoint //this should be used in parallel with the assumeIdentity entry point
+            -> outgoingAuthenticationRule.attemptCommunication
+    }
+
+    asset Module 
+    {
+        | connectToModule
+            -> vulnerabilities.abuse,
+            outgoingAuthenticationRule.attemptAuthenticatedCommunication
+    }
+
+    asset AuthenticatedAccessChannel
+    {
+        
+        & attemptAuthenticatedCommunication
+            -> attemptCommunication
+
+        | attemptCommunication
+            -> receiverModule.connectToModule,
+            outPort.connectToPort
+
+    }
+
+    asset Information
+    {
+        | read
+        user info: "The attacker is able to read the information. They may still be unable to extract it, which represents the adversary being able to read it themselves. This is the case if autonomous code is able to read it, but lack the required networking connections to transmit it back to the adversary."
+
+        | write
+        user info: "The attacker is able to write the information."
+            -> delete,
+            dependentIdentity.assumeIdentity
+
+        | delete
+        user info: "The attacker is able to delete the information."
+            -> deny
+
+        | deny
+        user info: "The attacker is able to deny the information."
+        
+        | extract
+        user info: "The attacker is able to extract the information. This means that they have a path available through which they can transfer the information back to a system that they control."
+
+    }
+
+    asset Data
+    {
+        | read
+        user info: "The attacker is able to read the data. They may still be unable to extract it, which represents the adversary being able to read it themselves. This is the case if autonomous code is able to read it, but lack the required networking connections to transmit it back to the adversary."
+            ->  information.read
+
+        | write
+        user info: "The attacker is able to write the data."
+            -> delete,
+            information.write
+
+        | delete
+        user info: "The attacker is able to delete the data."
+            -> deny,
+            information.delete
+
+        | deny
+        user info: "The attacker is able to deny the data."
+            -> information.deny
+    }
+
+    asset Privilege extends Information
+    {
+        | assumePrivilege
+            -> authenticationRule.attemptAuthenticatedCommunication
+    }
+
+    asset Identity extends Information
+    {
+        | assumeIdentity @entrypoint //this should be used, even if it is a non-authenticated identity
+            -> privileges.assumePrivilege,
+            rightIdentities.assumeIdentity
+
+    }
+
+    asset OperatingSystem
+    {
+
+    }
+
+    asset Port
+    {
+        | connectToPort @entrypoint
+            -> incomingAuthenticationRule.attemptAuthenticatedCommunication
+    }
+}
+
+category Vulnerability {
+    abstract asset ModuleVulnerability
+    {
+        | abuse
+             -> impact //TODO
+
+        | impact
+
+        & null
+    }
+    
+    asset CWEVulnerability extends ModuleVulnerability
+    {
+        # modifyMemoryImpactLimitation @suppress [Bernoulli(1)]
+            -> modifyMemory
+
+        # readMemoryImpactLimitation @suppress [Bernoulli(1)]
+            -> readMemory
+
+        # modifyFilesOrDirectoriesImpactLimitation @suppress [Bernoulli(1)]
+            -> modifyFilesOrDirectories
+
+        # readFilesOrDirectoriesImpactLimitation @suppress [Bernoulli(1)]
+            -> readFilesOrDirectories
+
+        # modifyModuleDataImpactLimitation @suppress [Bernoulli(1)]
+            -> modifyModuleData
+
+        # readModuleDataImpactLimitation @suppress [Bernoulli(1)]
+            -> readModuleData
+
+        # dosCrashOrRestartImpactLimitation @suppress [Bernoulli(1)]
+            -> dosCrashExitRestart
+
+        # dosAmplificationImpactLimitation @suppress [Bernoulli(1)]
+            -> dosAmplification
+
+        # dosInstabilityImpactLimitation @suppress [Bernoulli(1)]
+            -> dosInstability
+
+        # dosResourceCpuImpactLimitation @suppress [Bernoulli(1)]
+            -> dosResourceCpu
+
+        # dosResourceMemoryImpactLimitation @suppress [Bernoulli(1)]
+            -> dosResourceMemory
+
+        # dosResourceOtherImpactLimitation @suppress [Bernoulli(1)]
+            -> dosResourceOther
+
+        # executeUnauthorizedCodeImpactLimitation @suppress [Bernoulli(1)]
+            -> executeUnauthorizedCode
+
+        # gainPrivilegesOrAssumeIdentityImpactLimitation @suppress [Bernoulli(1)]
+            -> gainPrivilegesOrAssumeIdentity
+
+        # bypassProtectionMechanismImpactLimitation @suppress [Bernoulli(1)]
+            -> bypassProtectionMechanism
+
+        # hideActivitiesImpactLimitation @suppress [Bernoulli(1)]
+            -> hideActivities
+
+        # alterExecutionLogicImpactLimitation @suppress [Bernoulli(1)]
+            -> alterExecutionLogic
+
+        # qualityDegradationImpactLimitation @suppress [Bernoulli(1)]
+            -> qualityDegradation
+
+        # unexpectedStateImpactLimitation @suppress [Bernoulli(1)]
+            -> unexpectedState
+
+        # contextDependentImpactLimitation @suppress [Bernoulli(1)]
+            -> contextDependent
+
+        # increaseAnalyticalComplexityImpactLimitation @suppress [Bernoulli(1)]
+            -> increaseAnalyticalComplexity
+
+        # reduceMaintainabilityImpactLimitation @suppress [Bernoulli(1)]
+            -> reduceMaintainability
+
+        # reducePerformanceImpactLimitation @suppress [Bernoulli(1)]
+            -> reducePerformance
+
+        # reduceReliabilityImpactLimitation @suppress [Bernoulli(1)]
+            -> reduceReliability
+
+
+        | impact
+            +> modifyMemory,
+            readMemory,
+            modifyFilesOrDirectories,
+            readFilesOrDirectories,
+            modifyModuleData,
+            readModuleData,
+            dosCrashExitRestart,
+            dosAmplification,
+            dosInstability,
+            dosResourceCpu,
+            dosResourceMemory,
+            dosResourceOther,
+            executeUnauthorizedCode,
+            gainPrivilegesOrAssumeIdentity,
+            bypassProtectionMechanism,
+            hideActivities,
+            alterExecutionLogic,
+            qualityDegradation,
+            unexpectedState,
+            contextDependent,
+            increaseAnalyticalComplexity,
+            reduceMaintainability,
+            reducePerformance,
+            reduceReliability
+        
+        //The attack steps based on the defenses (the base case is no impact)
+        & modifyMemory
+            -> null
+
+        & readMemory
+            -> null
+
+        & modifyFilesOrDirectories
+            -> null
+
+        & readFilesOrDirectories
+            -> null
+
+        & modifyModuleData
+            -> null
+
+        & readModuleData
+            -> null
+
+        & dosCrashExitRestart
+            -> null
+
+        & dosAmplification
+            -> null
+
+        & dosInstability
+            -> null
+
+        & dosResourceCpu
+            -> null
+
+        & dosResourceMemory
+            -> null
+
+        & dosResourceOther
+            -> null
+
+        & executeUnauthorizedCode
+            -> module.readData.read,
+            module.writtenData.write,
+            module.controlledAuthenticationRules.attemptCommunication
+
+        & gainPrivilegesOrAssumeIdentity
+            -> module.identity.assumeIdentity
+
+        & bypassProtectionMechanism
+            -> module.outgoingAuthenticationRule.receiverModule.connectToModule
+
+        & hideActivities
+            -> null
+
+        & alterExecutionLogic
+            -> null
+
+        & qualityDegradation
+            -> null
+
+        & unexpectedState
+            -> null
+
+        & contextDependent
+            -> null
+
+        & increaseAnalyticalComplexity
+            -> null
+
+        & reduceMaintainability
+            -> null
+
+        & reducePerformance
+            -> null
+
+        & reduceReliability
+            -> null
+    }
+
+
+
+}
+
+
+
+associations {
+    Module [module]                         *<-- ModulePartOfApp -->1                                          [application] Application
+    Module [senderModule]             *<-- ModuleOutgoingCommunication -->*       [outgoingAuthenticationRule]AuthenticatedAccessChannel
+    Module [receiverModule]          *<-- ModuleIncomingCommunication -->*        [incomingAuthenticationRule]AuthenticatedAccessChannel
+    Module [module]                         *<-- ModuleVulnerability -->*                          [vulnerabilities] ModuleVulnerability
+    Identity [identity]                   *<-- IdentityHasPrivileges -->*                                         [privileges] Privilege
+    AuthenticatedAccessChannel [authenticationRule]     *<-- AuthenticatedAccessChannelRequiresPrivilege -->*      [privilege] Privilege
+    Module [module]                          *<-- ModuleHasIdentity -->*                                             [identity] Identity
+    Application [application]                *<-- AppRunsOnOperatingSystem -->*                        [operatingSystem] OperatingSystem
+    Module [dependentModule]                  *<-- ModuleDependsOnModule -->*                                        [dependency] Module
+    Application [app]                *<-- AppOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel    
+    Identity [leftIdentity]                        0..1<-- IdentitiesEquivalent -->*                          [rightIdentities] Identity
+    Module [readerModule]                               *<-- ModuleReadsData -->*                                        [readData] Data
+    Module [writerModule]                               *<-- ModuleWritesData -->*                                    [writtenData] Data
+    Data [data]                                *<-- DataContainsInformation -->*                               [information] Information
+    Data [containerData]                                *<-- DataContainsData -->*                                  [containedData] Data
+    Identity [dependentIdentity]                     *<-- IdentityDependsOnInformation -->*                    [information] Information
+    Module [controllerModule]    0..1<-- ModuleControlsAuthentication -->*    [controlledAuthenticationRules] AuthenticatedAccessChannel
+    Port [outPort]                  *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel
+    Port [inPort]                   *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule] AuthenticatedAccessChannel
+}

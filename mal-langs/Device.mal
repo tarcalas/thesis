@@ -1,0 +1,135 @@
+#id: "tno-devLang"
+#version: "1.0.0"
+
+category Component {
+
+    asset Hardware
+    {
+        | hardwarePhysicalAccess @entrypoint
+            -> operatingSystem.attemptCommunication
+        
+    }
+
+    asset Application
+    {
+        | connectToApp @entrypoint
+            -> appAuthenticationRule.attemptAuthenticatedCommunication
+    }
+
+    asset OperatingSystem extends Application
+    {
+        | attemptCommunication @entrypoint
+            -> outgoingAuthenticationRule.attemptAuthenticatedCommunication
+    }
+
+
+    asset AuthenticatedAccessChannel
+    {
+        !E noOutPort //this checks the existence of an outPort, if there is none, we can attempt authentication
+            <- outPort
+            -> connectToPortSatisfied
+
+
+        | connectToPortEntryPoint @entrypoint //this is an entrypoint from lower level modells, only needed if this connects to an out port
+            -> connectToPortSatisfied
+
+        | connectToPortSatisfied
+            -> attemptAuthenticatedCommunication
+
+        & attemptAuthenticatedCommunication
+            -> attemptCommunication
+        
+        | attemptCommunication
+            -> receiverApp.connectToApp,
+               outPort.connectToPort,
+               readableData.read,
+               writableData.write
+    }
+
+    asset Identity
+    {
+        | assumeIdentity @entrypoint //this should be used, even if it is a non-authenticated identity
+            -> privileges.assumePrivilege,
+            rightIdentities.assumeIdentity
+    }
+
+    asset Privilege
+    {
+        | assumePrivilege
+            -> authenticationRule.attemptAuthenticatedCommunication
+    }
+
+    asset Data
+    {
+        | read
+        user info: "The attacker is able to read the data. They may still be unable to extract it, which represents the adversary being able to read it themselves. This is the case if autonomous code is able to read it, but lack the required networking connections to transmit it back to the adversary."
+            ->  information.read
+
+        | write
+        user info: "The attacker is able to write the data."
+            -> delete,
+            information.write
+
+        | delete
+        user info: "The attacker is able to delete the data."
+            -> deny,
+            information.delete
+
+        | deny
+        user info: "The attacker is able to deny the data."
+            -> information.deny
+    }
+
+    asset Information
+    {
+        | read
+        user info: "The attacker is able to read the information. They may still be unable to extract it, which represents the adversary being able to read it themselves. This is the case if autonomous code is able to read it, but lack the required networking connections to transmit it back to the adversary."
+
+        | write
+        user info: "The attacker is able to write the information."
+            -> delete,
+            dependentIdentity.assumeIdentity
+
+        | delete
+        user info: "The attacker is able to delete the information."
+            -> deny
+
+        | deny
+        user info: "The attacker is able to deny the information."
+        
+        | extract
+        user info: "The attacker is able to extract the information. This means that they have a path available through which they can transfer the information back to a system that they control."
+
+    }
+
+    asset Port
+    {
+        | connectToPort @entrypoint
+            -> incomingAuthenticationRule.attemptAuthenticatedCommunication
+    }
+}
+
+associations {
+    Hardware [hardware]                           0..1<-- HardwareRunsOperatingSystem -->*             [operatingSystem] OperatingSystem
+    OperatingSystem [operatingSystem]             *<-- OperatingSystemRunsApplication -->*                     [application] Application
+    Application [senderApp]          *<-- AppOutgoingCommunication -->*           [outgoingAuthenticationRule]AuthenticatedAccessChannel
+    Application [receiverApp]        *<-- AppIncomingCommunication -->*           [incomingAuthenticationRule]AuthenticatedAccessChannel
+    Application [application]                *<-- AppDataAccess -->*                   [appAuthenticationRule]AuthenticatedAccessChannel
+    Identity [identity]                   *<-- IdentityHasPrivileges -->*                                         [privileges] Privilege
+    AuthenticatedAccessChannel [authenticationRule]     *<-- AuthenticatedAccessChannelRequiresPrivilege -->*      [privilege] Privilege
+    Identity [leftIdentity]                        0..1<-- IdentitiesEquivalent -->*                          [rightIdentities] Identity
+    Data [readableData]                    *<-- DataReadAccess -->*                   [readAuthenticationRule]AuthenticatedAccessChannel
+    Data [writableData]                    *<-- DataWriteAccess -->*                 [writeAuthenticationRule]AuthenticatedAccessChannel
+    Data [data]                                *<-- DataContainsInformation -->*                               [information] Information
+    Data [containerData]                                *<-- DataContainsData -->*                                  [containedData] Data
+    Identity [dependentIdentity]                     *<-- IdentityDependsOnInformation -->*                    [information] Information
+    Application [controllerApp]    0..1<-- ModuleControlsAuthentication -->*  [controlledAuthenticationRules] AuthenticatedAccessChannel
+    Port [outPort]                   *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule]AuthenticatedAccessChannel
+    Port [inPort]                    *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule]AuthenticatedAccessChannel
+ //   Capability [readCapability]                 *<-- ReadAccessCapability -->*                                           [readData] Data
+ //   Capability [writeCapability]                 *<-- WriteAccessCapability -->*                                        [writeData] Data
+ //maybe?   Capability [executeCapability]                 *<-- ExecuteAccessCapability -->*                    [executeApplication] Application
+ //   Capability [connectCapability]               *<-- ConnectAccessCapability -->*         [connectedChannel] AuthenticatedAccessChannel
+ // Capability [capability]                     *<-- IdentityObtainedCapability -->*                               [identities] Identity
+ // Capability [capability]                      *<-- PrivilegeObtainedCapability -->*                            [privileges] Privilege
+}

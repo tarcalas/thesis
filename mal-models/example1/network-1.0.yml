@@ -1,0 +1,64 @@
+assets:
+  0:
+    associated_assets:
+      ports:
+        1: Dev1+80
+    extras:
+      position:
+        x: -290.0
+        y: -346.0
+    name: Device1
+    type: Device
+  1:
+    associated_assets:
+      device:
+        0: Device1
+      outgoingAuthenticationRule:
+        3: Dev1+80-Dev2+80
+    extras:
+      position:
+        x: -486.0
+        y: -503.0
+    name: Dev1+80
+    type: Port
+  2:
+    associated_assets:
+      device:
+        4: Device2
+      incomingAuthenticationRule:
+        3: Dev1+80-Dev2+80
+    extras:
+      position:
+        x: -829.0
+        y: -154.0
+    name: Dev2+80
+    type: Port
+  3:
+    associated_assets:
+      inPort:
+        2: Dev2+80
+      outPort:
+        1: Dev1+80
+    extras:
+      position:
+        x: -935.0
+        y: -443.0
+    name: Dev1+80-Dev2+80
+    type: AuthenticatedAccessChannel
+  4:
+    associated_assets:
+      ports:
+        2: Dev2+80
+    extras:
+      position:
+        x: -747.0
+        y: 40.0
+    name: Device2
+    type: Device
+metadata:
+  MAL-Toolbox Version: 2.8.0
+  info: Created by the mal-toolbox model python module.
+  langID: tno-netLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: network-1.0

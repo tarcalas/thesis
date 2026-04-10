@@ -1,0 +1,169 @@
+assets:
+  0:
+    associated_assets:
+      operatingSystem:
+        1: OS
+      outgoingAuthenticationRule:
+        2: App2-CoreModule
+    extras:
+      position:
+        x: -455.0
+        y: -461.0
+    name: App2
+    type: Application
+  1:
+    associated_assets:
+      application:
+        0: App2
+    extras:
+      position:
+        x: -445.0
+        y: -633.0
+    name: OS
+    type: OperatingSystem
+  2:
+    associated_assets:
+      app:
+        0: App2
+      privilege:
+        3: NoPriv
+      receiverModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -840.0
+        y: -444.0
+    name: App2-CoreModule
+    type: AuthenticatedAccessChannel
+  3:
+    associated_assets:
+      authenticationRule:
+        2: App2-CoreModule
+        10: CoreModule-80
+        12: CoreModule-420
+      identity:
+        4: NoAuth
+        6: PowerId
+    extras:
+      position:
+        x: -726.0
+        y: 708.0
+    name: NoPriv
+    type: Privilege
+  4:
+    associated_assets:
+      privileges:
+        3: NoPriv
+    extras:
+      position:
+        x: -1027.5
+        y: 1000.5
+    name: NoAuth
+    type: Identity
+  5:
+    associated_assets:
+      identity:
+        6: PowerId
+      incomingAuthenticationRule:
+        2: App2-CoreModule
+      outgoingAuthenticationRule:
+        10: CoreModule-80
+        12: CoreModule-420
+      vulnerabilities:
+        8: PrivEsc
+    extras:
+      position:
+        x: -1219.5
+        y: -249.0
+    name: CoreModule
+    type: Module
+  6:
+    associated_assets:
+      module:
+        5: CoreModule
+      privileges:
+        3: NoPriv
+        7: PowerPriv
+    extras:
+      position:
+        x: -2421.0
+        y: 157.5
+    name: PowerId
+    type: Identity
+  7:
+    associated_assets:
+      identity:
+        6: PowerId
+    extras:
+      position:
+        x: -2827.5
+        y: -139.5
+    name: PowerPriv
+    type: Privilege
+  8:
+    associated_assets:
+      module:
+        5: CoreModule
+    defenses:
+      gainPrivilegesOrAssumeIdentityImpactLimitation: 0.0
+    extras:
+      position:
+        x: -1401.0
+        y: -423.0
+    name: PrivEsc
+    type: CWEVulnerability
+  9:
+    associated_assets:
+      outgoingAuthenticationRule:
+        10: CoreModule-80
+    extras:
+      position:
+        x: -958.5
+        y: -132.0
+    name: '80'
+    type: Port
+  10:
+    associated_assets:
+      outPort:
+        9: '80'
+      privilege:
+        3: NoPriv
+      senderModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -1129.5
+        y: 31.5
+    name: CoreModule-80
+    type: AuthenticatedAccessChannel
+  11:
+    associated_assets:
+      outgoingAuthenticationRule:
+        12: CoreModule-420
+    extras:
+      position:
+        x: -1576.5
+        y: 264.0
+    name: '420'
+    type: Port
+  12:
+    associated_assets:
+      outPort:
+        11: '420'
+      privilege:
+        3: NoPriv
+      senderModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -1570.5
+        y: 124.5
+    name: CoreModule-420
+    type: AuthenticatedAccessChannel
+metadata:
+  MAL-Toolbox Version: 2.8.0
+  info: Created by the mal-toolbox model python module.
+  langID: tno-appLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: app2-1.0

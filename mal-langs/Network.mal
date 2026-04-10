@@ -1,0 +1,51 @@
+#id: "tno-netLang"
+#version: "1.0.0"
+
+category Component{
+    asset Device {
+        | physicalAccess @entrypoint
+
+        | attemptNetworkCommunication
+    }
+
+    asset AuthenticatedAccessChannel {
+        | attemptAuthenticatedCommunication @entrypoint
+            -> attemptCommunication
+
+        | attemptCommunication
+            -> inPort.connectToPort
+    }
+
+    asset Port {
+        | connectToPort @entrypoint
+            -> outgoingAuthenticationRule.attemptAuthenticatedCommunication,
+            connectToDevice
+        
+        E isInPort
+            <- incomingAuthenticationRule
+            -> connectToDevice
+        
+        & connectToDevice
+            -> device.attemptNetworkCommunication
+    }
+
+    asset Privilege {
+
+    }
+
+    asset Identity {
+    }
+
+}
+
+associations {
+    Device [senderDevice]         *<-- DeviceOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel
+    Device [receiverDevice]       *<-- DeviceIncomingCommunication -->*          [incomingAuthenticationRule] AuthenticatedAccessChannel
+    Identity [identity]                   *<-- IdentityHasPrivileges -->*                                         [privileges] Privilege
+    AuthenticatedAccessChannel [authenticationRule]     *<-- AuthenticatedAccessChannelRequiresPrivilege -->*      [privilege] Privilege
+    Identity [leftIdentity]                        0..1<-- IdentitiesEquivalent -->*                          [rightIdentities] Identity
+    Device [controllerDevice]    0..1<-- DeviceControlsAuthentication -->*    [controlledAuthenticationRules] AuthenticatedAccessChannel
+    Port [outPort]                  *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel
+    Port [inPort]                   *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule] AuthenticatedAccessChannel
+    Device [device]                                        1<--DeviceHasPorts-->*                                           [ports] Port
+}

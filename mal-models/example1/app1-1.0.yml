@@ -1,0 +1,99 @@
+assets:
+  0:
+    associated_assets:
+      operatingSystem:
+        1: OS
+      outgoingAuthenticationRule:
+        2: App1-CoreModule
+    extras:
+      position:
+        x: -458.0
+        y: -462.0
+    name: App1
+    type: Application
+  1:
+    associated_assets:
+      application:
+        0: App1
+    extras:
+      position:
+        x: -445.0
+        y: -633.0
+    name: OS
+    type: OperatingSystem
+  2:
+    associated_assets:
+      app:
+        0: App1
+      privilege:
+        3: Root
+      receiverModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -860.0
+        y: -414.0
+    name: App1-CoreModule
+    type: AuthenticatedAccessChannel
+  3:
+    associated_assets:
+      authenticationRule:
+        2: App1-CoreModule
+      identity:
+        4: Admin
+    extras:
+      position:
+        x: -1079.0
+        y: -611.0
+    name: Root
+    type: Privilege
+  4:
+    associated_assets:
+      privileges:
+        3: Root
+    extras:
+      position:
+        x: -1497.0
+        y: -715.0
+    name: Admin
+    type: Identity
+  5:
+    associated_assets:
+      incomingAuthenticationRule:
+        2: App1-CoreModule
+        7: 420-CoreModule
+    extras:
+      position:
+        x: -1019.0
+        y: -253.0
+    name: CoreModule
+    type: Module
+  6:
+    associated_assets:
+      incomingAuthenticationRule:
+        7: 420-CoreModule
+    extras:
+      position:
+        x: -781.0
+        y: 128.0
+    name: '420'
+    type: Port
+  7:
+    associated_assets:
+      inPort:
+        6: '420'
+      receiverModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -942.0
+        y: -66.0
+    name: 420-CoreModule
+    type: AuthenticatedAccessChannel
+metadata:
+  MAL-Toolbox Version: 2.8.0
+  info: Created by the mal-toolbox model python module.
+  langID: tno-appLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: app1-1.0

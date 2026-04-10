@@ -1,0 +1,117 @@
+assets:
+  0:
+    associated_assets:
+      operatingSystem:
+        1: OS
+      outgoingAuthenticationRule:
+        2: App3-CoreModule
+    extras:
+      position:
+        x: -458.0
+        y: -462.0
+    name: App3
+    type: Application
+  1:
+    associated_assets:
+      application:
+        0: App3
+    extras:
+      position:
+        x: -312.0
+        y: -164.0
+    name: OS
+    type: OperatingSystem
+  2:
+    associated_assets:
+      app:
+        0: App3
+      privilege:
+        3: Admin
+      receiverModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -860.0
+        y: -414.0
+    name: App3-CoreModule
+    type: AuthenticatedAccessChannel
+  3:
+    associated_assets:
+      authenticationRule:
+        2: App3-CoreModule
+      identity:
+        4: Admin
+    extras:
+      position:
+        x: -1106.0
+        y: -593.0
+    name: Admin
+    type: Privilege
+  4:
+    associated_assets:
+      module:
+        5: CoreModule
+      privileges:
+        3: Admin
+    extras:
+      position:
+        x: -1497.0
+        y: -715.0
+    name: Admin
+    type: Identity
+  5:
+    associated_assets:
+      identity:
+        4: Admin
+      incomingAuthenticationRule:
+        2: App3-CoreModule
+        7: 80-CoreModule
+      vulnerabilities:
+        8: PrivEsc
+    extras:
+      position:
+        x: -1019.0
+        y: -253.0
+    name: CoreModule
+    type: Module
+  6:
+    associated_assets:
+      incomingAuthenticationRule:
+        7: 80-CoreModule
+    extras:
+      position:
+        x: -759.0
+        y: 154.0
+    name: '80'
+    type: Port
+  7:
+    associated_assets:
+      inPort:
+        6: '80'
+      receiverModule:
+        5: CoreModule
+    extras:
+      position:
+        x: -974.0
+        y: -41.0
+    name: 80-CoreModule
+    type: AuthenticatedAccessChannel
+  8:
+    associated_assets:
+      module:
+        5: CoreModule
+    defenses:
+      gainPrivilegesOrAssumeIdentityImpactLimitation: 0.0
+    extras:
+      position:
+        x: -1457.0
+        y: -294.0
+    name: PrivEsc
+    type: CWEVulnerability
+metadata:
+  MAL-Toolbox Version: 2.8.0
+  info: Created by the mal-toolbox model python module.
+  langID: tno-appLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: app3-1.0

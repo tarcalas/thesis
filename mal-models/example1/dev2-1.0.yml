@@ -1,0 +1,171 @@
+assets:
+  0:
+    associated_assets:
+      operatingSystem:
+        2: OS
+    extras:
+      position:
+        x: -564.0
+        y: -162.0
+    name: Device2
+    type: Hardware
+  1:
+    associated_assets:
+      appAuthenticationRule:
+        5: App3-TargetData
+      incomingAuthenticationRule:
+        7: 80-App3
+      operatingSystem:
+        2: OS
+    extras:
+      position:
+        x: -1041.0
+        y: -314.0
+    name: App3
+    type: Application
+  2:
+    associated_assets:
+      appAuthenticationRule:
+        10: OS-TargetData
+      application:
+        1: App3
+      hardware:
+        0: Device2
+    extras:
+      position:
+        x: -568.0
+        y: -374.0
+    name: OS
+    type: OperatingSystem
+  3:
+    associated_assets:
+      information:
+        4: TargetInformation
+      readAuthenticationRule:
+        5: App3-TargetData
+        10: OS-TargetData
+      writeAuthenticationRule:
+        10: OS-TargetData
+    extras:
+      position:
+        x: -1369.5
+        y: -580.5
+    name: TargetData
+    type: Data
+  4:
+    associated_assets:
+      data:
+        3: TargetData
+      dependentIdentity:
+        11: Admin
+    extras:
+      position:
+        x: -1710.0
+        y: -435.0
+    name: TargetInformation
+    type: Information
+  5:
+    associated_assets:
+      application:
+        1: App3
+      privilege:
+        14: App3+Admin
+      readableData:
+        3: TargetData
+    extras:
+      position:
+        x: -1174.0
+        y: -441.0
+    name: App3-TargetData
+    type: AuthenticatedAccessChannel
+  6:
+    associated_assets:
+      incomingAuthenticationRule:
+        7: 80-App3
+    extras:
+      position:
+        x: -1213.0
+        y: -20.0
+    name: '80'
+    type: Port
+  7:
+    associated_assets:
+      inPort:
+        6: '80'
+      receiverApp:
+        1: App3
+    extras:
+      position:
+        x: -1169.0
+        y: -173.0
+    name: 80-App3
+    type: AuthenticatedAccessChannel
+  10:
+    associated_assets:
+      application:
+        2: OS
+      privilege:
+        12: Root
+      readableData:
+        3: TargetData
+      writableData:
+        3: TargetData
+    extras:
+      position:
+        x: -997.0
+        y: -635.0
+    name: OS-TargetData
+    type: AuthenticatedAccessChannel
+  11:
+    associated_assets:
+      information:
+        4: TargetInformation
+      privileges:
+        12: Root
+    extras:
+      position:
+        x: -1522.0
+        y: -721.0
+    name: Admin
+    type: Identity
+  12:
+    associated_assets:
+      authenticationRule:
+        10: OS-TargetData
+      identity:
+        11: Admin
+    extras:
+      position:
+        x: -1215.0
+        y: -743.0
+    name: Root
+    type: Privilege
+  13:
+    associated_assets:
+      privileges:
+        14: App3+Admin
+    extras:
+      position:
+        x: -1585.5
+        y: -171.0
+    name: App3+Admin
+    type: Identity
+  14:
+    associated_assets:
+      authenticationRule:
+        5: App3-TargetData
+      identity:
+        13: App3+Admin
+    extras:
+      position:
+        x: -1488.0
+        y: -322.5
+    name: App3+Admin
+    type: Privilege
+metadata:
+  MAL-Toolbox Version: 2.8.0
+  info: Created by the mal-toolbox model python module.
+  langID: tno-devLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: dev2-1.0
