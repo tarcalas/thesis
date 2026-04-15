@@ -1,0 +1,17 @@
+[project]
+name = "thesis"
+version = "0.1.0"
+description = "Thesis tooling and MAL CLI"
+authors = [{ name = "B. Tarcali" }]
+readme = "README.md"
+requires-python = ">=3.12"
+
+dependencies = [
+    "pyyaml",
+    "click",
+    "mal-toolbox>=2.8.1",
+    "mal-simulator>=2.4.0",
+]
+
+[project.scripts]
+thesis = "source.createCLI:main"

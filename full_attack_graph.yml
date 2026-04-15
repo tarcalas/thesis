@@ -1,0 +1,615 @@
+attack_steps:
+  420-App1:attemptAuthenticatedCommunication:
+    asset: 420-App1
+    children:
+      51: 420-App1:attemptCommunication
+    id: 50
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      46: 420:connectToPort
+      49: 420-App1:connectToPortSatisfied
+    ttc: null
+    type: and
+  420-App1:attemptCommunication:
+    asset: 420-App1
+    children:
+      4: App1:connectToApp
+    id: 51
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      50: 420-App1:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  420-App1:connectToPortEntryPoint:
+    asset: 420-App1
+    children:
+      49: 420-App1:connectToPortSatisfied
+    id: 48
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
+    name: connectToPortEntryPoint
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  420-App1:connectToPortSatisfied:
+    asset: 420-App1
+    children:
+      50: 420-App1:attemptAuthenticatedCommunication
+    id: 49
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
+    name: connectToPortSatisfied
+    parents:
+      47: 420-App1:noOutPort
+      48: 420-App1:connectToPortEntryPoint
+    ttc: null
+    type: or
+  420-App1:noOutPort:
+    asset: 420-App1
+    children:
+      49: 420-App1:connectToPortSatisfied
+    existence_status: false
+    id: 47
+    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
+    name: noOutPort
+    parents: {}
+    ttc: null
+    type: notExist
+  420:connectToPort:
+    asset: '420'
+    children:
+      50: 420-App1:attemptAuthenticatedCommunication
+    id: 46
+    lang_graph_attack_step: Port:connectToPort
+    name: connectToPort
+    parents:
+      23: App2-420:attemptCommunication
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  80:connectToPort:
+    asset: '80'
+    children: {}
+    id: 40
+    lang_graph_attack_step: Port:connectToPort
+    name: connectToPort
+    parents:
+      45: App2-80:attemptCommunication
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  Admin:assumeIdentity:
+    asset: Admin
+    children:
+      7: Root:assumePrivilege
+      8: NoPriv:assumePrivilege
+    id: 6
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      29: IdentityInfo:write
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  App1-IdentityData:attemptAuthenticatedCommunication:
+    asset: App1-IdentityData
+    children:
+      39: App1-IdentityData:attemptCommunication
+    id: 38
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      4: App1:connectToApp
+      34: App2:PowerPriv:assumePrivilege
+      37: App1-IdentityData:connectToPortSatisfied
+    ttc: null
+    type: and
+  App1-IdentityData:attemptCommunication:
+    asset: App1-IdentityData
+    children:
+      24: IdentityData:read
+      25: IdentityData:write
+    id: 39
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      38: App1-IdentityData:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  App1-IdentityData:connectToPortEntryPoint:
+    asset: App1-IdentityData
+    children:
+      37: App1-IdentityData:connectToPortSatisfied
+    id: 36
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
+    name: connectToPortEntryPoint
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  App1-IdentityData:connectToPortSatisfied:
+    asset: App1-IdentityData
+    children:
+      38: App1-IdentityData:attemptAuthenticatedCommunication
+    id: 37
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
+    name: connectToPortSatisfied
+    parents:
+      35: App1-IdentityData:noOutPort
+      36: App1-IdentityData:connectToPortEntryPoint
+    ttc: null
+    type: or
+  App1-IdentityData:noOutPort:
+    asset: App1-IdentityData
+    children:
+      37: App1-IdentityData:connectToPortSatisfied
+    existence_status: false
+    id: 35
+    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
+    name: noOutPort
+    parents: {}
+    ttc: null
+    type: notExist
+  App1:connectToApp:
+    asset: App1
+    children:
+      38: App1-IdentityData:attemptAuthenticatedCommunication
+    id: 4
+    lang_graph_attack_step: Application:connectToApp
+    name: connectToApp
+    parents:
+      13: OS-App1:attemptCommunication
+      51: 420-App1:attemptCommunication
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  App2-420:attemptAuthenticatedCommunication:
+    asset: App2-420
+    children:
+      23: App2-420:attemptCommunication
+    id: 22
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      21: App2-420:connectToPortSatisfied
+    ttc: null
+    type: and
+  App2-420:attemptCommunication:
+    asset: App2-420
+    children:
+      46: 420:connectToPort
+    id: 23
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      22: App2-420:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  App2-420:connectToPortEntryPoint:
+    asset: App2-420
+    children:
+      21: App2-420:connectToPortSatisfied
+    id: 20
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
+    name: connectToPortEntryPoint
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  App2-420:connectToPortSatisfied:
+    asset: App2-420
+    children:
+      22: App2-420:attemptAuthenticatedCommunication
+    id: 21
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
+    name: connectToPortSatisfied
+    parents:
+      19: App2-420:noOutPort
+      20: App2-420:connectToPortEntryPoint
+    ttc: null
+    type: or
+  App2-420:noOutPort:
+    asset: App2-420
+    children:
+      21: App2-420:connectToPortSatisfied
+    existence_status: true
+    id: 19
+    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
+    name: noOutPort
+    parents: {}
+    ttc: null
+    type: notExist
+  App2-80:attemptAuthenticatedCommunication:
+    asset: App2-80
+    children:
+      45: App2-80:attemptCommunication
+    id: 44
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      7: Root:assumePrivilege
+      43: App2-80:connectToPortSatisfied
+    ttc: null
+    type: and
+  App2-80:attemptCommunication:
+    asset: App2-80
+    children:
+      40: 80:connectToPort
+    id: 45
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      44: App2-80:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  App2-80:connectToPortEntryPoint:
+    asset: App2-80
+    children:
+      43: App2-80:connectToPortSatisfied
+    id: 42
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
+    name: connectToPortEntryPoint
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  App2-80:connectToPortSatisfied:
+    asset: App2-80
+    children:
+      44: App2-80:attemptAuthenticatedCommunication
+    id: 43
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
+    name: connectToPortSatisfied
+    parents:
+      41: App2-80:noOutPort
+      42: App2-80:connectToPortEntryPoint
+    ttc: null
+    type: or
+  App2-80:noOutPort:
+    asset: App2-80
+    children:
+      43: App2-80:connectToPortSatisfied
+    existence_status: true
+    id: 41
+    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
+    name: noOutPort
+    parents: {}
+    ttc: null
+    type: notExist
+  App2:PoweId:assumeIdentity:
+    asset: App2:PoweId
+    children:
+      34: App2:PowerPriv:assumePrivilege
+    id: 33
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  App2:PowerPriv:assumePrivilege:
+    asset: App2:PowerPriv
+    children:
+      38: App1-IdentityData:attemptAuthenticatedCommunication
+    id: 34
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      33: App2:PoweId:assumeIdentity
+    ttc: null
+    type: or
+  App2:connectToApp:
+    asset: App2
+    children: {}
+    id: 1
+    lang_graph_attack_step: Application:connectToApp
+    name: connectToApp
+    parents:
+      18: OS-App2:attemptCommunication
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  Dev1:hardwarePhysicalAccess:
+    asset: Dev1
+    children:
+      2: OS:attemptCommunication
+    id: 0
+    lang_graph_attack_step: Hardware:hardwarePhysicalAccess
+    name: hardwarePhysicalAccess
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  IdentityData:delete:
+    asset: IdentityData
+    children:
+      27: IdentityData:deny
+      30: IdentityInfo:delete
+    id: 26
+    lang_graph_attack_step: Data:delete
+    name: delete
+    parents:
+      25: IdentityData:write
+    ttc: null
+    type: or
+  IdentityData:deny:
+    asset: IdentityData
+    children:
+      31: IdentityInfo:deny
+    id: 27
+    lang_graph_attack_step: Data:deny
+    name: deny
+    parents:
+      26: IdentityData:delete
+    ttc: null
+    type: or
+  IdentityData:read:
+    asset: IdentityData
+    children:
+      28: IdentityInfo:read
+    id: 24
+    lang_graph_attack_step: Data:read
+    name: read
+    parents:
+      39: App1-IdentityData:attemptCommunication
+    ttc: null
+    type: or
+  IdentityData:write:
+    asset: IdentityData
+    children:
+      26: IdentityData:delete
+      29: IdentityInfo:write
+    id: 25
+    lang_graph_attack_step: Data:write
+    name: write
+    parents:
+      39: App1-IdentityData:attemptCommunication
+    ttc: null
+    type: or
+  IdentityInfo:delete:
+    asset: IdentityInfo
+    children:
+      31: IdentityInfo:deny
+    id: 30
+    lang_graph_attack_step: Information:delete
+    name: delete
+    parents:
+      26: IdentityData:delete
+      29: IdentityInfo:write
+    ttc: null
+    type: or
+  IdentityInfo:deny:
+    asset: IdentityInfo
+    children: {}
+    id: 31
+    lang_graph_attack_step: Information:deny
+    name: deny
+    parents:
+      27: IdentityData:deny
+      30: IdentityInfo:delete
+    ttc: null
+    type: or
+  IdentityInfo:extract:
+    asset: IdentityInfo
+    children: {}
+    id: 32
+    lang_graph_attack_step: Information:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  IdentityInfo:read:
+    asset: IdentityInfo
+    children: {}
+    id: 28
+    lang_graph_attack_step: Information:read
+    name: read
+    parents:
+      24: IdentityData:read
+    ttc: null
+    type: or
+  IdentityInfo:write:
+    asset: IdentityInfo
+    children:
+      5: NoAuth:assumeIdentity
+      6: Admin:assumeIdentity
+      30: IdentityInfo:delete
+    id: 29
+    lang_graph_attack_step: Information:write
+    name: write
+    parents:
+      25: IdentityData:write
+    ttc: null
+    type: or
+  NoAuth:assumeIdentity:
+    asset: NoAuth
+    children:
+      8: NoPriv:assumePrivilege
+    id: 5
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      29: IdentityInfo:write
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NoPriv:assumePrivilege:
+    asset: NoPriv
+    children:
+      17: OS-App2:attemptAuthenticatedCommunication
+    id: 8
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      5: NoAuth:assumeIdentity
+      6: Admin:assumeIdentity
+    ttc: null
+    type: or
+  OS-App1:attemptAuthenticatedCommunication:
+    asset: OS-App1
+    children:
+      13: OS-App1:attemptCommunication
+    id: 12
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      2: OS:attemptCommunication
+      7: Root:assumePrivilege
+      11: OS-App1:connectToPortSatisfied
+    ttc: null
+    type: and
+  OS-App1:attemptCommunication:
+    asset: OS-App1
+    children:
+      4: App1:connectToApp
+    id: 13
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      12: OS-App1:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  OS-App1:connectToPortEntryPoint:
+    asset: OS-App1
+    children:
+      11: OS-App1:connectToPortSatisfied
+    id: 10
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
+    name: connectToPortEntryPoint
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  OS-App1:connectToPortSatisfied:
+    asset: OS-App1
+    children:
+      12: OS-App1:attemptAuthenticatedCommunication
+    id: 11
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
+    name: connectToPortSatisfied
+    parents:
+      9: OS-App1:noOutPort
+      10: OS-App1:connectToPortEntryPoint
+    ttc: null
+    type: or
+  OS-App1:noOutPort:
+    asset: OS-App1
+    children:
+      11: OS-App1:connectToPortSatisfied
+    existence_status: false
+    id: 9
+    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
+    name: noOutPort
+    parents: {}
+    ttc: null
+    type: notExist
+  OS-App2:attemptAuthenticatedCommunication:
+    asset: OS-App2
+    children:
+      18: OS-App2:attemptCommunication
+    id: 17
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      2: OS:attemptCommunication
+      8: NoPriv:assumePrivilege
+      16: OS-App2:connectToPortSatisfied
+    ttc: null
+    type: and
+  OS-App2:attemptCommunication:
+    asset: OS-App2
+    children:
+      1: App2:connectToApp
+    id: 18
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      17: OS-App2:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  OS-App2:connectToPortEntryPoint:
+    asset: OS-App2
+    children:
+      16: OS-App2:connectToPortSatisfied
+    id: 15
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
+    name: connectToPortEntryPoint
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  OS-App2:connectToPortSatisfied:
+    asset: OS-App2
+    children:
+      17: OS-App2:attemptAuthenticatedCommunication
+    id: 16
+    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
+    name: connectToPortSatisfied
+    parents:
+      14: OS-App2:noOutPort
+      15: OS-App2:connectToPortEntryPoint
+    ttc: null
+    type: or
+  OS-App2:noOutPort:
+    asset: OS-App2
+    children:
+      16: OS-App2:connectToPortSatisfied
+    existence_status: false
+    id: 14
+    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
+    name: noOutPort
+    parents: {}
+    ttc: null
+    type: notExist
+  OS:attemptCommunication:
+    asset: OS
+    children:
+      12: OS-App1:attemptAuthenticatedCommunication
+      17: OS-App2:attemptAuthenticatedCommunication
+    id: 2
+    lang_graph_attack_step: OperatingSystem:attemptCommunication
+    name: attemptCommunication
+    parents:
+      0: Dev1:hardwarePhysicalAccess
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  OS:connectToApp:
+    asset: OS
+    children: {}
+    id: 3
+    lang_graph_attack_step: OperatingSystem:connectToApp
+    name: connectToApp
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  Root:assumePrivilege:
+    asset: Root
+    children:
+      12: OS-App1:attemptAuthenticatedCommunication
+      44: App2-80:attemptAuthenticatedCommunication
+    id: 7
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      6: Admin:assumeIdentity
+    ttc: null
+    type: or

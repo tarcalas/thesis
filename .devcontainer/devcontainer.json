@@ -1,0 +1,28 @@
+{
+    "name": "thesis",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "dev",
+    "workspaceFolder": "/workspaces/thesis",
+    "features": {},
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": ".venv/bin/python",
+                "python.terminal.activateEnvironment": true
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "tamasfe.even-better-toml",
+                "redhat.vscode-yaml"
+            ],
+            "mounts": [
+                "source=${env:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,readonly"
+            ]
+        }
+    },
+    "shutdownAction": "none",
+    "overrideCommand": false,
+    "postCreateCommand": "bash -lc \"uv python install && uv venv && uv pip install -e .\"",
+    "remoteUser": "vscode"
+}
