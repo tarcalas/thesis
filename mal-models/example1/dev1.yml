@@ -5,35 +5,35 @@ assets:
         2: OS
     extras:
       position:
-        x: -325.0
-        y: -321.0
-    name: Dev1
+        x: -328.5
+        y: -256.5
+    name: dev1
     type: Hardware
   1:
     associated_assets:
       incomingAuthenticationRule:
-        10: OS-App2
+        10: OS-app2
       operatingSystem:
         2: OS
       outgoingAuthenticationRule:
-        11: App2-420
-        18: App2-80
+        11: app2-420
+        18: app2-80
     extras:
       position:
         x: -667.0
         y: -798.0
-    name: App2
+    name: app2
     type: Application
   2:
     associated_assets:
       application:
-        1: App2
-        3: App1
+        1: app2
+        3: app1
       hardware:
-        0: Dev1
+        0: dev1
       outgoingAuthenticationRule:
-        8: OS-App1
-        10: OS-App2
+        8: OS-app1
+        10: OS-app2
     extras:
       position:
         x: -643.5
@@ -43,17 +43,17 @@ assets:
   3:
     associated_assets:
       appAuthenticationRule:
-        16: App1-IdentityData
+        16: app1-IdentityData
       incomingAuthenticationRule:
-        8: OS-App1
-        20: 420-App1
+        8: OS-app1
+        20: 420-app1
       operatingSystem:
         2: OS
     extras:
       position:
-        x: -1075.5
-        y: -696.0
-    name: App1
+        x: -997.5
+        y: -699.0
+    name: app1
     type: Application
   4:
     associated_assets:
@@ -83,8 +83,8 @@ assets:
   6:
     associated_assets:
       authenticationRule:
-        8: OS-App1
-        18: App2-80
+        8: OS-app1
+        18: app2-80
       identity:
         5: Admin
     extras:
@@ -96,7 +96,7 @@ assets:
   7:
     associated_assets:
       authenticationRule:
-        10: OS-App2
+        10: OS-app2
       identity:
         4: NoAuth
         5: Admin
@@ -111,49 +111,49 @@ assets:
       privilege:
         6: Root
       receiverApp:
-        3: App1
+        3: app1
       senderApp:
         2: OS
     extras:
       position:
         x: -961.0
         y: -496.0
-    name: OS-App1
+    name: OS-app1
     type: AuthenticatedAccessChannel
   10:
     associated_assets:
       privilege:
         7: NoPriv
       receiverApp:
-        1: App2
+        1: app2
       senderApp:
         2: OS
     extras:
       position:
         x: -267.0
         y: -694.0
-    name: OS-App2
+    name: OS-app2
     type: AuthenticatedAccessChannel
   11:
     associated_assets:
       outPort:
         19: '420'
       senderApp:
-        1: App2
+        1: app2
     extras:
       position:
-        x: -984.0
-        y: -969.0
-    name: App2-420
+        x: -1012.5
+        y: -954.0
+    name: app2-420
     type: AuthenticatedAccessChannel
   12:
     associated_assets:
       information:
         13: IdentityInfo
       readAuthenticationRule:
-        16: App1-IdentityData
+        16: app1-IdentityData
       writeAuthenticationRule:
-        16: App1-IdentityData
+        16: app1-IdentityData
     extras:
       position:
         x: -1701.0
@@ -176,45 +176,45 @@ assets:
   14:
     associated_assets:
       privileges:
-        15: App2:PowerPriv
+        15: app2+PowerPriv
     extras:
       position:
-        x: -1352.25
+        x: -1350.75
         y: -384.75
-    name: App2:PoweId
+    name: app2+PowerId
     type: Identity
   15:
     associated_assets:
       authenticationRule:
-        16: App1-IdentityData
+        16: app1-IdentityData
       identity:
-        14: App2:PoweId
+        14: app2+PowerId
     extras:
       position:
-        x: -1318.5
-        y: -560.25
-    name: App2:PowerPriv
+        x: -1354.5
+        y: -534.0
+    name: app2+PowerPriv
     type: Privilege
   16:
     associated_assets:
       application:
-        3: App1
+        3: app1
       privilege:
-        15: App2:PowerPriv
+        15: app2+PowerPriv
       readableData:
         12: IdentityData
       writableData:
         12: IdentityData
     extras:
       position:
-        x: -1326.0
-        y: -685.5
-    name: App1-IdentityData
+        x: -1344.0
+        y: -667.5
+    name: app1-IdentityData
     type: AuthenticatedAccessChannel
   17:
     associated_assets:
       outgoingAuthenticationRule:
-        18: App2-80
+        18: app2-80
     extras:
       position:
         x: -1156.5
@@ -228,19 +228,19 @@ assets:
       privilege:
         6: Root
       senderApp:
-        1: App2
+        1: app2
     extras:
       position:
         x: -739.5
         y: -1030.5
-    name: App2-80
+    name: app2-80
     type: AuthenticatedAccessChannel
   19:
     associated_assets:
       incomingAuthenticationRule:
-        20: 420-App1
+        20: 420-app1
       outgoingAuthenticationRule:
-        11: App2-420
+        11: app2-420
     extras:
       position:
         x: -1446.0
@@ -252,12 +252,12 @@ assets:
       inPort:
         19: '420'
       receiverApp:
-        3: App1
+        3: app1
     extras:
       position:
-        x: -1327.5
-        y: -862.5
-    name: 420-App1
+        x: -1291.5
+        y: -805.5
+    name: 420-app1
     type: AuthenticatedAccessChannel
 metadata:
   MAL-Toolbox Version: 2.8.0
@@ -265,4 +265,4 @@ metadata:
   langID: tno-devLang
   langVersion: 1.0.0
   malVersion: 0.1.0-SNAPSHOT
-  name: dev1-1.0
+  name: dev1

@@ -4,27 +4,27 @@ assets:
       operatingSystem:
         1: OS
       outgoingAuthenticationRule:
-        2: App1-CoreModule
+        2: app3-CoreModule
     extras:
       position:
-        x: -458.0
-        y: -462.0
-    name: App1
+        x: -466.5
+        y: -435.0
+    name: app3
     type: Application
   1:
     associated_assets:
       application:
-        0: App1
+        0: app3
     extras:
       position:
-        x: -445.0
-        y: -633.0
+        x: -312.0
+        y: -164.0
     name: OS
     type: OperatingSystem
   2:
     associated_assets:
       app:
-        0: App1
+        0: app3
       privilege:
         3: Root
       receiverModule:
@@ -33,22 +33,24 @@ assets:
       position:
         x: -860.0
         y: -414.0
-    name: App1-CoreModule
+    name: app3-CoreModule
     type: AuthenticatedAccessChannel
   3:
     associated_assets:
       authenticationRule:
-        2: App1-CoreModule
+        2: app3-CoreModule
       identity:
         4: Admin
     extras:
       position:
-        x: -1079.0
-        y: -611.0
+        x: -1106.0
+        y: -593.0
     name: Root
     type: Privilege
   4:
     associated_assets:
+      module:
+        5: CoreModule
       privileges:
         3: Root
     extras:
@@ -59,9 +61,13 @@ assets:
     type: Identity
   5:
     associated_assets:
+      identity:
+        4: Admin
       incomingAuthenticationRule:
-        2: App1-CoreModule
-        7: 420-CoreModule
+        2: app3-CoreModule
+        7: 80-CoreModule
+      vulnerabilities:
+        8: PrivEsc
     extras:
       position:
         x: -1019.0
@@ -71,29 +77,49 @@ assets:
   6:
     associated_assets:
       incomingAuthenticationRule:
-        7: 420-CoreModule
+        7: 80-CoreModule
     extras:
       position:
-        x: -781.0
-        y: 128.0
-    name: '420'
+        x: -759.0
+        y: 154.0
+    name: '80'
     type: Port
   7:
     associated_assets:
       inPort:
-        6: '420'
+        6: '80'
       receiverModule:
         5: CoreModule
     extras:
       position:
-        x: -942.0
-        y: -66.0
-    name: 420-CoreModule
+        x: -974.0
+        y: -41.0
+    name: 80-CoreModule
     type: AuthenticatedAccessChannel
+  8:
+    associated_assets:
+      module:
+        5: CoreModule
+    defenses:
+      gainPrivilegesOrAssumeIdentityImpactLimitation: 0.0
+    extras:
+      position:
+        x: -1457.0
+        y: -294.0
+    name: PrivEsc
+    type: CWEVulnerability
+  9:
+    associated_assets: {}
+    extras:
+      position:
+        x: -739.5
+        y: -633.0
+    name: NoAuth
+    type: Identity
 metadata:
   MAL-Toolbox Version: 2.8.0
   info: Created by the mal-toolbox model python module.
   langID: tno-appLang
   langVersion: 1.0.0
   malVersion: 0.1.0-SNAPSHOT
-  name: app1-1.0
+  name: app3

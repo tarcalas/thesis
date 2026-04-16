@@ -4,17 +4,17 @@ assets:
       operatingSystem:
         1: OS
       outgoingAuthenticationRule:
-        2: App2-CoreModule
+        2: app2-CoreModule
     extras:
       position:
         x: -455.0
         y: -461.0
-    name: App2
+    name: app2
     type: Application
   1:
     associated_assets:
       application:
-        0: App2
+        0: app2
     extras:
       position:
         x: -445.0
@@ -24,7 +24,7 @@ assets:
   2:
     associated_assets:
       app:
-        0: App2
+        0: app2
       privilege:
         3: NoPriv
       receiverModule:
@@ -33,12 +33,12 @@ assets:
       position:
         x: -840.0
         y: -444.0
-    name: App2-CoreModule
+    name: app2-CoreModule
     type: AuthenticatedAccessChannel
   3:
     associated_assets:
       authenticationRule:
-        2: App2-CoreModule
+        2: app2-CoreModule
         10: CoreModule-80
         12: CoreModule-420
       identity:
@@ -65,7 +65,7 @@ assets:
       identity:
         6: PowerId
       incomingAuthenticationRule:
-        2: App2-CoreModule
+        2: app2-CoreModule
       outgoingAuthenticationRule:
         10: CoreModule-80
         12: CoreModule-420

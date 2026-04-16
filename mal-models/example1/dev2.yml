@@ -7,30 +7,30 @@ assets:
       position:
         x: -564.0
         y: -162.0
-    name: Device2
+    name: dev2
     type: Hardware
   1:
     associated_assets:
       appAuthenticationRule:
-        5: App3-TargetData
+        5: app3-TargetData
       incomingAuthenticationRule:
-        7: 80-App3
+        7: 80-app3
       operatingSystem:
         2: OS
     extras:
       position:
         x: -1041.0
         y: -314.0
-    name: App3
+    name: app3
     type: Application
   2:
     associated_assets:
       appAuthenticationRule:
         10: OS-TargetData
       application:
-        1: App3
+        1: app3
       hardware:
-        0: Device2
+        0: dev2
     extras:
       position:
         x: -568.0
@@ -42,7 +42,7 @@ assets:
       information:
         4: TargetInformation
       readAuthenticationRule:
-        5: App3-TargetData
+        5: app3-TargetData
         10: OS-TargetData
       writeAuthenticationRule:
         10: OS-TargetData
@@ -67,21 +67,21 @@ assets:
   5:
     associated_assets:
       application:
-        1: App3
+        1: app3
       privilege:
-        14: App3+Admin
+        14: app3+Admin
       readableData:
         3: TargetData
     extras:
       position:
         x: -1174.0
         y: -441.0
-    name: App3-TargetData
+    name: app3-TargetData
     type: AuthenticatedAccessChannel
   6:
     associated_assets:
       incomingAuthenticationRule:
-        7: 80-App3
+        7: 80-app3
     extras:
       position:
         x: -1213.0
@@ -93,12 +93,12 @@ assets:
       inPort:
         6: '80'
       receiverApp:
-        1: App3
+        1: app3
     extras:
       position:
         x: -1169.0
         y: -173.0
-    name: 80-App3
+    name: 80-app3
     type: AuthenticatedAccessChannel
   10:
     associated_assets:
@@ -143,24 +143,24 @@ assets:
   13:
     associated_assets:
       privileges:
-        14: App3+Admin
+        14: app3+Admin
     extras:
       position:
         x: -1585.5
         y: -171.0
-    name: App3+Admin
+    name: app3+Admin
     type: Identity
   14:
     associated_assets:
       authenticationRule:
-        5: App3-TargetData
+        5: app3-TargetData
       identity:
-        13: App3+Admin
+        13: app3+Admin
     extras:
       position:
-        x: -1488.0
-        y: -322.5
-    name: App3+Admin
+        x: -1435.0
+        y: -307.0
+    name: app3+Admin
     type: Privilege
 metadata:
   MAL-Toolbox Version: 2.8.0

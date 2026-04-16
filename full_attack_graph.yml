@@ -1,83 +1,34 @@
 attack_steps:
-  420-App1:attemptAuthenticatedCommunication:
-    asset: 420-App1
+  80-CoreModule:attemptAuthenticatedCommunication:
+    asset: 80-CoreModule
     children:
-      51: 420-App1:attemptCommunication
-    id: 50
+      18: 80-CoreModule:attemptCommunication
+    id: 17
     lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
     name: attemptAuthenticatedCommunication
     parents:
-      46: 420:connectToPort
-      49: 420-App1:connectToPortSatisfied
+      16: 80:connectToPort
     ttc: null
     type: and
-  420-App1:attemptCommunication:
-    asset: 420-App1
+  80-CoreModule:attemptCommunication:
+    asset: 80-CoreModule
     children:
-      4: App1:connectToApp
-    id: 51
+      15: CoreModule:connectToModule
+    id: 18
     lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
     name: attemptCommunication
     parents:
-      50: 420-App1:attemptAuthenticatedCommunication
-    ttc: null
-    type: or
-  420-App1:connectToPortEntryPoint:
-    asset: 420-App1
-    children:
-      49: 420-App1:connectToPortSatisfied
-    id: 48
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
-    name: connectToPortEntryPoint
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  420-App1:connectToPortSatisfied:
-    asset: 420-App1
-    children:
-      50: 420-App1:attemptAuthenticatedCommunication
-    id: 49
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
-    name: connectToPortSatisfied
-    parents:
-      47: 420-App1:noOutPort
-      48: 420-App1:connectToPortEntryPoint
-    ttc: null
-    type: or
-  420-App1:noOutPort:
-    asset: 420-App1
-    children:
-      49: 420-App1:connectToPortSatisfied
-    existence_status: false
-    id: 47
-    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
-    name: noOutPort
-    parents: {}
-    ttc: null
-    type: notExist
-  420:connectToPort:
-    asset: '420'
-    children:
-      50: 420-App1:attemptAuthenticatedCommunication
-    id: 46
-    lang_graph_attack_step: Port:connectToPort
-    name: connectToPort
-    parents:
-      23: App2-420:attemptCommunication
-    tags:
-    - entrypoint
+      17: 80-CoreModule:attemptAuthenticatedCommunication
     ttc: null
     type: or
   80:connectToPort:
     asset: '80'
-    children: {}
-    id: 40
+    children:
+      17: 80-CoreModule:attemptAuthenticatedCommunication
+    id: 16
     lang_graph_attack_step: Port:connectToPort
     name: connectToPort
-    parents:
-      45: App2-80:attemptCommunication
+    parents: {}
     tags:
     - entrypoint
     ttc: null
@@ -85,531 +36,974 @@ attack_steps:
   Admin:assumeIdentity:
     asset: Admin
     children:
-      7: Root:assumePrivilege
-      8: NoPriv:assumePrivilege
-    id: 6
+      3: Root:assumePrivilege
+    id: 9
     lang_graph_attack_step: Identity:assumeIdentity
     name: assumeIdentity
     parents:
-      29: IdentityInfo:write
+      57: PrivEsc:gainPrivilegesOrAssumeIdentity
     tags:
     - entrypoint
     ttc: null
     type: or
-  App1-IdentityData:attemptAuthenticatedCommunication:
-    asset: App1-IdentityData
+  Admin:delete:
+    asset: Admin
     children:
-      39: App1-IdentityData:attemptCommunication
-    id: 38
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
-    name: attemptAuthenticatedCommunication
-    parents:
-      4: App1:connectToApp
-      34: App2:PowerPriv:assumePrivilege
-      37: App1-IdentityData:connectToPortSatisfied
-    ttc: null
-    type: and
-  App1-IdentityData:attemptCommunication:
-    asset: App1-IdentityData
-    children:
-      24: IdentityData:read
-      25: IdentityData:write
-    id: 39
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
-    name: attemptCommunication
-    parents:
-      38: App1-IdentityData:attemptAuthenticatedCommunication
-    ttc: null
-    type: or
-  App1-IdentityData:connectToPortEntryPoint:
-    asset: App1-IdentityData
-    children:
-      37: App1-IdentityData:connectToPortSatisfied
-    id: 36
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
-    name: connectToPortEntryPoint
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  App1-IdentityData:connectToPortSatisfied:
-    asset: App1-IdentityData
-    children:
-      38: App1-IdentityData:attemptAuthenticatedCommunication
-    id: 37
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
-    name: connectToPortSatisfied
-    parents:
-      35: App1-IdentityData:noOutPort
-      36: App1-IdentityData:connectToPortEntryPoint
-    ttc: null
-    type: or
-  App1-IdentityData:noOutPort:
-    asset: App1-IdentityData
-    children:
-      37: App1-IdentityData:connectToPortSatisfied
-    existence_status: false
-    id: 35
-    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
-    name: noOutPort
-    parents: {}
-    ttc: null
-    type: notExist
-  App1:connectToApp:
-    asset: App1
-    children:
-      38: App1-IdentityData:attemptAuthenticatedCommunication
-    id: 4
-    lang_graph_attack_step: Application:connectToApp
-    name: connectToApp
-    parents:
-      13: OS-App1:attemptCommunication
-      51: 420-App1:attemptCommunication
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  App2-420:attemptAuthenticatedCommunication:
-    asset: App2-420
-    children:
-      23: App2-420:attemptCommunication
-    id: 22
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
-    name: attemptAuthenticatedCommunication
-    parents:
-      21: App2-420:connectToPortSatisfied
-    ttc: null
-    type: and
-  App2-420:attemptCommunication:
-    asset: App2-420
-    children:
-      46: 420:connectToPort
-    id: 23
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
-    name: attemptCommunication
-    parents:
-      22: App2-420:attemptAuthenticatedCommunication
-    ttc: null
-    type: or
-  App2-420:connectToPortEntryPoint:
-    asset: App2-420
-    children:
-      21: App2-420:connectToPortSatisfied
-    id: 20
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
-    name: connectToPortEntryPoint
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  App2-420:connectToPortSatisfied:
-    asset: App2-420
-    children:
-      22: App2-420:attemptAuthenticatedCommunication
-    id: 21
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
-    name: connectToPortSatisfied
-    parents:
-      19: App2-420:noOutPort
-      20: App2-420:connectToPortEntryPoint
-    ttc: null
-    type: or
-  App2-420:noOutPort:
-    asset: App2-420
-    children:
-      21: App2-420:connectToPortSatisfied
-    existence_status: true
-    id: 19
-    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
-    name: noOutPort
-    parents: {}
-    ttc: null
-    type: notExist
-  App2-80:attemptAuthenticatedCommunication:
-    asset: App2-80
-    children:
-      45: App2-80:attemptCommunication
-    id: 44
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
-    name: attemptAuthenticatedCommunication
-    parents:
-      7: Root:assumePrivilege
-      43: App2-80:connectToPortSatisfied
-    ttc: null
-    type: and
-  App2-80:attemptCommunication:
-    asset: App2-80
-    children:
-      40: 80:connectToPort
-    id: 45
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
-    name: attemptCommunication
-    parents:
-      44: App2-80:attemptAuthenticatedCommunication
-    ttc: null
-    type: or
-  App2-80:connectToPortEntryPoint:
-    asset: App2-80
-    children:
-      43: App2-80:connectToPortSatisfied
-    id: 42
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
-    name: connectToPortEntryPoint
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  App2-80:connectToPortSatisfied:
-    asset: App2-80
-    children:
-      44: App2-80:attemptAuthenticatedCommunication
-    id: 43
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
-    name: connectToPortSatisfied
-    parents:
-      41: App2-80:noOutPort
-      42: App2-80:connectToPortEntryPoint
-    ttc: null
-    type: or
-  App2-80:noOutPort:
-    asset: App2-80
-    children:
-      43: App2-80:connectToPortSatisfied
-    existence_status: true
-    id: 41
-    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
-    name: noOutPort
-    parents: {}
-    ttc: null
-    type: notExist
-  App2:PoweId:assumeIdentity:
-    asset: App2:PoweId
-    children:
-      34: App2:PowerPriv:assumePrivilege
-    id: 33
-    lang_graph_attack_step: Identity:assumeIdentity
-    name: assumeIdentity
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  App2:PowerPriv:assumePrivilege:
-    asset: App2:PowerPriv
-    children:
-      38: App1-IdentityData:attemptAuthenticatedCommunication
-    id: 34
-    lang_graph_attack_step: Privilege:assumePrivilege
-    name: assumePrivilege
-    parents:
-      33: App2:PoweId:assumeIdentity
-    ttc: null
-    type: or
-  App2:connectToApp:
-    asset: App2
-    children: {}
-    id: 1
-    lang_graph_attack_step: Application:connectToApp
-    name: connectToApp
-    parents:
-      18: OS-App2:attemptCommunication
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  Dev1:hardwarePhysicalAccess:
-    asset: Dev1
-    children:
-      2: OS:attemptCommunication
-    id: 0
-    lang_graph_attack_step: Hardware:hardwarePhysicalAccess
-    name: hardwarePhysicalAccess
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  IdentityData:delete:
-    asset: IdentityData
-    children:
-      27: IdentityData:deny
-      30: IdentityInfo:delete
-    id: 26
-    lang_graph_attack_step: Data:delete
+      13: Admin:deny
+    id: 12
+    lang_graph_attack_step: Identity:delete
     name: delete
     parents:
-      25: IdentityData:write
+      11: Admin:write
     ttc: null
     type: or
-  IdentityData:deny:
-    asset: IdentityData
-    children:
-      31: IdentityInfo:deny
-    id: 27
-    lang_graph_attack_step: Data:deny
+  Admin:deny:
+    asset: Admin
+    children: {}
+    id: 13
+    lang_graph_attack_step: Identity:deny
     name: deny
     parents:
-      26: IdentityData:delete
+      12: Admin:delete
     ttc: null
     type: or
-  IdentityData:read:
-    asset: IdentityData
-    children:
-      28: IdentityInfo:read
-    id: 24
-    lang_graph_attack_step: Data:read
-    name: read
-    parents:
-      39: App1-IdentityData:attemptCommunication
-    ttc: null
-    type: or
-  IdentityData:write:
-    asset: IdentityData
-    children:
-      26: IdentityData:delete
-      29: IdentityInfo:write
-    id: 25
-    lang_graph_attack_step: Data:write
-    name: write
-    parents:
-      39: App1-IdentityData:attemptCommunication
-    ttc: null
-    type: or
-  IdentityInfo:delete:
-    asset: IdentityInfo
-    children:
-      31: IdentityInfo:deny
-    id: 30
-    lang_graph_attack_step: Information:delete
-    name: delete
-    parents:
-      26: IdentityData:delete
-      29: IdentityInfo:write
-    ttc: null
-    type: or
-  IdentityInfo:deny:
-    asset: IdentityInfo
+  Admin:extract:
+    asset: Admin
     children: {}
-    id: 31
-    lang_graph_attack_step: Information:deny
-    name: deny
-    parents:
-      27: IdentityData:deny
-      30: IdentityInfo:delete
-    ttc: null
-    type: or
-  IdentityInfo:extract:
-    asset: IdentityInfo
-    children: {}
-    id: 32
-    lang_graph_attack_step: Information:extract
+    id: 14
+    lang_graph_attack_step: Identity:extract
     name: extract
     parents: {}
     ttc: null
     type: or
-  IdentityInfo:read:
-    asset: IdentityInfo
+  Admin:read:
+    asset: Admin
     children: {}
-    id: 28
-    lang_graph_attack_step: Information:read
+    id: 10
+    lang_graph_attack_step: Identity:read
     name: read
-    parents:
-      24: IdentityData:read
+    parents: {}
     ttc: null
     type: or
-  IdentityInfo:write:
-    asset: IdentityInfo
+  Admin:write:
+    asset: Admin
     children:
-      5: NoAuth:assumeIdentity
-      6: Admin:assumeIdentity
-      30: IdentityInfo:delete
-    id: 29
-    lang_graph_attack_step: Information:write
+      12: Admin:delete
+    id: 11
+    lang_graph_attack_step: Identity:write
     name: write
+    parents: {}
+    ttc: null
+    type: or
+  CoreModule:connectToModule:
+    asset: CoreModule
+    children:
+      68: PrivEsc:abuse
+    id: 15
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
     parents:
-      25: IdentityData:write
+      2: app3-CoreModule:attemptCommunication
+      18: 80-CoreModule:attemptCommunication
     ttc: null
     type: or
   NoAuth:assumeIdentity:
     asset: NoAuth
-    children:
-      8: NoPriv:assumePrivilege
-    id: 5
+    children: {}
+    id: 70
     lang_graph_attack_step: Identity:assumeIdentity
     name: assumeIdentity
-    parents:
-      29: IdentityInfo:write
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  NoPriv:assumePrivilege:
-    asset: NoPriv
-    children:
-      17: OS-App2:attemptAuthenticatedCommunication
-    id: 8
-    lang_graph_attack_step: Privilege:assumePrivilege
-    name: assumePrivilege
-    parents:
-      5: NoAuth:assumeIdentity
-      6: Admin:assumeIdentity
-    ttc: null
-    type: or
-  OS-App1:attemptAuthenticatedCommunication:
-    asset: OS-App1
-    children:
-      13: OS-App1:attemptCommunication
-    id: 12
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
-    name: attemptAuthenticatedCommunication
-    parents:
-      2: OS:attemptCommunication
-      7: Root:assumePrivilege
-      11: OS-App1:connectToPortSatisfied
-    ttc: null
-    type: and
-  OS-App1:attemptCommunication:
-    asset: OS-App1
-    children:
-      4: App1:connectToApp
-    id: 13
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
-    name: attemptCommunication
-    parents:
-      12: OS-App1:attemptAuthenticatedCommunication
-    ttc: null
-    type: or
-  OS-App1:connectToPortEntryPoint:
-    asset: OS-App1
-    children:
-      11: OS-App1:connectToPortSatisfied
-    id: 10
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
-    name: connectToPortEntryPoint
     parents: {}
     tags:
     - entrypoint
     ttc: null
     type: or
-  OS-App1:connectToPortSatisfied:
-    asset: OS-App1
+  NoAuth:delete:
+    asset: NoAuth
     children:
-      12: OS-App1:attemptAuthenticatedCommunication
-    id: 11
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
-    name: connectToPortSatisfied
+      74: NoAuth:deny
+    id: 73
+    lang_graph_attack_step: Identity:delete
+    name: delete
     parents:
-      9: OS-App1:noOutPort
-      10: OS-App1:connectToPortEntryPoint
+      72: NoAuth:write
     ttc: null
     type: or
-  OS-App1:noOutPort:
-    asset: OS-App1
-    children:
-      11: OS-App1:connectToPortSatisfied
-    existence_status: false
-    id: 9
-    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
-    name: noOutPort
-    parents: {}
-    ttc: null
-    type: notExist
-  OS-App2:attemptAuthenticatedCommunication:
-    asset: OS-App2
-    children:
-      18: OS-App2:attemptCommunication
-    id: 17
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
-    name: attemptAuthenticatedCommunication
-    parents:
-      2: OS:attemptCommunication
-      8: NoPriv:assumePrivilege
-      16: OS-App2:connectToPortSatisfied
-    ttc: null
-    type: and
-  OS-App2:attemptCommunication:
-    asset: OS-App2
-    children:
-      1: App2:connectToApp
-    id: 18
-    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
-    name: attemptCommunication
-    parents:
-      17: OS-App2:attemptAuthenticatedCommunication
-    ttc: null
-    type: or
-  OS-App2:connectToPortEntryPoint:
-    asset: OS-App2
-    children:
-      16: OS-App2:connectToPortSatisfied
-    id: 15
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortEntryPoint
-    name: connectToPortEntryPoint
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  OS-App2:connectToPortSatisfied:
-    asset: OS-App2
-    children:
-      17: OS-App2:attemptAuthenticatedCommunication
-    id: 16
-    lang_graph_attack_step: AuthenticatedAccessChannel:connectToPortSatisfied
-    name: connectToPortSatisfied
-    parents:
-      14: OS-App2:noOutPort
-      15: OS-App2:connectToPortEntryPoint
-    ttc: null
-    type: or
-  OS-App2:noOutPort:
-    asset: OS-App2
-    children:
-      16: OS-App2:connectToPortSatisfied
-    existence_status: false
-    id: 14
-    lang_graph_attack_step: AuthenticatedAccessChannel:noOutPort
-    name: noOutPort
-    parents: {}
-    ttc: null
-    type: notExist
-  OS:attemptCommunication:
-    asset: OS
-    children:
-      12: OS-App1:attemptAuthenticatedCommunication
-      17: OS-App2:attemptAuthenticatedCommunication
-    id: 2
-    lang_graph_attack_step: OperatingSystem:attemptCommunication
-    name: attemptCommunication
-    parents:
-      0: Dev1:hardwarePhysicalAccess
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  OS:connectToApp:
-    asset: OS
+  NoAuth:deny:
+    asset: NoAuth
     children: {}
-    id: 3
-    lang_graph_attack_step: OperatingSystem:connectToApp
-    name: connectToApp
-    parents: {}
-    tags:
-    - entrypoint
+    id: 74
+    lang_graph_attack_step: Identity:deny
+    name: deny
+    parents:
+      73: NoAuth:delete
     ttc: null
     type: or
+  NoAuth:extract:
+    asset: NoAuth
+    children: {}
+    id: 75
+    lang_graph_attack_step: Identity:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  NoAuth:read:
+    asset: NoAuth
+    children: {}
+    id: 71
+    lang_graph_attack_step: Identity:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  NoAuth:write:
+    asset: NoAuth
+    children:
+      73: NoAuth:delete
+    id: 72
+    lang_graph_attack_step: Identity:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  PrivEsc:abuse:
+    asset: PrivEsc
+    children:
+      43: PrivEsc:impact
+    id: 68
+    lang_graph_attack_step: CWEVulnerability:abuse
+    name: abuse
+    parents:
+      15: CoreModule:connectToModule
+    ttc: null
+    type: or
+  PrivEsc:alterExecutionLogic:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 60
+    lang_graph_attack_step: CWEVulnerability:alterExecutionLogic
+    name: alterExecutionLogic
+    parents:
+      35: PrivEsc:alterExecutionLogicImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:alterExecutionLogicImpactLimitation:
+    asset: PrivEsc
+    children:
+      60: PrivEsc:alterExecutionLogic
+    id: 35
+    lang_graph_attack_step: CWEVulnerability:alterExecutionLogicImpactLimitation
+    name: alterExecutionLogicImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:bypassProtectionMechanism:
+    asset: PrivEsc
+    children: {}
+    id: 58
+    lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanism
+    name: bypassProtectionMechanism
+    parents:
+      33: PrivEsc:bypassProtectionMechanismImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:bypassProtectionMechanismImpactLimitation:
+    asset: PrivEsc
+    children:
+      58: PrivEsc:bypassProtectionMechanism
+    id: 33
+    lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanismImpactLimitation
+    name: bypassProtectionMechanismImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:contextDependent:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 63
+    lang_graph_attack_step: CWEVulnerability:contextDependent
+    name: contextDependent
+    parents:
+      38: PrivEsc:contextDependentImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:contextDependentImpactLimitation:
+    asset: PrivEsc
+    children:
+      63: PrivEsc:contextDependent
+    id: 38
+    lang_graph_attack_step: CWEVulnerability:contextDependentImpactLimitation
+    name: contextDependentImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:dosAmplification:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 51
+    lang_graph_attack_step: CWEVulnerability:dosAmplification
+    name: dosAmplification
+    parents:
+      26: PrivEsc:dosAmplificationImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:dosAmplificationImpactLimitation:
+    asset: PrivEsc
+    children:
+      51: PrivEsc:dosAmplification
+    id: 26
+    lang_graph_attack_step: CWEVulnerability:dosAmplificationImpactLimitation
+    name: dosAmplificationImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:dosCrashExitRestart:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 50
+    lang_graph_attack_step: CWEVulnerability:dosCrashExitRestart
+    name: dosCrashExitRestart
+    parents:
+      25: PrivEsc:dosCrashOrRestartImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:dosCrashOrRestartImpactLimitation:
+    asset: PrivEsc
+    children:
+      50: PrivEsc:dosCrashExitRestart
+    id: 25
+    lang_graph_attack_step: CWEVulnerability:dosCrashOrRestartImpactLimitation
+    name: dosCrashOrRestartImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:dosInstability:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 52
+    lang_graph_attack_step: CWEVulnerability:dosInstability
+    name: dosInstability
+    parents:
+      27: PrivEsc:dosInstabilityImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:dosInstabilityImpactLimitation:
+    asset: PrivEsc
+    children:
+      52: PrivEsc:dosInstability
+    id: 27
+    lang_graph_attack_step: CWEVulnerability:dosInstabilityImpactLimitation
+    name: dosInstabilityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:dosResourceCpu:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 53
+    lang_graph_attack_step: CWEVulnerability:dosResourceCpu
+    name: dosResourceCpu
+    parents:
+      28: PrivEsc:dosResourceCpuImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:dosResourceCpuImpactLimitation:
+    asset: PrivEsc
+    children:
+      53: PrivEsc:dosResourceCpu
+    id: 28
+    lang_graph_attack_step: CWEVulnerability:dosResourceCpuImpactLimitation
+    name: dosResourceCpuImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:dosResourceMemory:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 54
+    lang_graph_attack_step: CWEVulnerability:dosResourceMemory
+    name: dosResourceMemory
+    parents:
+      29: PrivEsc:dosResourceMemoryImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:dosResourceMemoryImpactLimitation:
+    asset: PrivEsc
+    children:
+      54: PrivEsc:dosResourceMemory
+    id: 29
+    lang_graph_attack_step: CWEVulnerability:dosResourceMemoryImpactLimitation
+    name: dosResourceMemoryImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:dosResourceOther:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 55
+    lang_graph_attack_step: CWEVulnerability:dosResourceOther
+    name: dosResourceOther
+    parents:
+      30: PrivEsc:dosResourceOtherImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:dosResourceOtherImpactLimitation:
+    asset: PrivEsc
+    children:
+      55: PrivEsc:dosResourceOther
+    id: 30
+    lang_graph_attack_step: CWEVulnerability:dosResourceOtherImpactLimitation
+    name: dosResourceOtherImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:executeUnauthorizedCode:
+    asset: PrivEsc
+    children: {}
+    id: 56
+    lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCode
+    name: executeUnauthorizedCode
+    parents:
+      31: PrivEsc:executeUnauthorizedCodeImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:executeUnauthorizedCodeImpactLimitation:
+    asset: PrivEsc
+    children:
+      56: PrivEsc:executeUnauthorizedCode
+    id: 31
+    lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCodeImpactLimitation
+    name: executeUnauthorizedCodeImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:gainPrivilegesOrAssumeIdentity:
+    asset: PrivEsc
+    children:
+      9: Admin:assumeIdentity
+    id: 57
+    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentity
+    name: gainPrivilegesOrAssumeIdentity
+    parents:
+      32: PrivEsc:gainPrivilegesOrAssumeIdentityImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:gainPrivilegesOrAssumeIdentityImpactLimitation:
+    asset: PrivEsc
+    children:
+      57: PrivEsc:gainPrivilegesOrAssumeIdentity
+    id: 32
+    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentityImpactLimitation
+    name: gainPrivilegesOrAssumeIdentityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 0.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:hideActivities:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 59
+    lang_graph_attack_step: CWEVulnerability:hideActivities
+    name: hideActivities
+    parents:
+      34: PrivEsc:hideActivitiesImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:hideActivitiesImpactLimitation:
+    asset: PrivEsc
+    children:
+      59: PrivEsc:hideActivities
+    id: 34
+    lang_graph_attack_step: CWEVulnerability:hideActivitiesImpactLimitation
+    name: hideActivitiesImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:impact:
+    asset: PrivEsc
+    children:
+      44: PrivEsc:modifyMemory
+      45: PrivEsc:readMemory
+      46: PrivEsc:modifyFilesOrDirectories
+      47: PrivEsc:readFilesOrDirectories
+      48: PrivEsc:modifyModuleData
+      49: PrivEsc:readModuleData
+      50: PrivEsc:dosCrashExitRestart
+      51: PrivEsc:dosAmplification
+      52: PrivEsc:dosInstability
+      53: PrivEsc:dosResourceCpu
+      54: PrivEsc:dosResourceMemory
+      55: PrivEsc:dosResourceOther
+      56: PrivEsc:executeUnauthorizedCode
+      57: PrivEsc:gainPrivilegesOrAssumeIdentity
+      58: PrivEsc:bypassProtectionMechanism
+      59: PrivEsc:hideActivities
+      60: PrivEsc:alterExecutionLogic
+      61: PrivEsc:qualityDegradation
+      62: PrivEsc:unexpectedState
+      63: PrivEsc:contextDependent
+      64: PrivEsc:increaseAnalyticalComplexity
+      65: PrivEsc:reduceMaintainability
+      66: PrivEsc:reducePerformance
+      67: PrivEsc:reduceReliability
+    id: 43
+    lang_graph_attack_step: CWEVulnerability:impact
+    name: impact
+    parents:
+      68: PrivEsc:abuse
+    ttc: null
+    type: or
+  PrivEsc:increaseAnalyticalComplexity:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 64
+    lang_graph_attack_step: CWEVulnerability:increaseAnalyticalComplexity
+    name: increaseAnalyticalComplexity
+    parents:
+      39: PrivEsc:increaseAnalyticalComplexityImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:increaseAnalyticalComplexityImpactLimitation:
+    asset: PrivEsc
+    children:
+      64: PrivEsc:increaseAnalyticalComplexity
+    id: 39
+    lang_graph_attack_step: CWEVulnerability:increaseAnalyticalComplexityImpactLimitation
+    name: increaseAnalyticalComplexityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:modifyFilesOrDirectories:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 46
+    lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectories
+    name: modifyFilesOrDirectories
+    parents:
+      21: PrivEsc:modifyFilesOrDirectoriesImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:modifyFilesOrDirectoriesImpactLimitation:
+    asset: PrivEsc
+    children:
+      46: PrivEsc:modifyFilesOrDirectories
+    id: 21
+    lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectoriesImpactLimitation
+    name: modifyFilesOrDirectoriesImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:modifyMemory:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 44
+    lang_graph_attack_step: CWEVulnerability:modifyMemory
+    name: modifyMemory
+    parents:
+      19: PrivEsc:modifyMemoryImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:modifyMemoryImpactLimitation:
+    asset: PrivEsc
+    children:
+      44: PrivEsc:modifyMemory
+    id: 19
+    lang_graph_attack_step: CWEVulnerability:modifyMemoryImpactLimitation
+    name: modifyMemoryImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:modifyModuleData:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 48
+    lang_graph_attack_step: CWEVulnerability:modifyModuleData
+    name: modifyModuleData
+    parents:
+      23: PrivEsc:modifyModuleDataImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:modifyModuleDataImpactLimitation:
+    asset: PrivEsc
+    children:
+      48: PrivEsc:modifyModuleData
+    id: 23
+    lang_graph_attack_step: CWEVulnerability:modifyModuleDataImpactLimitation
+    name: modifyModuleDataImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:null:
+    asset: PrivEsc
+    children: {}
+    id: 69
+    lang_graph_attack_step: CWEVulnerability:null
+    name: 'null'
+    parents:
+      44: PrivEsc:modifyMemory
+      45: PrivEsc:readMemory
+      46: PrivEsc:modifyFilesOrDirectories
+      47: PrivEsc:readFilesOrDirectories
+      48: PrivEsc:modifyModuleData
+      49: PrivEsc:readModuleData
+      50: PrivEsc:dosCrashExitRestart
+      51: PrivEsc:dosAmplification
+      52: PrivEsc:dosInstability
+      53: PrivEsc:dosResourceCpu
+      54: PrivEsc:dosResourceMemory
+      55: PrivEsc:dosResourceOther
+      59: PrivEsc:hideActivities
+      60: PrivEsc:alterExecutionLogic
+      61: PrivEsc:qualityDegradation
+      62: PrivEsc:unexpectedState
+      63: PrivEsc:contextDependent
+      64: PrivEsc:increaseAnalyticalComplexity
+      65: PrivEsc:reduceMaintainability
+      66: PrivEsc:reducePerformance
+      67: PrivEsc:reduceReliability
+    ttc: null
+    type: and
+  PrivEsc:qualityDegradation:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 61
+    lang_graph_attack_step: CWEVulnerability:qualityDegradation
+    name: qualityDegradation
+    parents:
+      36: PrivEsc:qualityDegradationImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:qualityDegradationImpactLimitation:
+    asset: PrivEsc
+    children:
+      61: PrivEsc:qualityDegradation
+    id: 36
+    lang_graph_attack_step: CWEVulnerability:qualityDegradationImpactLimitation
+    name: qualityDegradationImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:readFilesOrDirectories:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 47
+    lang_graph_attack_step: CWEVulnerability:readFilesOrDirectories
+    name: readFilesOrDirectories
+    parents:
+      22: PrivEsc:readFilesOrDirectoriesImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:readFilesOrDirectoriesImpactLimitation:
+    asset: PrivEsc
+    children:
+      47: PrivEsc:readFilesOrDirectories
+    id: 22
+    lang_graph_attack_step: CWEVulnerability:readFilesOrDirectoriesImpactLimitation
+    name: readFilesOrDirectoriesImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:readMemory:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 45
+    lang_graph_attack_step: CWEVulnerability:readMemory
+    name: readMemory
+    parents:
+      20: PrivEsc:readMemoryImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:readMemoryImpactLimitation:
+    asset: PrivEsc
+    children:
+      45: PrivEsc:readMemory
+    id: 20
+    lang_graph_attack_step: CWEVulnerability:readMemoryImpactLimitation
+    name: readMemoryImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:readModuleData:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 49
+    lang_graph_attack_step: CWEVulnerability:readModuleData
+    name: readModuleData
+    parents:
+      24: PrivEsc:readModuleDataImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:readModuleDataImpactLimitation:
+    asset: PrivEsc
+    children:
+      49: PrivEsc:readModuleData
+    id: 24
+    lang_graph_attack_step: CWEVulnerability:readModuleDataImpactLimitation
+    name: readModuleDataImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:reduceMaintainability:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 65
+    lang_graph_attack_step: CWEVulnerability:reduceMaintainability
+    name: reduceMaintainability
+    parents:
+      40: PrivEsc:reduceMaintainabilityImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:reduceMaintainabilityImpactLimitation:
+    asset: PrivEsc
+    children:
+      65: PrivEsc:reduceMaintainability
+    id: 40
+    lang_graph_attack_step: CWEVulnerability:reduceMaintainabilityImpactLimitation
+    name: reduceMaintainabilityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:reducePerformance:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 66
+    lang_graph_attack_step: CWEVulnerability:reducePerformance
+    name: reducePerformance
+    parents:
+      41: PrivEsc:reducePerformanceImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:reducePerformanceImpactLimitation:
+    asset: PrivEsc
+    children:
+      66: PrivEsc:reducePerformance
+    id: 41
+    lang_graph_attack_step: CWEVulnerability:reducePerformanceImpactLimitation
+    name: reducePerformanceImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:reduceReliability:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 67
+    lang_graph_attack_step: CWEVulnerability:reduceReliability
+    name: reduceReliability
+    parents:
+      42: PrivEsc:reduceReliabilityImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:reduceReliabilityImpactLimitation:
+    asset: PrivEsc
+    children:
+      67: PrivEsc:reduceReliability
+    id: 42
+    lang_graph_attack_step: CWEVulnerability:reduceReliabilityImpactLimitation
+    name: reduceReliabilityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  PrivEsc:unexpectedState:
+    asset: PrivEsc
+    children:
+      69: PrivEsc:null
+    id: 62
+    lang_graph_attack_step: CWEVulnerability:unexpectedState
+    name: unexpectedState
+    parents:
+      37: PrivEsc:unexpectedStateImpactLimitation
+      43: PrivEsc:impact
+    ttc: null
+    type: and
+  PrivEsc:unexpectedStateImpactLimitation:
+    asset: PrivEsc
+    children:
+      62: PrivEsc:unexpectedState
+    id: 37
+    lang_graph_attack_step: CWEVulnerability:unexpectedStateImpactLimitation
+    name: unexpectedStateImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
   Root:assumePrivilege:
     asset: Root
     children:
-      12: OS-App1:attemptAuthenticatedCommunication
-      44: App2-80:attemptAuthenticatedCommunication
-    id: 7
+      1: app3-CoreModule:attemptAuthenticatedCommunication
+    id: 3
     lang_graph_attack_step: Privilege:assumePrivilege
     name: assumePrivilege
     parents:
-      6: Admin:assumeIdentity
+      9: Admin:assumeIdentity
+    ttc: null
+    type: or
+  Root:delete:
+    asset: Root
+    children:
+      7: Root:deny
+    id: 6
+    lang_graph_attack_step: Privilege:delete
+    name: delete
+    parents:
+      5: Root:write
+    ttc: null
+    type: or
+  Root:deny:
+    asset: Root
+    children: {}
+    id: 7
+    lang_graph_attack_step: Privilege:deny
+    name: deny
+    parents:
+      6: Root:delete
+    ttc: null
+    type: or
+  Root:extract:
+    asset: Root
+    children: {}
+    id: 8
+    lang_graph_attack_step: Privilege:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  Root:read:
+    asset: Root
+    children: {}
+    id: 4
+    lang_graph_attack_step: Privilege:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  Root:write:
+    asset: Root
+    children:
+      6: Root:delete
+    id: 5
+    lang_graph_attack_step: Privilege:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  app3-CoreModule:attemptAuthenticatedCommunication:
+    asset: app3-CoreModule
+    children:
+      2: app3-CoreModule:attemptCommunication
+    id: 1
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      3: Root:assumePrivilege
+    ttc: null
+    type: and
+  app3-CoreModule:attemptCommunication:
+    asset: app3-CoreModule
+    children:
+      15: CoreModule:connectToModule
+    id: 2
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      0: app3:interactWithApplication
+      1: app3-CoreModule:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  app3:interactWithApplication:
+    asset: app3
+    children:
+      2: app3-CoreModule:attemptCommunication
+    id: 0
+    lang_graph_attack_step: Application:interactWithApplication
+    name: interactWithApplication
+    parents: {}
+    tags:
+    - entrypoint
     ttc: null
     type: or
