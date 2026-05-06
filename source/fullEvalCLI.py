@@ -61,7 +61,7 @@ def eval_network(lang_file_path, model_file_path, entrypoints, output_path, _):
     compromise_entrypoints_at_start = False))
     path = run_simulation(simulator)
     
-    pprint.pprint(simulator.recording)
+    #pprint.pprint(simulator.recording)
 
     path = path['attacker']
     first_ids = {node.id for node in path}
@@ -109,7 +109,6 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
     models = args.models
     to_eval = set()
     for _, node in reduced_graph["attack_steps"].items():
-        print(node)
         match type:
             case 0:
                 if node["lang_graph_attack_step"] == "Device:physicalAccess":
@@ -192,12 +191,12 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                         if count < len(entrypoints[invoker]):
                             to_eval.add((invoker, "Device")) 
     for (asset, type) in to_eval:
+       print(asset, entrypoints[asset])
        match type:
             case "Network":
                 eval_list.append((network_file_path, os.path.join(models, asset + ".yml"), entrypoints[asset], os.path.join(args.output, asset + "_" + str(counts[asset]) + ".yml"),current_asset))
                 counts[asset] += 1
             case "Device":
-                print(counts[asset])
                 eval_list.append((device_file_path, os.path.join(models, asset + ".yml"), entrypoints[asset], os.path.join(args.output, asset + "_" + str(counts[asset]) + ".yml"),current_asset))
                 counts[asset] += 1
             case "Application":

@@ -1,0 +1,386 @@
+---
+blueprints:
+- bom-ref: blueprint-exchange
+  name: MS Exchange blueprint
+  description: Blueprint for the modeling of MS Exchange.
+  metadata:
+    timestamp: '2026-04-15T09:30:00Z'
+    authors:
+      name: Barnabas Tarcali
+      contact:
+      - name: Barnabas Tarcali
+        email: barnabas.tarcali@tno.nl
+    ordinalVersion: 1.0.0
+  modelTypes:
+  - type: Not sure whether we care, if we have different model it might matter, I think we should make the strong assumption, that all the information for one application is in one blueprint
+  methodologies:
+  - type: I don't think it matters for our use-case, probably Archimate is the closest to what we want
+    version: NTODO
+  scope:
+    bom-ref: scope-1
+    name: MS Exchange
+    description: Blueprint of the MS Exchange server Backend and Frontend. 
+    boundaries:
+    - Internet
+    - Internal Network
+    includedComponents:
+    - reference to components NTODO (although I dont't think it matters)
+    excludedComponents:
+    - reference to components NTODO (although I don't think it matters)
+  assets:
+  - bom-ref: asset-frontend
+    componentRef: only if defined elsewhere
+    serviceRef: only if defined elswhere
+    type: component
+    name: Frontend
+    description: I'm not sure what type this should be, but this would work with the MAL specification
+    zone: zone-public
+    parent: MS-Exchange (reference to the application)
+    classification:
+      criticality: moderate
+      sensitivity: public
+      dataClassification: I don't think this is highly relevant
+      tier: tier2
+      categories:
+      - Again, probably not important
+      tags:
+      - module
+      - this is for searching 
+    tags: Not sure if it's relevant
+    responsibilities:
+    - take the incoming rewuest
+    - add and remove metadata
+    - if we want to be pedantic, it sends to t he corresponding frontend submodule, and that does the job
+    - send it to the backend IIS
+    interfaces:
+    - name: HTTPS API
+      type: rest
+      description: I'm unsure whether we need this much detail...
+      specification: Link for the specs
+      protocol: HTTPS
+      dataFormat: JSON
+      authentication:
+      - none
+      operations:
+      - Maybe the valid operations/end points here, again, probably no relevance
+    dependencies:
+    - here are the packages that this component depends on (nice to integrate it into the MAL model)
+    useCases:
+    - I don't think this is necessary for us, but it references the useCase objects
+    authentication:
+    - none
+    authorization:
+    - TODO
+    ownership: TODO
+    properties:
+    - extraInfo : not relevant, but can add extra info if we would miss anything
+    externalReferences:
+    - url: someUrl
+      type: other, this doesn't really matter to us
+  - bom-ref: asset-backend-iis
+    type: component
+    name: Backen IIS
+    description: I'm not sure what type this should be, but this would work with the MAL specification
+    zone: zone-internal-proxy
+    parent: MS-Exchange (reference to the application)
+    classification:
+      criticality: moderate
+      sensitivity: public
+      dataClassification: I don't think this is highly relevant
+      tier: tier2
+      categories:
+      - Again, probably not important
+      tags:
+      - module
+      - this is for searching 
+    tags: Not sure if it's relevant
+    responsibilities:
+    - take the incoming request
+    - check that it comes from the frontend
+    - process and rewrite metadata
+    - restore the user identity on the backend
+    - send it to the correct backend submodule
+    interfaces:
+    - name: HTTPS API
+      type: rest
+      description: I'm unsure whether we need this much detail...
+      specification: Link for the specs
+      protocol: HTTPS
+      dataFormat: JSON
+      authentication:
+      - TODO
+      operations:
+      - Maybe the valid operations/end points here, again, probably no relevance
+    dependencies:
+    - here are the packages that this component depends on (nice to integrate it into the MAL model)
+    useCases:
+    - I don't think this is necessary for us, but it references the useCase objects
+    authentication:
+    - TODO
+    authorization:
+    - TODO
+    ownership: TODO
+    properties:
+    - extraInfo : not relevant, but can add extra info if we would miss anything
+    externalReferences:
+    - url: someUrl
+      type: other, this doesn't really matter to us
+  - bom-ref: asset-backend-ecp
+    type: component
+    name: Backend ECP
+    description: I'm not sure what type this should be, but this would work with the MAL specification
+    zone: zone-internal-functions
+    parent: MS-Exchange (reference to the application)
+    classification:
+      criticality: moderate
+      sensitivity: public
+      dataClassification: I don't think this is highly relevant
+      tier: tier2
+      categories:
+      - Again, probably not important
+      tags:
+      - module
+      - this is for searching 
+    tags: Not sure if it's relevant
+    responsibilities:
+    - take the incoming rewuest
+    - check the users privileges
+    - perform the requested action
+    - send the response to the Backend IIS
+    interfaces:
+    - name: HTTPS API
+      type: rest
+      description: I'm unsure whether we need this much detail...
+      specification: Link for the specs
+      protocol: HTTPS
+      dataFormat: JSON
+      authentication:
+      - TODO
+      operations:
+      - Maybe the valid operations/end points here, again, probably no relevance
+    dependencies:
+    - here are the packages that this component depends on (nice to integrate it into the MAL model)
+    useCases:
+    - I don't think this is necessary for us, but it references the useCase objects
+    authentication:
+    - TODO
+    authorization:
+    - TODO
+    ownership: TODO
+    properties:
+    - extraInfo : not relevant, but can add extra info if we would miss anything
+    externalReferences:
+    - url: someUrl
+      type: other, this doesn't really matter to us
+  - bom-ref: asset-database
+    type: dataStore
+    name: Order Database
+    description: Stores acc infos
+  behaviors:
+    instances:
+    - bom-ref: frontend-connect-to-backend
+      behavior: application:controlFlow:emitsEvent
+      acknowledgement: declared
+      trigger: user-initiated
+      actors:
+      - asset-frontend
+      targets:
+      - asset-backend-iis
+    flows:
+    - bom-ref: normal-flow
+      acknowledgement: declared
+      ordering: sequential
+      trigger: user-initiated
+      steps:
+      - ordinal: 1
+        ref: frontend-connect-to-backend
+  ataStores:
+  - bom-ref: ds-account-info
+    name: Account Info Store
+    description: contains all user info
+    type: sql
+    vendor: PostgreSQL Global Development Group
+    product: PostgreSQL
+    version: '15'
+    environment: production
+    zone: zone-internal-functions
+    location: Dont't think it matters
+    technologies:
+    - doesn't matter 
+  dataSets:
+  - bom-ref: dataset-account-info
+    name: Account Info Dataset
+    description: Account records including identifiers and privileges
+    dataProfile: It is probably way more detail then what we need
+    recordCount: 120000
+    owners:
+    - Not sure if it's important
+    authorization:
+    - TODO
+    placements:
+    - dataStore: ds-account-info
+      encrypted: true
+      retention: 7 years
+      replicated: true
+    properties:
+    - extraInfo: Optional extra info
+  zones:
+  - bom-ref: zone-public
+    name: Public Zone
+    type: trust
+    description: Untrusted internet-facing zone
+    parent: If there is one
+    characteristics:
+    - accessible by anyone
+    - contains the login interface
+    constraints:
+    - whatever constraints this zone has
+    properties:
+    - extraInfo: key-value pairs if we'd need them
+  - bom-ref: zone-internal-proxy
+    name: Internal Services
+    type: trust
+    description: Trusted internal service network. It might also be logical boundary? But I do think that the way we disected the AACs is based on trust boundaries
+    parent: If there is one
+    characteristics:
+    - accessible by anyone
+    - contains the login interface
+    constraints:
+    - whatever constraints this zone has
+    properties:
+    - extraInfo: key-value pairs if we'd need them
+  - bom-ref: zone-internal-functions
+    name: Internal Functions
+    type: trust
+    description: The trusted zone with internal priv representation
+    parent: If there is one
+    characteristics:
+    - accessible by anyone
+    - contains the login interface
+    constraints:
+    - whatever constraints this zone has
+    properties:
+    - extraInfo: key-value pairs if we'd need them
+  boundaries:
+  - bom-ref: boundary+public+internal-proxy
+    name: Exchange frontend and backend IIc boundary
+    type: trust
+    zones:
+    - zone-public
+    - zone-internal-proxy
+    crossingRequirements:
+      authentication:
+      - TODO
+      authorization:
+      - TODO
+      dataValidation: false
+      dataTransformation: true
+      logging: true
+      monitoring: true
+      rateLimit: no rate limiting, don't think it's important anyways
+      protocols:
+      - HTTPS
+      - This might be handy for some checks? Or out of scope?
+    properties:
+    - extraInfo: If needed
+  - bom-ref: boundary+internal-proxy+internal-functions
+    name: Exchange frontend and backend IIc boundary
+    type: trust
+    zones:
+    - zone-internal-proxy
+    - zone-internal-functions
+    crossingRequirements:
+      authentication:
+      - TODO
+      authorization:
+      - TODO
+      dataValidation: false
+      dataTransformation: false
+      logging: true
+      monitoring: true
+      rateLimit: no rate limiting, don't think it's important anyways
+      protocols:
+      - HTTPS
+      - This might be handy for some checks? Or out of scope?
+    properties:
+    - extraInfo: If needed
+  flows:
+  - bom-ref: flow-frontend-backend
+    name: Interaction between frontend and backend
+    description: the interaction between the frontend and the backend IIS module. Not sure what type describes it best. I'm also not sure that it matters.
+    type: interaction
+    source: asset-frontend
+    destination: asset-backend-iis
+    bidirectional: false
+    synchronous: false (not sure this matters)
+    volume: Does not interest us
+    timing: Does not interest us
+    protocols:
+    - HTTPS
+    dataProfile: I don't think we need this much details
+    authentication:
+    - TODO
+    authorization:
+    - TODO
+    sequence: 0
+    properties:
+    - extraInfo: I'm not sure whether sequence is really relevant for us
+  - bom-ref: flow-backend-ecp
+    name: Interaction between backend and backend ecp module
+    description: the interaction between the backend IIS and ECP module. Not sure what type describes it best. I'm also not sure that it matters.
+    type: interaction
+    source: asset-backend-iis
+    destination: asset-backend-ecp
+    bidirectional: false
+    synchronous: false (not sure this matters)
+    volume: Does not interest us
+    timing: Does not interest us
+    protocols:
+    - HTTPS
+    dataProfile: I don't think we need this much details
+    authentication:
+    - TODO
+    authorization:
+    - TODO
+    sequence: 1
+    properties:
+    - extraInfo: I'm not sure whether sequence is really relevant for us
+  actors:
+  - bom-ref: actor-admin
+    name: Admin
+    type: administrator
+    description: Admin
+    permissions:
+    - login
+    - admin
+    delegatedBy:
+    - actor-admin
+    zone: zone-public
+  - bom-ref: actor-user
+    name: User
+    type: user
+    description: End user
+    permissions:
+    - login
+    delegatedBy:
+    - actor-admin
+    zone: zone-public
+  - bom-ref: actor-attacker
+    name: Attacker
+    type: user
+    description: Attacker with no privs
+    permissions:
+    zone: zone-public
+  assumptions:
+  - bom-ref: assumption-1
+    description: The identity provider correctly enforces multi-factor authentication
+      for all customer logins.
+    topic: security
+    validity: unverified
+    impact: Compromise could allow account takeover and fraudulent transactions.
+  visualizations: Not Needed
+  useCases: Not Needed
+  requirements: Not Needed
+  externalReferences: Not Needed?
+  properties: extra
+  
