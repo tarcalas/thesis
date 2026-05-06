@@ -4,6 +4,13 @@
     "service": "dev",
     "workspaceFolder": "/workspaces/thesis",
     "features": {},
+    "mounts": [
+        "source=${env:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,readonly",
+        "source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"
+    ],
+    "remoteEnv": {
+        "SSH_AUTH_SOCK": "/ssh-agent"
+    },
     "customizations": {
         "vscode": {
             "settings": {
@@ -15,14 +22,12 @@
                 "ms-python.vscode-pylance",
                 "tamasfe.even-better-toml",
                 "redhat.vscode-yaml"
-            ],
-            "mounts": [
-                "source=${env:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,readonly"
             ]
         }
     },
     "shutdownAction": "none",
     "overrideCommand": false,
     "postCreateCommand": "bash -lc \"uv python install && uv venv && uv pip install -e .\"",
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "updateRemoteUserUID": true
 }
