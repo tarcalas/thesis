@@ -18,6 +18,9 @@ category Component {
 
     asset OperatingSystem extends Application
     {
+        | connectToApp
+            +> attemptCommunication
+            
         | attemptCommunication @entrypoint
             -> outgoingAuthenticationRule.attemptAuthenticatedCommunication
     }
@@ -126,10 +129,4 @@ associations {
     Application [controllerApp]    0..1<-- ModuleControlsAuthentication -->*  [controlledAuthenticationRules] AuthenticatedAccessChannel
     Port [outPort]                   *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule]AuthenticatedAccessChannel
     Port [inPort]                    *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule]AuthenticatedAccessChannel
- //   Capability [readCapability]                 *<-- ReadAccessCapability -->*                                           [readData] Data
- //   Capability [writeCapability]                 *<-- WriteAccessCapability -->*                                        [writeData] Data
- //maybe?   Capability [executeCapability]                 *<-- ExecuteAccessCapability -->*                    [executeApplication] Application
- //   Capability [connectCapability]               *<-- ConnectAccessCapability -->*         [connectedChannel] AuthenticatedAccessChannel
- // Capability [capability]                     *<-- IdentityObtainedCapability -->*                               [identities] Identity
- // Capability [capability]                      *<-- PrivilegeObtainedCapability -->*                            [privileges] Privilege
 }

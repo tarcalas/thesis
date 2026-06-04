@@ -114,6 +114,7 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                 if node["lang_graph_attack_step"] == "Device:physicalAccess":
                     count = len(entrypoints[node["asset"]])
                     entrypoints[node["asset"]].add(node["asset"] + ":hardwarePhysicalAccess")
+                    #assumption: every model has a NoAuth identity
                     entrypoints[node["asset"]].add("NoAuth:assumeIdentity")
                     if count < len(entrypoints[node["asset"]]):
                         to_eval.add((node["asset"], "Device"))
@@ -129,6 +130,7 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                     #assumption: naming is of "app:connectToApp"
                     count = len(entrypoints[node["asset"]])
                     entrypoints[node["asset"]].add(node["asset"] + ":interactWithApplication")
+                    #assumption: every model has a NoAuth identity 
                     entrypoints[node["asset"]].add("NoAuth:assumeIdentity")
                     if count < len(entrypoints[node["asset"]]):
                         to_eval.add((node["asset"], "Application"))
@@ -171,6 +173,7 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                 if node["lang_graph_attack_step"] == "Identity:assumeIdentity":
                     count = len(entrypoints[invoker])
                     #this is very ugly
+                    #we check whether the identity exists in the device model
                     identity_exists = False
                     identity_to_add = current_asset + "+" + node["asset"]
                     with open(args.models + "/" + invoker + ".yml", "r") as f:

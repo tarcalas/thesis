@@ -218,16 +218,18 @@ category Vulnerability {
             -> null
 
         & modifyFilesOrDirectories
-            -> null
+            -> module.readData.read,
+            module.writtenData.write
 
         & readFilesOrDirectories
-            -> null
+            -> module.readData.read
 
         & modifyModuleData
-            -> null
+            -> module.readData.read,
+            module.writtenData.write
 
         & readModuleData
-            -> null
+            -> module.readData.read
 
         & dosCrashExitRestart
             -> null

@@ -194,7 +194,7 @@ blueprints:
       steps:
       - ordinal: 1
         ref: frontend-connect-to-backend
-  ataStores:
+  dataStores:
   - bom-ref: ds-account-info
     name: Account Info Store
     description: contains all user info

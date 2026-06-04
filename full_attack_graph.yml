@@ -576,8 +576,7 @@ attack_steps:
     type: defense
   PrivEsc:modifyFilesOrDirectories:
     asset: PrivEsc
-    children:
-      69: PrivEsc:null
+    children: {}
     id: 46
     lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectories
     name: modifyFilesOrDirectories
@@ -632,8 +631,7 @@ attack_steps:
     type: defense
   PrivEsc:modifyModuleData:
     asset: PrivEsc
-    children:
-      69: PrivEsc:null
+    children: {}
     id: 48
     lang_graph_attack_step: CWEVulnerability:modifyModuleData
     name: modifyModuleData
@@ -667,10 +665,6 @@ attack_steps:
     parents:
       44: PrivEsc:modifyMemory
       45: PrivEsc:readMemory
-      46: PrivEsc:modifyFilesOrDirectories
-      47: PrivEsc:readFilesOrDirectories
-      48: PrivEsc:modifyModuleData
-      49: PrivEsc:readModuleData
       50: PrivEsc:dosCrashExitRestart
       51: PrivEsc:dosAmplification
       52: PrivEsc:dosInstability
@@ -718,8 +712,7 @@ attack_steps:
     type: defense
   PrivEsc:readFilesOrDirectories:
     asset: PrivEsc
-    children:
-      69: PrivEsc:null
+    children: {}
     id: 47
     lang_graph_attack_step: CWEVulnerability:readFilesOrDirectories
     name: readFilesOrDirectories
@@ -774,8 +767,7 @@ attack_steps:
     type: defense
   PrivEsc:readModuleData:
     asset: PrivEsc
-    children:
-      69: PrivEsc:null
+    children: {}
     id: 49
     lang_graph_attack_step: CWEVulnerability:readModuleData
     name: readModuleData
