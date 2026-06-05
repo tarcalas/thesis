@@ -29,7 +29,7 @@ blueprints:
     - asset-frontend
   - bom-ref: asset-header-info
     type: data
-    name: Header
+    name: Header Info
     zone: zone-public
     tags:
     - information
@@ -121,7 +121,7 @@ blueprints:
     name: NT/SYSTEM-Backend
     type: user
     delegatedBy:
-    - asset-header
+    - asset-header-info
     permissions:
     - SYSTEM-Backend
     zone: zone-internal-functions
