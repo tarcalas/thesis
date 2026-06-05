@@ -1,0 +1,128 @@
+assets:
+  0:
+    associated_assets:
+      privileges:
+        1: NoPriv
+    name: NoAuth
+    type: Identity
+  1:
+    associated_assets:
+      identity:
+        0: NoAuth
+    name: NoPriv
+    type: Privilege
+  2:
+    associated_assets: {}
+    name: MS Exchange
+    type: Application
+  3:
+    associated_assets:
+      identity:
+        8: DOMAIN
+      outgoingAuthenticationRule:
+        14: Frontend - Backen IIS
+    name: Frontend
+    type: Module
+  4:
+    associated_assets:
+      incomingAuthenticationRule:
+        14: Frontend - Backen IIS
+      outgoingAuthenticationRule:
+        15: Backen IIS - Backend ECP
+    name: Backen IIS
+    type: Module
+  5:
+    associated_assets:
+      incomingAuthenticationRule:
+        15: Backen IIS - Backend ECP
+    name: Backend ECP
+    type: Module
+  6:
+    associated_assets:
+      information:
+        7: Header:7
+    name: Header
+    type: Data
+  7:
+    associated_assets:
+      data:
+        6: Header
+      dependentIdentity:
+        10: NT/SYSTEM-Backend
+    name: Header:7
+    type: Information
+  8:
+    associated_assets:
+      module:
+        3: Frontend
+      privileges:
+        9: Token-Serialization
+    name: DOMAIN
+    type: Identity
+  9:
+    associated_assets:
+      authenticationRule:
+        14: Frontend - Backen IIS
+      identity:
+        8: DOMAIN
+    name: Token-Serialization
+    type: Privilege
+  10:
+    associated_assets:
+      information:
+        7: Header:7
+      privileges:
+        11: SYSTEM-Backend
+      rightIdentities:
+        12: NT/SYSTEM
+    name: NT/SYSTEM-Backend
+    type: Identity
+  11:
+    associated_assets:
+      identity:
+        10: NT/SYSTEM-Backend
+    name: SYSTEM-Backend
+    type: Privilege
+  12:
+    associated_assets:
+      leftIdentity:
+        10: NT/SYSTEM-Backend
+      privileges:
+        13: SYSTEM
+    name: NT/SYSTEM
+    type: Identity
+  13:
+    associated_assets:
+      authenticationRule:
+        15: Backen IIS - Backend ECP
+      identity:
+        12: NT/SYSTEM
+    name: SYSTEM
+    type: Privilege
+  14:
+    associated_assets:
+      privilege:
+        9: Token-Serialization
+      receiverModule:
+        4: Backen IIS
+      senderModule:
+        3: Frontend
+    name: Frontend - Backen IIS
+    type: AuthenticatedAccessChannel
+  15:
+    associated_assets:
+      privilege:
+        13: SYSTEM
+      receiverModule:
+        5: Backend ECP
+      senderModule:
+        4: Backen IIS
+    name: Backen IIS - Backend ECP
+    type: AuthenticatedAccessChannel
+metadata:
+  MAL-Toolbox Version: 2.8.1
+  info: Created by the mal-toolbox model python module.
+  langID: tno-appLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: generated-model

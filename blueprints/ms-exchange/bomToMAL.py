@@ -14,32 +14,37 @@ import yaml
 
 import json
 from maltoolbox.model import Model
+from maltoolbox.language import LanguageGraph
 
 
 class BlueprintToMAL:
     def __init__(self, blueprint_json):
-        my_language = LanguageGraph.load_from_file("/workspaces/thesis/mal-langs/Application.mal") 
-        self.bp = blueprint_json["blueprints"][0]
-        self.model = Model("generated-model", lang_graph=my_language)
+        # Load MAL language
+        lang = LanguageGraph.load_from_file(
+            "/workspaces/thesis/mal-langs/Application.mal"
+        )
 
-        # Input lookup
+        self.bp = blueprint_json["blueprints"][0]
+        self.model = Model("generated-model", lang_graph=lang)
+
+        # Blueprint lookup tables
         self.assets = {a["bom-ref"]: a for a in self.bp.get("assets", [])}
         self.actors = {a["bom-ref"]: a for a in self.bp.get("actors", [])}
         self.boundaries = self.bp.get("boundaries", [])
 
-        # MAL objects
+        # MAL assets
         self.mal_assets = {}
         self.identities = {}
         self.privileges = {}
         self.zone_to_module = {}
         self.channels = []
 
-        # Assumption-required objects
+        # Required assumption
         self.noauth_identity = None
         self.nopriv_privilege = None
 
     # --------------------------------------------------
-    # Core helpers
+    # Helpers
     # --------------------------------------------------
     def create_asset(self, name, mal_type):
         return self.model.add_asset(mal_type, name)
@@ -47,22 +52,38 @@ class BlueprintToMAL:
     def get_or_create_privilege(self, name):
         if name in self.privileges:
             return self.privileges[name]
+        priv = self.create_asset(name, "Privilege")
+        self.privileges[name] = priv
+        return priv
 
-        p = self.create_asset(name, "Privilege")
-        self.privileges[name] = p
-        return p
+    def resolve_information_asset(self, asset):
+        """
+        Ensure Identity.information only receives Information assets.
+        If a Data asset is given, try to resolve its contained Information.
+        """
+        if asset.type == "Information":
+            return asset
+
+        if asset.type == "Data":
+            infos = asset.associated_assets.get("information")
+            if infos:
+                for info in infos:  # Assuming one Information per Data, this is ugly
+                    return info
+
+        return None
 
     # --------------------------------------------------
-    # REQUIRED assumption: NoAuth identity
+    # REQUIRED assumption: NoAuth
     # --------------------------------------------------
     def ensure_noauth(self):
         self.noauth_identity = self.create_asset("NoAuth", "Identity")
         self.nopriv_privilege = self.get_or_create_privilege("NoPriv")
-
-        self.noauth_identity.add_associated_assets("privileges", {self.nopriv_privilege})
+        self.noauth_identity.add_associated_assets(
+            "privileges", {self.nopriv_privilege}
+        )
 
     # --------------------------------------------------
-    # Components
+    # Components (Application / Module)
     # --------------------------------------------------
     def build_components(self):
         for aid, a in self.assets.items():
@@ -70,13 +91,12 @@ class BlueprintToMAL:
                 continue
 
             tag = a.get("tags", ["module"])[0]
-
             mal_type = "Application" if tag == "application" else "Module"
 
             mal_asset = self.create_asset(a["name"], mal_type)
             self.mal_assets[aid] = mal_asset
 
-            # Map zones → modules (assumption: exactly 1 module per zone)
+            # Exactly one module per zone
             if mal_type == "Module":
                 zone = a.get("zone")
                 if zone:
@@ -86,6 +106,7 @@ class BlueprintToMAL:
     # Data + Information
     # --------------------------------------------------
     def build_data(self):
+        # Create Data / Information assets
         for aid, a in self.assets.items():
             if a["type"] != "data":
                 continue
@@ -96,20 +117,22 @@ class BlueprintToMAL:
             mal_asset = self.create_asset(a["name"], mal_type)
             self.mal_assets[aid] = mal_asset
 
-        # Parent relationship
-        #TODO: may be incorrect
+        # DataContainsInformation (CORRECT DIRECTION)
         for aid, a in self.assets.items():
             if "parent" not in a:
                 continue
 
-            child = self.mal_assets.get(aid)
-            parent = self.mal_assets.get(a["parent"])
+            child = self.mal_assets.get(aid)           # Information
+            parent = self.mal_assets.get(a["parent"])  # Data
 
-            if child and parent:
-                child.add_associated_assets("data", {parent})
+            if not child or not parent:
+                continue
+
+            if child.type == "Information" and parent.type == "Data":
+                parent.add_associated_assets("information", {child})
 
     # --------------------------------------------------
-    # Identities
+    # Identities + Privileges
     # --------------------------------------------------
     def build_identities(self):
         for actor_id, actor in self.actors.items():
@@ -121,15 +144,17 @@ class BlueprintToMAL:
                 priv = self.get_or_create_privilege(perm)
                 identity.add_associated_assets("privileges", {priv})
 
-            # Delegation → information
+            # Delegation → Information (TYPE SAFE)
             for dep in actor.get("delegatedBy", []):
-                print(dep)
-                info = self.mal_assets.get(dep)
+                asset = self.mal_assets.get(dep)
+                if not asset:
+                    continue
+
+                info = self.resolve_information_asset(asset)
                 if info:
-                    print(info)
                     identity.add_associated_assets("information", {info})
 
-        # Right equivalence
+        # Right-equivalent identities
         for actor_id, actor in self.actors.items():
             identity = self.identities[actor_id]
 
@@ -137,25 +162,29 @@ class BlueprintToMAL:
                 if prop["name"] == "right-equivalent":
                     target = self.identities.get(prop["value"])
                     if target:
-                        identity.add_associated_assets("rightIdentities", {target})
+                        identity.add_associated_assets(
+                            "rightIdentities", {target}
+                        )
 
     # --------------------------------------------------
-    # Module identity assignment
+    # Module → Identity
     # --------------------------------------------------
     def link_module_identities(self):
         for aid, a in self.assets.items():
             module = self.mal_assets.get(aid)
-            if not module:
+            if not module or module.type != "Module":
                 continue
 
             for prop in a.get("properties", []):
                 if prop["name"] == "identity":
                     identity = self.identities.get(f"actor-{prop['value']}")
                     if identity:
-                        module.add_associated_assets("identity", {identity})
+                        module.add_associated_assets(
+                            "identity", {identity}
+                        )
 
     # --------------------------------------------------
-    # App → Module hierarchy
+    # Application → Module hierarchy
     # --------------------------------------------------
     def build_hierarchy(self):
         for aid, a in self.assets.items():
@@ -163,36 +192,35 @@ class BlueprintToMAL:
                 continue
 
             child = self.mal_assets.get(aid)
-
             parent = None
+
             for k, v in self.assets.items():
                 if v["name"] == a["parent"] or k == a["parent"]:
                     parent = self.mal_assets.get(k)
                     break
 
             if child and parent:
-                child.add_associated_assets("application", {parent})
+                if child.type == "Module" and parent.type == "Application":
+                    child.add_associated_assets("application", {parent})
+                if child.type == "Information" and parent.type == "Data":
+                    child.add_associated_assets("data", {parent})
 
     # --------------------------------------------------
-    # Channels (SIMPLIFIED using your assumption)
+    # Authenticated Access Channels
+    # (1 boundary = 1 directed channel)
     # --------------------------------------------------
     def build_channels(self):
         for boundary in self.boundaries:
             zones = boundary.get("zones", [])
             if len(zones) != 2:
-                continue  # guaranteed by assumption
+                continue
 
-            source_zone = zones[0]
-            target_zone = zones[1]
-
-            sender = self.zone_to_module.get(source_zone)
-            receiver = self.zone_to_module.get(target_zone)
+            sender = self.zone_to_module.get(zones[0])
+            receiver = self.zone_to_module.get(zones[1])
 
             if not sender or not receiver:
                 continue
-            
-            #TODO: can there be multiple privileges?
-            # Privilege from boundary
+
             priv_name = next(
                 (p["value"] for p in boundary.get("properties", [])
                  if p["name"] == "priv"),
@@ -201,10 +229,8 @@ class BlueprintToMAL:
 
             privilege = self.get_or_create_privilege(priv_name)
 
-            name = f"{sender.name} - {receiver.name}"
-
             channel = self.create_asset(
-                name,
+                f"{sender.name} - {receiver.name}",
                 "AuthenticatedAccessChannel"
             )
 
@@ -221,15 +247,22 @@ class BlueprintToMAL:
         for ch in self.channels:
             sender = ch.associated_assets.get("senderModule")
             receiver = ch.associated_assets.get("receiverModule")
-
+            
+            #TODO: assumes exactly one sender and one receiver
             if sender:
-                sender[0].add_associated_assets("outgoingAuthenticationRule", {ch})
+                for s in sender:
+                    s.add_associated_assets(
+                        "outgoingAuthenticationRule", {ch}
+                    )
 
             if receiver:
-                receiver[0].add_associated_assets("incomingAuthenticationRule", {ch})
+                for r in receiver:
+                    r.add_associated_assets(
+                        "incomingAuthenticationRule", {ch}
+                    )
 
     # --------------------------------------------------
-    # Build whole model
+    # Build model
     # --------------------------------------------------
     def build(self):
         self.ensure_noauth()
@@ -254,16 +287,16 @@ def transform(input_file, output_file):
     with open(input_file, "r") as f:
         blueprint = json.load(f)
 
-    converter = BlueprintToMAL(blueprint)
-    model = converter.build()
-
-    model.save(output_file)
-    print(f"Model saved to {output_file}")
+    model = BlueprintToMAL(blueprint).build()
+    model.save_to_file(output_file)
+    print(f"✅ Model saved to {output_file}")
 
 
 if __name__ == "__main__":
-    transform("blueprints/ms-exchange/exchange-blue.json", "autooutput.yaml")
-
+    transform(
+        "blueprints/ms-exchange/exchange-blue.json",
+        "autooutput.yaml"
+    )
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate and reduce attack graphs using MALSim.")
