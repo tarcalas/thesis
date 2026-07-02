@@ -13,15 +13,15 @@ category Component{
             -> attemptCommunication
 
         | attemptCommunication
-            -> inPort.connectToPort
+            -> inDataChannel.connectToDataChannel
     }
 
-    asset Port {
-        | connectToPort @entrypoint
+    asset DataChannel {
+        | connectToDataChannel @entrypoint
             -> outgoingAuthenticationRule.attemptAuthenticatedCommunication,
             connectToDevice
         
-        E isInPort
+        E isInDataChannel
             <- incomingAuthenticationRule
             -> connectToDevice
         
@@ -45,7 +45,7 @@ associations {
     AuthenticatedAccessChannel [authenticationRule]     *<-- AuthenticatedAccessChannelRequiresPrivilege -->*      [privilege] Privilege
     Identity [leftIdentity]                        0..1<-- IdentitiesEquivalent -->*                          [rightIdentities] Identity
     Device [controllerDevice]    0..1<-- DeviceControlsAuthentication -->*    [controlledAuthenticationRules] AuthenticatedAccessChannel
-    Port [outPort]                  *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel
-    Port [inPort]                   *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule] AuthenticatedAccessChannel
-    Device [device]                                        1<--DeviceHasPorts-->*                                           [ports] Port
+    DataChannel [outDataChannel] *<-- DataChannelOutgoingCommunication -->*      [outgoingAuthenticationRule] AuthenticatedAccessChannel
+    DataChannel [inDataChannel]   *<-- DataChannelIncomingCommunication -->*     [incomingAuthenticationRule] AuthenticatedAccessChannel
+    Device [device]                   1<--DeviceHasDataChannels-->*                                           [DataChannels] DataChannel
 }

@@ -8,6 +8,8 @@ category Component {
     {     
         | interactWithApplication @entrypoint //this should be used in parallel with the assumeIdentity entry point
             -> outgoingAuthenticationRule.attemptCommunication
+
+        | interactWithSupervisor //this signifies escaping from a sandbox
     }
 
     asset Module 
@@ -25,7 +27,7 @@ category Component {
 
         | attemptCommunication
             -> receiverModule.connectToModule,
-            outPort.connectToPort
+            outDataChannel.connectToDataChannel
 
     }
 
@@ -86,14 +88,9 @@ category Component {
 
     }
 
-    asset OperatingSystem
+    asset DataChannel
     {
-
-    }
-
-    asset Port
-    {
-        | connectToPort @entrypoint
+        | connectToDataChannel @entrypoint
             -> incomingAuthenticationRule.attemptAuthenticatedCommunication
     }
 }
@@ -252,7 +249,8 @@ category Vulnerability {
         & executeUnauthorizedCode
             -> module.readData.read,
             module.writtenData.write,
-            module.controlledAuthenticationRules.attemptCommunication
+            module.controlledAuthenticationRules.attemptCommunication,
+            module.ranApplication.interactWithSupervisor
 
         & gainPrivilegesOrAssumeIdentity
             -> module.identity.assumeIdentity
@@ -295,14 +293,13 @@ category Vulnerability {
 
 
 associations {
-    Module [module]                         *<-- ModulePartOfApp -->1                                          [application] Application
+    Module [interactingModule]                 *<-- ModuleInteractsWithSupervisor -->1                      [ranApplication] Application
     Module [senderModule]             *<-- ModuleOutgoingCommunication -->*       [outgoingAuthenticationRule]AuthenticatedAccessChannel
     Module [receiverModule]          *<-- ModuleIncomingCommunication -->*        [incomingAuthenticationRule]AuthenticatedAccessChannel
     Module [module]                         *<-- ModuleVulnerability -->*                          [vulnerabilities] ModuleVulnerability
     Identity [identity]                   *<-- IdentityHasPrivileges -->*                                         [privileges] Privilege
     AuthenticatedAccessChannel [authenticationRule]     *<-- AuthenticatedAccessChannelRequiresPrivilege -->*      [privilege] Privilege
     Module [module]                          *<-- ModuleHasIdentity -->*                                             [identity] Identity
-    Application [application]                *<-- AppRunsOnOperatingSystem -->*                        [operatingSystem] OperatingSystem
     Module [dependentModule]                  *<-- ModuleDependsOnModule -->*                                        [dependency] Module
     Application [app]                *<-- AppOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel    
     Identity [leftIdentity]                        0..1<-- IdentitiesEquivalent -->*                          [rightIdentities] Identity
@@ -312,6 +309,6 @@ associations {
     Data [containerData]                                *<-- DataContainsData -->*                                  [containedData] Data
     Identity [dependentIdentity]                     *<-- IdentityDependsOnInformation -->*                    [information] Information
     Module [controllerModule]    0..1<-- ModuleControlsAuthentication -->*    [controlledAuthenticationRules] AuthenticatedAccessChannel
-    Port [outPort]                  *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule] AuthenticatedAccessChannel
-    Port [inPort]                   *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule] AuthenticatedAccessChannel
+    DataChannel [outDataChannel]    *<-- DataChannelOutgoingCommunication -->*   [outgoingAuthenticationRule] AuthenticatedAccessChannel
+    DataChannel [inDataChannel]     *<-- DataChannelIncomingCommunication -->*   [incomingAuthenticationRule] AuthenticatedAccessChannel
 }

@@ -14,6 +14,9 @@ category Component {
     {
         | connectToApp @entrypoint
             -> appAuthenticationRule.attemptAuthenticatedCommunication
+        
+        | interactWithSupervisor
+            -> supervisorApp.connectToApp
     }
 
     asset OperatingSystem extends Application
@@ -28,15 +31,15 @@ category Component {
 
     asset AuthenticatedAccessChannel
     {
-        !E noOutPort //this checks the existence of an outPort, if there is none, we can attempt authentication
-            <- outPort
-            -> connectToPortSatisfied
+        !E noOutDataChannel //this checks the existence of an outDataChannel, if there is none, we can attempt authentication
+            <- outDataChannel
+            -> connectToDataChannelSatisfied
 
 
-        | connectToPortEntryPoint @entrypoint //this is an entrypoint from lower level modells, only needed if this connects to an out port
-            -> connectToPortSatisfied
+        | connectToDataChannelEntryPoint @entrypoint //this is an entrypoint from lower level modells, only needed if this connects to an out DataChannel
+            -> connectToDataChannelSatisfied
 
-        | connectToPortSatisfied
+        | connectToDataChannelSatisfied
             -> attemptAuthenticatedCommunication
 
         & attemptAuthenticatedCommunication
@@ -44,7 +47,7 @@ category Component {
         
         | attemptCommunication
             -> receiverApp.connectToApp,
-               outPort.connectToPort,
+               outDataChannel.connectToDataChannel,
                readableData.read,
                writableData.write
     }
@@ -105,16 +108,16 @@ category Component {
 
     }
 
-    asset Port
+    asset DataChannel
     {
-        | connectToPort @entrypoint
+        | connectToDataChannel @entrypoint
             -> incomingAuthenticationRule.attemptAuthenticatedCommunication
     }
 }
 
 associations {
     Hardware [hardware]                           0..1<-- HardwareRunsOperatingSystem -->*             [operatingSystem] OperatingSystem
-    OperatingSystem [operatingSystem]             *<-- OperatingSystemRunsApplication -->*                     [application] Application
+    Application [supervisorApp]             *<-- ApplicationRunsApplication -->*                               [application] Application
     Application [senderApp]          *<-- AppOutgoingCommunication -->*           [outgoingAuthenticationRule]AuthenticatedAccessChannel
     Application [receiverApp]        *<-- AppIncomingCommunication -->*           [incomingAuthenticationRule]AuthenticatedAccessChannel
     Application [application]                *<-- AppDataAccess -->*                   [appAuthenticationRule]AuthenticatedAccessChannel
@@ -127,6 +130,6 @@ associations {
     Data [containerData]                                *<-- DataContainsData -->*                                  [containedData] Data
     Identity [dependentIdentity]                     *<-- IdentityDependsOnInformation -->*                    [information] Information
     Application [controllerApp]    0..1<-- ModuleControlsAuthentication -->*  [controlledAuthenticationRules] AuthenticatedAccessChannel
-    Port [outPort]                   *<-- PortOutgoingCommunication -->*          [outgoingAuthenticationRule]AuthenticatedAccessChannel
-    Port [inPort]                    *<-- PortIncomingCommunication -->*          [incomingAuthenticationRule]AuthenticatedAccessChannel
+    DataChannel [outDataChannel]    *<-- DataChannelOutgoingCommunication -->*    [outgoingAuthenticationRule]AuthenticatedAccessChannel
+    DataChannel [inDataChannel]    *<-- DataChannelIncomingCommunication -->*     [incomingAuthenticationRule]AuthenticatedAccessChannel
 }

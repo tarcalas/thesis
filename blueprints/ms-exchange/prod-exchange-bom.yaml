@@ -38,7 +38,7 @@ blueprints:
     - asset-header
   - bom-ref: asset-ms-exchange
     type: component
-    name: MS Exchange
+    name: MS-Exchange
     description: I'm not sure what type this should be, but this would work with the MAL specification
     zone: zone-public
     tags:
@@ -76,6 +76,7 @@ blueprints:
     parent: MS-Exchange
     tags:
     - module
+    - interactsWithSupervisor
     dependencies:
     - here are the packages that this component depends on (nice to integrate it into the MAL model)
   zones:

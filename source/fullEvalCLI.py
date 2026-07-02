@@ -118,11 +118,11 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                     entrypoints[node["asset"]].add("NoAuth:assumeIdentity")
                     if count < len(entrypoints[node["asset"]]):
                         to_eval.add((node["asset"], "Device"))
-                if node["lang_graph_attack_step"] == "Port:connectToPort":
-                    #assumption: naming is of "device+port:connectToPort"
+                if node["lang_graph_attack_step"] == "DataChannel:connectToDataChannel":
+                    #assumption: naming is of "device+DataChannel:connectToDataChannel"
                     info = node["asset"].split("+")
                     count = len(entrypoints[info[0]])
-                    entrypoints[info[0]].add(info[1] + ":connectToPort")
+                    entrypoints[info[0]].add(info[1] + ":connectToDataChannel")
                     if count < len(entrypoints[info[0]]):
                         to_eval.add((info[0], "Device"))
             case 1:
@@ -149,11 +149,11 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                         #entrypoints["network"].add(current_asset + "+" + node["asset"] + ":assumeIdentity")
                         if count < len(entrypoints["network"]):
                             to_eval.add(("network", "Network"))
-                if node["lang_graph_attack_step"] == "Port:connectToPort":
+                if node["lang_graph_attack_step"] == "DataChannel:connectToDataChannel":
                     #if no next steps, the communication is on the network level and we can add a network entry point
                     if node["children"] == {}:
                         count = len(entrypoints["network"])
-                        entrypoints["network"].add(current_asset + "+" + node["asset"] + ":connectToPort")
+                        entrypoints["network"].add(current_asset + "+" + node["asset"] + ":connectToDataChannel")
                         if count < len(entrypoints["network"]):
                             to_eval.add(("network", "Network"))
                     else:
@@ -163,10 +163,10 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                             if info[0] != node["asset"]:
                                 continue
                             else:
-                                #assumption: the next step of the outgoing comm is always of the form "port-app:attemptAuthenticatedCommunication"
+                                #assumption: the next step of the outgoing comm is always of the form "DataChannel-app:attemptAuthenticatedCommunication"
                                 info = info[1].split(":")
                                 count = len(entrypoints[info[0]])
-                                entrypoints[info[0]].add(node["asset"] + ":connectToPort")
+                                entrypoints[info[0]].add(node["asset"] + ":connectToDataChannel")
                                 if count < len(entrypoints[info[0]]):
                                     to_eval.add((info[0], "Application"))
             case 2:
@@ -186,13 +186,18 @@ def process_new_info(type, reduced_graph, entrypoints, current_asset, counts, ev
                         entrypoints[invoker].add(identity_to_add + ":assumeIdentity")
                     if count < len(entrypoints[invoker]):
                         to_eval.add((invoker, "Device"))
-                if node["lang_graph_attack_step"] == "Port:connectToPort":
+                if node["lang_graph_attack_step"] == "DataChannel:connectToDataChannel":
                     #if no next steps, the communication is on the device level and we can add a device entry point
                     if node["children"] == {}:
                         count = len(entrypoints[invoker])
-                        entrypoints[invoker].add(current_asset + "-" + node["asset"] + ":connectToPortEntryPoint")
+                        entrypoints[invoker].add(current_asset + "-" + node["asset"] + ":connectToDataChannelEntryPoint")
                         if count < len(entrypoints[invoker]):
                             to_eval.add((invoker, "Device")) 
+                if node["lang_graph_attack_step"] == "Application:interactWithSupervisor":
+                    count = len(entrypoints[node["asset"]])
+                    entrypoints[node["asset"]].add(node["asset"] + ":interactWithSupervisor")
+                    if count < len(entrypoints[node["asset"]]):
+                        to_eval.add((node["asset"], "Device"))
     for (asset, type) in to_eval:
        print(asset, entrypoints[asset])
        match type:

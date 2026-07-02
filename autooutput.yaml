@@ -7,20 +7,35 @@ assets:
     type: Identity
   1:
     associated_assets:
+      authenticationRule:
+        16: MS-Exchange-Frontend
       identity:
         0: NoAuth
+        8: DOMAIN
+        10: NT/SYSTEM-Backend
+        12: NT/SYSTEM
     name: NoPriv
     type: Privilege
   2:
-    associated_assets: {}
-    name: MS Exchange
+    associated_assets:
+      interactingModule:
+        5: Backend ECP
+      outgoingAuthenticationRule:
+        16: MS-Exchange-Frontend
+    name: MS-Exchange
     type: Application
   3:
     associated_assets:
       identity:
         8: DOMAIN
+      incomingAuthenticationRule:
+        16: MS-Exchange-Frontend
       outgoingAuthenticationRule:
         14: Frontend - Backen IIS
+      readData:
+        6: Header
+      writtenData:
+        6: Header
     name: Frontend
     type: Module
   4:
@@ -35,12 +50,18 @@ assets:
     associated_assets:
       incomingAuthenticationRule:
         15: Backen IIS - Backend ECP
+      ranApplication:
+        2: MS-Exchange
     name: Backend ECP
     type: Module
   6:
     associated_assets:
       information:
-        7: Header:7
+        7: Header Info
+      readerModule:
+        3: Frontend
+      writerModule:
+        3: Frontend
     name: Header
     type: Data
   7:
@@ -49,13 +70,14 @@ assets:
         6: Header
       dependentIdentity:
         10: NT/SYSTEM-Backend
-    name: Header:7
+    name: Header Info
     type: Information
   8:
     associated_assets:
       module:
         3: Frontend
       privileges:
+        1: NoPriv
         9: Token-Serialization
     name: DOMAIN
     type: Identity
@@ -70,8 +92,9 @@ assets:
   10:
     associated_assets:
       information:
-        7: Header:7
+        7: Header Info
       privileges:
+        1: NoPriv
         11: SYSTEM-Backend
       rightIdentities:
         12: NT/SYSTEM
@@ -88,6 +111,7 @@ assets:
       leftIdentity:
         10: NT/SYSTEM-Backend
       privileges:
+        1: NoPriv
         13: SYSTEM
     name: NT/SYSTEM
     type: Identity
@@ -118,6 +142,16 @@ assets:
       senderModule:
         4: Backen IIS
     name: Backen IIS - Backend ECP
+    type: AuthenticatedAccessChannel
+  16:
+    associated_assets:
+      app:
+        2: MS-Exchange
+      privilege:
+        1: NoPriv
+      receiverModule:
+        3: Frontend
+    name: MS-Exchange-Frontend
     type: AuthenticatedAccessChannel
 metadata:
   MAL-Toolbox Version: 2.8.1

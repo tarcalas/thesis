@@ -19,7 +19,6 @@ from maltoolbox.language import LanguageGraph
 
 class BlueprintToMAL:
     def __init__(self, blueprint_json):
-        # Load MAL language
         lang = LanguageGraph.load_from_file(
             "/workspaces/thesis/mal-langs/Application.mal"
         )
@@ -27,21 +26,24 @@ class BlueprintToMAL:
         self.bp = blueprint_json["blueprints"][0]
         self.model = Model("generated-model", lang_graph=lang)
 
-        # Blueprint lookup tables
         self.assets = {a["bom-ref"]: a for a in self.bp.get("assets", [])}
         self.actors = {a["bom-ref"]: a for a in self.bp.get("actors", [])}
         self.boundaries = self.bp.get("boundaries", [])
 
-        # MAL assets
         self.mal_assets = {}
         self.identities = {}
         self.privileges = {}
         self.zone_to_module = {}
         self.channels = []
 
-        # Required assumption
         self.noauth_identity = None
         self.nopriv_privilege = None
+
+        # Assumptions:
+        # - Exactly one application per blueprint
+        # - Exactly one module per trust zone
+        self.application = None
+        self.public_module = None
 
     # --------------------------------------------------
     # Helpers
@@ -52,166 +54,327 @@ class BlueprintToMAL:
     def get_or_create_privilege(self, name):
         if name in self.privileges:
             return self.privileges[name]
+
         priv = self.create_asset(name, "Privilege")
         self.privileges[name] = priv
         return priv
 
     def resolve_information_asset(self, asset):
-        """
-        Ensure Identity.information only receives Information assets.
-        If a Data asset is given, try to resolve its contained Information.
-        """
         if asset.type == "Information":
             return asset
 
         if asset.type == "Data":
             infos = asset.associated_assets.get("information")
             if infos:
-                for info in infos:  # Assuming one Information per Data, this is ugly
+                for info in infos:
                     return info
 
         return None
 
     # --------------------------------------------------
-    # REQUIRED assumption: NoAuth
+    # Assumption:
+    # NoAuth identity with NoPriv privilege exists
     # --------------------------------------------------
     def ensure_noauth(self):
-        self.noauth_identity = self.create_asset("NoAuth", "Identity")
-        self.nopriv_privilege = self.get_or_create_privilege("NoPriv")
+        self.noauth_identity = self.create_asset(
+            "NoAuth",
+            "Identity"
+        )
+
+        self.nopriv_privilege = self.get_or_create_privilege(
+            "NoPriv"
+        )
+
         self.noauth_identity.add_associated_assets(
-            "privileges", {self.nopriv_privilege}
+            "privileges",
+            {self.nopriv_privilege}
         )
 
     # --------------------------------------------------
-    # Components (Application / Module)
+    # Components
     # --------------------------------------------------
     def build_components(self):
-        for aid, a in self.assets.items():
-            if a["type"] != "component":
+        for aid, asset in self.assets.items():
+
+            if asset["type"] != "component":
                 continue
 
-            tag = a.get("tags", ["module"])[0]
-            mal_type = "Application" if tag == "application" else "Module"
+            tag = asset.get("tags", ["module"])[0]
 
-            mal_asset = self.create_asset(a["name"], mal_type)
+            mal_type = (
+                "Application"
+                if tag == "application"
+                else "Module"
+            )
+
+            mal_asset = self.create_asset(
+                asset["name"],
+                mal_type
+            )
+
             self.mal_assets[aid] = mal_asset
 
-            # Exactly one module per zone
-            if mal_type == "Module":
-                zone = a.get("zone")
+            zone = asset.get("zone")
+
+            if mal_type == "Application":
+                self.application = mal_asset
+
+            elif mal_type == "Module":
+
                 if zone:
                     self.zone_to_module[zone] = mal_asset
+
+                if zone == "zone-public":
+                    self.public_module = mal_asset
+                
 
     # --------------------------------------------------
     # Data + Information
     # --------------------------------------------------
     def build_data(self):
-        # Create Data / Information assets
-        for aid, a in self.assets.items():
-            if a["type"] != "data":
+        for aid, asset in self.assets.items():
+
+            if asset["type"] != "data":
                 continue
 
-            tag = a.get("tags", ["data"])[0]
-            mal_type = "Data" if tag == "data" else "Information"
+            tag = asset.get("tags", ["data"])[0]
 
-            mal_asset = self.create_asset(a["name"], mal_type)
+            mal_type = (
+                "Data"
+                if tag == "data"
+                else "Information"
+            )
+
+            mal_asset = self.create_asset(
+                asset["name"],
+                mal_type
+            )
+
             self.mal_assets[aid] = mal_asset
 
-        # DataContainsInformation (CORRECT DIRECTION)
-        for aid, a in self.assets.items():
-            if "parent" not in a:
+        for aid, asset in self.assets.items():
+
+            if "parent" not in asset:
                 continue
 
-            child = self.mal_assets.get(aid)           # Information
-            parent = self.mal_assets.get(a["parent"])  # Data
+            child = self.mal_assets.get(aid)
+            parent = self.mal_assets.get(asset["parent"])
 
             if not child or not parent:
                 continue
 
             if child.type == "Information" and parent.type == "Data":
-                parent.add_associated_assets("information", {child})
+                parent.add_associated_assets(
+                    "information",
+                    {child}
+                )
 
     # --------------------------------------------------
-    # Identities + Privileges
+    # Assumption:
+    # Owner of data has read and write rights
+    # --------------------------------------------------
+    def build_data_ownership(self):
+
+        for aid, asset in self.assets.items():
+
+            if asset["type"] != "data":
+                continue
+
+            data_asset = self.mal_assets.get(aid)
+
+            if not data_asset:
+                continue
+
+            for owner in asset.get("ownership", []):
+
+                module = self.mal_assets.get(owner)
+
+                if not module:
+                    continue
+
+                if module.type != "Module":
+                    continue
+
+                module.add_associated_assets(
+                    "readData",
+                    {data_asset}
+                )
+
+                module.add_associated_assets(
+                    "writtenData",
+                    {data_asset}
+                )
+
+    # --------------------------------------------------
+    # Identities
     # --------------------------------------------------
     def build_identities(self):
+
         for actor_id, actor in self.actors.items():
-            identity = self.create_asset(actor["name"], "Identity")
+
+            identity = self.create_asset(
+                actor["name"],
+                "Identity"
+            )
+
             self.identities[actor_id] = identity
 
-            # Permissions → Privileges
-            for perm in actor.get("permissions", []):
-                priv = self.get_or_create_privilege(perm)
-                identity.add_associated_assets("privileges", {priv})
+            # Assumption:
+            # Every identity has NoPriv
+            identity.add_associated_assets(
+                "privileges",
+                {self.nopriv_privilege}
+            )
 
-            # Delegation → Information (TYPE SAFE)
+            for perm in actor.get("permissions", []):
+
+                privilege = self.get_or_create_privilege(
+                    perm
+                )
+
+                identity.add_associated_assets(
+                    "privileges",
+                    {privilege}
+                )
+
             for dep in actor.get("delegatedBy", []):
+
                 asset = self.mal_assets.get(dep)
+
                 if not asset:
                     continue
 
                 info = self.resolve_information_asset(asset)
-                if info:
-                    identity.add_associated_assets("information", {info})
 
-        # Right-equivalent identities
+                if not info:
+                    continue
+
+                identity.add_associated_assets(
+                    "information",
+                    {info}
+                )
+
         for actor_id, actor in self.actors.items():
+
             identity = self.identities[actor_id]
 
             for prop in actor.get("properties", []):
-                if prop["name"] == "right-equivalent":
-                    target = self.identities.get(prop["value"])
-                    if target:
-                        identity.add_associated_assets(
-                            "rightIdentities", {target}
-                        )
+
+                if prop["name"] != "right-equivalent":
+                    continue
+
+                target = self.identities.get(
+                    prop["value"]
+                )
+
+                if target:
+                    identity.add_associated_assets(
+                        "rightIdentities",
+                        {target}
+                    )
 
     # --------------------------------------------------
     # Module → Identity
     # --------------------------------------------------
     def link_module_identities(self):
-        for aid, a in self.assets.items():
+
+        for aid, asset in self.assets.items():
+
             module = self.mal_assets.get(aid)
-            if not module or module.type != "Module":
+
+            if not module:
                 continue
 
-            for prop in a.get("properties", []):
-                if prop["name"] == "identity":
-                    identity = self.identities.get(f"actor-{prop['value']}")
-                    if identity:
-                        module.add_associated_assets(
-                            "identity", {identity}
-                        )
+            if module.type != "Module":
+                continue
+
+            for prop in asset.get("properties", []):
+
+                if prop["name"] != "identity":
+                    continue
+
+                identity = self.identities.get(
+                    f"actor-{prop['value']}"
+                )
+
+                if identity:
+                    module.add_associated_assets(
+                        "identity",
+                        {identity}
+                    )
 
     # --------------------------------------------------
-    # Application → Module hierarchy
+    # Application → Module
     # --------------------------------------------------
     def build_hierarchy(self):
-        for aid, a in self.assets.items():
-            if "parent" not in a:
+
+        for aid, asset in self.assets.items():
+
+            if "parent" not in asset:
                 continue
 
             child = self.mal_assets.get(aid)
             parent = None
 
             for k, v in self.assets.items():
-                if v["name"] == a["parent"] or k == a["parent"]:
+
+                if (
+                    v["name"] == asset["parent"]
+                    or k == asset["parent"]
+                ):
                     parent = self.mal_assets.get(k)
                     break
 
-            if child and parent:
-                if child.type == "Module" and parent.type == "Application":
-                    child.add_associated_assets("application", {parent})
-                if child.type == "Information" and parent.type == "Data":
-                    child.add_associated_assets("data", {parent})
+            if not child or not parent:
+                continue
+
+            if (
+                child.type == "Information"
+                and parent.type == "Data"
+            ):
+                child.add_associated_assets(
+                    "data",
+                    {parent}
+                )
 
     # --------------------------------------------------
-    # Authenticated Access Channels
-    # (1 boundary = 1 directed channel)
+    # Building the supervisor interactions
+    # --------------------------------------------------
+
+    def build_supervisor_links(self):
+
+        if not self.application:
+            return
+
+        for aid, asset in self.assets.items():
+
+            if asset.get("type") != "component":
+                continue
+
+            module = self.mal_assets.get(aid)
+
+            if not module or module.type != "Module":
+                continue
+
+            tags = asset.get("tags", [])
+
+            if "interactsWithSupervisor" not in tags:
+                continue
+
+            module.add_associated_assets(
+                "ranApplication",
+                {self.application}
+            )
+
+    # --------------------------------------------------
+    # Trust boundary channels
     # --------------------------------------------------
     def build_channels(self):
+
         for boundary in self.boundaries:
+
             zones = boundary.get("zones", [])
+
             if len(zones) != 2:
                 continue
 
@@ -222,64 +385,146 @@ class BlueprintToMAL:
                 continue
 
             priv_name = next(
-                (p["value"] for p in boundary.get("properties", [])
-                 if p["name"] == "priv"),
+                (
+                    p["value"]
+                    for p in boundary.get("properties", [])
+                    if p["name"] == "priv"
+                ),
                 "NoPriv"
             )
 
-            privilege = self.get_or_create_privilege(priv_name)
+            privilege = self.get_or_create_privilege(
+                priv_name
+            )
 
             channel = self.create_asset(
                 f"{sender.name} - {receiver.name}",
                 "AuthenticatedAccessChannel"
             )
 
-            channel.add_associated_assets("senderModule", {sender})
-            channel.add_associated_assets("receiverModule", {receiver})
-            channel.add_associated_assets("privilege", {privilege})
+            channel.add_associated_assets(
+                "senderModule",
+                {sender}
+            )
+
+            channel.add_associated_assets(
+                "receiverModule",
+                {receiver}
+            )
+
+            channel.add_associated_assets(
+                "privilege",
+                {privilege}
+            )
 
             self.channels.append(channel)
 
     # --------------------------------------------------
-    # Link channels to modules
+    # Assumption:
+    # Application and module in same trust-zone
+    # get a NoPriv AAC
+    # --------------------------------------------------
+    def build_same_zone_application_channel(self):
+
+        if not self.application:
+            return
+
+        app_zone = None
+
+        for aid, asset in self.assets.items():
+
+            if self.mal_assets.get(aid) == self.application:
+                app_zone = asset.get("zone")
+                break
+
+        if not app_zone:
+            return
+
+        module = self.zone_to_module.get(app_zone)
+
+        if not module:
+            return
+
+        channel = self.create_asset(
+            f"{self.application.name}-{module.name}",
+            "AuthenticatedAccessChannel"
+        )
+
+        channel.add_associated_assets(
+            "receiverModule",
+            {module}
+        )
+
+        channel.add_associated_assets(
+            "privilege",
+            {self.nopriv_privilege}
+        )
+
+        channel.add_associated_assets(
+            "app",
+            {self.application}
+        )
+
+        self.channels.append(channel)
+
+    # --------------------------------------------------
+    # Link channels
     # --------------------------------------------------
     def link_channels(self):
-        for ch in self.channels:
-            sender = ch.associated_assets.get("senderModule")
-            receiver = ch.associated_assets.get("receiverModule")
-            
-            #TODO: assumes exactly one sender and one receiver
-            if sender:
-                for s in sender:
-                    s.add_associated_assets(
-                        "outgoingAuthenticationRule", {ch}
+
+        for channel in self.channels:
+
+            senders = channel.associated_assets.get(
+                "senderModule"
+            )
+
+            receivers = channel.associated_assets.get(
+                "receiverModule"
+            )
+
+            if senders:
+                for sender in senders:
+                    sender.add_associated_assets(
+                        "outgoingAuthenticationRule",
+                        {channel}
                     )
 
-            if receiver:
-                for r in receiver:
-                    r.add_associated_assets(
-                        "incomingAuthenticationRule", {ch}
+            if receivers:
+                for receiver in receivers:
+                    receiver.add_associated_assets(
+                        "incomingAuthenticationRule",
+                        {channel}
                     )
 
     # --------------------------------------------------
     # Build model
     # --------------------------------------------------
     def build(self):
+
         self.ensure_noauth()
 
         self.build_components()
+
         self.build_data()
+        
+        self.build_data_ownership()
+
         self.build_identities()
 
         self.link_module_identities()
+
         self.build_hierarchy()
 
+        self.build_supervisor_links()
+
         self.build_channels()
+
+        self.build_same_zone_application_channel()
+
         self.link_channels()
 
+
         return self.model
-
-
 # --------------------------------------------------
 # Entry point
 # --------------------------------------------------

@@ -1,209 +1,210 @@
 {
-    "blueprints": [
+  "blueprints": [
+    {
+      "bom-ref": "blueprint-exchange",
+      "name": "MS Exchange blueprint",
+      "description": "Blueprint for the modeling of MS Exchange.",
+      "metadata": {
+        "timestamp": "2026-04-15T09:30:00Z",
+        "authors": {
+          "name": "Barnabas Tarcali",
+          "contact": [
+            {
+              "name": "Barnabas Tarcali",
+              "email": "barnabas.tarcali@tno.nl"
+            }
+          ]
+        },
+        "ordinalVersion": "1.0.0"
+      },
+      "scope": {
+        "bom-ref": "scope-1",
+        "name": "MS Exchange",
+        "description": "Blueprint of the MS Exchange server Backend and Frontend.",
+        "boundaries": [
+          "Internet",
+          "Internal Network"
+        ]
+      },
+      "assets": [
         {
-            "bom-ref": "blueprint-exchange",
-            "name": "MS Exchange blueprint",
-            "description": "Blueprint for the modeling of MS Exchange.",
-            "metadata": {
-                "timestamp": "2026-04-15T09:30:00Z",
-                "authors": {
-                    "name": "Barnabas Tarcali",
-                    "contact": [
-                        {
-                            "name": "Barnabas Tarcali",
-                            "email": "barnabas.tarcali@tno.nl"
-                        }
-                    ]
-                },
-                "ordinalVersion": "1.0.0"
-            },
-            "scope": {
-                "bom-ref": "scope-1",
-                "name": "MS Exchange",
-                "description": "Blueprint of the MS Exchange server Backend and Frontend.",
-                "boundaries": [
-                    "Internet",
-                    "Internal Network"
-                ]
-            },
-            "assets": [
-                {
-                    "bom-ref": "asset-header",
-                    "type": "data",
-                    "name": "Header",
-                    "zone": "zone-public",
-                    "tags": [
-                        "data"
-                    ],
-                    "ownership": [
-                        "asset-frontend"
-                    ]
-                },
-                {
-                    "bom-ref": "asset-header-info",
-                    "type": "data",
-                    "name": "Header",
-                    "zone": "zone-public",
-                    "tags": [
-                        "information"
-                    ],
-                    "parent": "asset-header",
-                    "ownership": [
-                        "asset-header"
-                    ]
-                },
-                {
-                    "bom-ref": "asset-ms-exchange",
-                    "type": "component",
-                    "name": "MS Exchange",
-                    "description": "I'm not sure what type this should be, but this would work with the MAL specification",
-                    "zone": "zone-public",
-                    "tags": [
-                        "application"
-                    ],
-                    "dependencies": [
-                        "here are the packages that this component depends on (nice to integrate it into the MAL model)"
-                    ]
-                },
-                {
-                    "bom-ref": "asset-frontend",
-                    "type": "component",
-                    "name": "Frontend",
-                    "description": "I'm not sure what type this should be, but this would work with the MAL specification",
-                    "zone": "zone-public",
-                    "parent": "MS-Exchange",
-                    "tags": [
-                        "module"
-                    ],
-                    "properties": [
-                        {
-                            "name": "identity",
-                            "value": "DOMAIN"
-                        }
-                    ],
-                    "dependencies": [
-                        "here are the packages that this component depends on (nice to integrate it into the MAL model)"
-                    ]
-                },
-                {
-                    "bom-ref": "asset-backend-iis",
-                    "type": "component",
-                    "name": "Backen IIS",
-                    "description": "I'm not sure what type this should be, but this would work with the MAL specification",
-                    "zone": "zone-internal-proxy",
-                    "parent": "MS-Exchange",
-                    "tags": [
-                        "module"
-                    ],
-                    "dependencies": [
-                        "here are the packages that this component depends on (nice to integrate it into the MAL model)"
-                    ]
-                },
-                {
-                    "bom-ref": "asset-backend-ecp",
-                    "type": "component",
-                    "name": "Backend ECP",
-                    "description": "I'm not sure what type this should be, but this would work with the MAL specification",
-                    "zone": "zone-internal-functions",
-                    "parent": "MS-Exchange",
-                    "tags": [
-                        "module"
-                    ],
-                    "dependencies": [
-                        "here are the packages that this component depends on (nice to integrate it into the MAL model)"
-                    ]
-                }
-            ],
-            "zones": [
-                {
-                    "bom-ref": "zone-public",
-                    "name": "Public Zone",
-                    "type": "trust",
-                    "description": "Untrusted internet-facing zone"
-                },
-                {
-                    "bom-ref": "zone-internal-proxy",
-                    "name": "Internal Services",
-                    "type": "trust",
-                    "description": "Trusted internal service network. It might also be logical boundary? But I do think that the way we disected the AACs is based on trust boundaries"
-                },
-                {
-                    "bom-ref": "zone-internal-functions",
-                    "name": "Internal Functions",
-                    "type": "trust",
-                    "description": "The trusted zone with internal priv representation"
-                }
-            ],
-            "boundaries": [
-                {
-                    "bom-ref": "boundary+public+internal-proxy",
-                    "name": "Exchange frontend and backend IIc boundary",
-                    "type": "trust",
-                    "zones": [
-                        "zone-public",
-                        "zone-internal-proxy"
-                    ],
-                    "properties": [
-                        {
-                            "name": "priv",
-                            "value": "Token-Serialization"
-                        }
-                    ]
-                },
-                {
-                    "bom-ref": "boundary+internal-proxy+internal-functions",
-                    "name": "Exchange frontend and backend IIc boundary",
-                    "type": "trust",
-                    "zones": [
-                        "zone-internal-proxy",
-                        "zone-internal-functions"
-                    ],
-                    "properties": [
-                        {
-                            "name": "priv",
-                            "value": "SYSTEM"
-                        }
-                    ]
-                }
-            ],
-            "actors": [
-                {
-                    "bom-ref": "actor-DOMAIN",
-                    "name": "DOMAIN",
-                    "type": "user",
-                    "permissions": [
-                        "Token-Serialization"
-                    ],
-                    "zone": "zone-public"
-                },
-                {
-                    "bom-ref": "actor-NT/SYSTEM-Backend",
-                    "name": "NT/SYSTEM-Backend",
-                    "type": "user",
-                    "delegatedBy": [
-                        "asset-header"
-                    ],
-                    "permissions": [
-                        "SYSTEM-Backend"
-                    ],
-                    "zone": "zone-internal-functions",
-                    "properties": [
-                        {
-                            "name": "right-equivalent",
-                            "value": "actor-NT/SYSTEM"
-                        }
-                    ]
-                },
-                {
-                    "bom-ref": "actor-NT/SYSTEM",
-                    "name": "NT/SYSTEM",
-                    "type": "user",
-                    "permissions": [
-                        "SYSTEM"
-                    ],
-                    "zone": "zone-public"
-                }
-            ]
+          "bom-ref": "asset-header",
+          "type": "data",
+          "name": "Header",
+          "zone": "zone-public",
+          "tags": [
+            "data"
+          ],
+          "ownership": [
+            "asset-frontend"
+          ]
+        },
+        {
+          "bom-ref": "asset-header-info",
+          "type": "data",
+          "name": "Header Info",
+          "zone": "zone-public",
+          "tags": [
+            "information"
+          ],
+          "parent": "asset-header",
+          "ownership": [
+            "asset-header"
+          ]
+        },
+        {
+          "bom-ref": "asset-ms-exchange",
+          "type": "component",
+          "name": "MS-Exchange",
+          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
+          "zone": "zone-public",
+          "tags": [
+            "application"
+          ],
+          "dependencies": [
+            "here are the packages that this component depends on (nice to integrate it into the MAL model)"
+          ]
+        },
+        {
+          "bom-ref": "asset-frontend",
+          "type": "component",
+          "name": "Frontend",
+          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
+          "zone": "zone-public",
+          "parent": "MS-Exchange",
+          "tags": [
+            "module"
+          ],
+          "properties": [
+            {
+              "name": "identity",
+              "value": "DOMAIN"
+            }
+          ],
+          "dependencies": [
+            "here are the packages that this component depends on (nice to integrate it into the MAL model)"
+          ]
+        },
+        {
+          "bom-ref": "asset-backend-iis",
+          "type": "component",
+          "name": "Backen IIS",
+          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
+          "zone": "zone-internal-proxy",
+          "parent": "MS-Exchange",
+          "tags": [
+            "module"
+          ],
+          "dependencies": [
+            "here are the packages that this component depends on (nice to integrate it into the MAL model)"
+          ]
+        },
+        {
+          "bom-ref": "asset-backend-ecp",
+          "type": "component",
+          "name": "Backend ECP",
+          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
+          "zone": "zone-internal-functions",
+          "parent": "MS-Exchange",
+          "tags": [
+            "module",
+            "interactsWithSupervisor"
+          ],
+          "dependencies": [
+            "here are the packages that this component depends on (nice to integrate it into the MAL model)"
+          ]
         }
-    ]
+      ],
+      "zones": [
+        {
+          "bom-ref": "zone-public",
+          "name": "Public Zone",
+          "type": "trust",
+          "description": "Untrusted internet-facing zone"
+        },
+        {
+          "bom-ref": "zone-internal-proxy",
+          "name": "Internal Services",
+          "type": "trust",
+          "description": "Trusted internal service network. It might also be logical boundary? But I do think that the way we disected the AACs is based on trust boundaries"
+        },
+        {
+          "bom-ref": "zone-internal-functions",
+          "name": "Internal Functions",
+          "type": "trust",
+          "description": "The trusted zone with internal priv representation"
+        }
+      ],
+      "boundaries": [
+        {
+          "bom-ref": "boundary+public+internal-proxy",
+          "name": "Exchange frontend and backend IIc boundary",
+          "type": "trust",
+          "zones": [
+            "zone-public",
+            "zone-internal-proxy"
+          ],
+          "properties": [
+            {
+              "name": "priv",
+              "value": "Token-Serialization"
+            }
+          ]
+        },
+        {
+          "bom-ref": "boundary+internal-proxy+internal-functions",
+          "name": "Exchange frontend and backend IIc boundary",
+          "type": "trust",
+          "zones": [
+            "zone-internal-proxy",
+            "zone-internal-functions"
+          ],
+          "properties": [
+            {
+              "name": "priv",
+              "value": "SYSTEM"
+            }
+          ]
+        }
+      ],
+      "actors": [
+        {
+          "bom-ref": "actor-DOMAIN",
+          "name": "DOMAIN",
+          "type": "user",
+          "permissions": [
+            "Token-Serialization"
+          ],
+          "zone": "zone-public"
+        },
+        {
+          "bom-ref": "actor-NT/SYSTEM-Backend",
+          "name": "NT/SYSTEM-Backend",
+          "type": "user",
+          "delegatedBy": [
+            "asset-header-info"
+          ],
+          "permissions": [
+            "SYSTEM-Backend"
+          ],
+          "zone": "zone-internal-functions",
+          "properties": [
+            {
+              "name": "right-equivalent",
+              "value": "actor-NT/SYSTEM"
+            }
+          ]
+        },
+        {
+          "bom-ref": "actor-NT/SYSTEM",
+          "name": "NT/SYSTEM",
+          "type": "user",
+          "permissions": [
+            "SYSTEM"
+          ],
+          "zone": "zone-public"
+        }
+      ]
+    }
+  ]
 }
