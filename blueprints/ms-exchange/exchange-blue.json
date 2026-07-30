@@ -56,7 +56,6 @@
           "bom-ref": "asset-ms-exchange",
           "type": "component",
           "name": "MS-Exchange",
-          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
           "zone": "zone-public",
           "tags": [
             "application"
@@ -69,7 +68,6 @@
           "bom-ref": "asset-frontend",
           "type": "component",
           "name": "Frontend",
-          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
           "zone": "zone-public",
           "parent": "MS-Exchange",
           "tags": [
@@ -89,7 +87,6 @@
           "bom-ref": "asset-backend-iis",
           "type": "component",
           "name": "Backen IIS",
-          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
           "zone": "zone-internal-proxy",
           "parent": "MS-Exchange",
           "tags": [
@@ -103,7 +100,6 @@
           "bom-ref": "asset-backend-ecp",
           "type": "component",
           "name": "Backend ECP",
-          "description": "I'm not sure what type this should be, but this would work with the MAL specification",
           "zone": "zone-internal-functions",
           "parent": "MS-Exchange",
           "tags": [
@@ -206,5 +202,35 @@
         }
       ]
     }
-  ]
+  ],
+  "vulnerabilities": [
+    {
+    "bom-ref": "SSRF",
+    "id": "CVE-2021-26855",
+    "weaknesses": [
+      {
+        "cweId" : 918
+      }
+    ],
+    "affects": [
+      {
+        "ref": "asset-frontend"
+      }
+    ]
+    },
+    {
+    "bom-ref": "RCE",
+    "id": "CVE-2021-27065",
+    "weaknesses": [
+      {
+        "cweId" : 22
+      }
+    ],
+    "affects": [
+      {
+        "ref": "asset-backend-ecp"
+      }
+    ]
+    }
+  ]   
 }

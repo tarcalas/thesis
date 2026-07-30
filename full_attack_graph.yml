@@ -1,200 +1,79 @@
 attack_steps:
-  80-CoreModule:attemptAuthenticatedCommunication:
-    asset: 80-CoreModule
+  Backen IIS - Backend ECP:attemptAuthenticatedCommunication:
+    asset: Backen IIS - Backend ECP
     children:
-      18: 80-CoreModule:attemptCommunication
-    id: 17
+      65: Backen IIS - Backend ECP:attemptCommunication
+    id: 64
     lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
     name: attemptAuthenticatedCommunication
     parents:
-      16: 80:connectToPort
+      15: Backen IIS:connectToModule
+      56: SYSTEM:assumePrivilege
     ttc: null
     type: and
-  80-CoreModule:attemptCommunication:
-    asset: 80-CoreModule
+  Backen IIS - Backend ECP:attemptCommunication:
+    asset: Backen IIS - Backend ECP
     children:
-      15: CoreModule:connectToModule
-    id: 18
+      16: Backend ECP:connectToModule
+    id: 65
     lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
     name: attemptCommunication
     parents:
-      17: 80-CoreModule:attemptAuthenticatedCommunication
+      64: Backen IIS - Backend ECP:attemptAuthenticatedCommunication
     ttc: null
     type: or
-  80:connectToPort:
-    asset: '80'
+  Backen IIS:connectToModule:
+    asset: Backen IIS
     children:
-      17: 80-CoreModule:attemptAuthenticatedCommunication
-    id: 16
-    lang_graph_attack_step: Port:connectToPort
-    name: connectToPort
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  Admin:assumeIdentity:
-    asset: Admin
-    children:
-      3: Root:assumePrivilege
-    id: 9
-    lang_graph_attack_step: Identity:assumeIdentity
-    name: assumeIdentity
-    parents:
-      57: PrivEsc:gainPrivilegesOrAssumeIdentity
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  Admin:delete:
-    asset: Admin
-    children:
-      13: Admin:deny
-    id: 12
-    lang_graph_attack_step: Identity:delete
-    name: delete
-    parents:
-      11: Admin:write
-    ttc: null
-    type: or
-  Admin:deny:
-    asset: Admin
-    children: {}
-    id: 13
-    lang_graph_attack_step: Identity:deny
-    name: deny
-    parents:
-      12: Admin:delete
-    ttc: null
-    type: or
-  Admin:extract:
-    asset: Admin
-    children: {}
-    id: 14
-    lang_graph_attack_step: Identity:extract
-    name: extract
-    parents: {}
-    ttc: null
-    type: or
-  Admin:read:
-    asset: Admin
-    children: {}
-    id: 10
-    lang_graph_attack_step: Identity:read
-    name: read
-    parents: {}
-    ttc: null
-    type: or
-  Admin:write:
-    asset: Admin
-    children:
-      12: Admin:delete
-    id: 11
-    lang_graph_attack_step: Identity:write
-    name: write
-    parents: {}
-    ttc: null
-    type: or
-  CoreModule:connectToModule:
-    asset: CoreModule
-    children:
-      68: PrivEsc:abuse
+      64: Backen IIS - Backend ECP:attemptAuthenticatedCommunication
     id: 15
     lang_graph_attack_step: Module:connectToModule
     name: connectToModule
     parents:
-      2: app3-CoreModule:attemptCommunication
-      18: 80-CoreModule:attemptCommunication
+      63: Frontend - Backen IIS:attemptCommunication
+      107: CVE-2021-26855:bypassProtectionMechanism
     ttc: null
     type: or
-  NoAuth:assumeIdentity:
-    asset: NoAuth
-    children: {}
-    id: 70
-    lang_graph_attack_step: Identity:assumeIdentity
-    name: assumeIdentity
-    parents: {}
-    tags:
-    - entrypoint
-    ttc: null
-    type: or
-  NoAuth:delete:
-    asset: NoAuth
+  Backend ECP:connectToModule:
+    asset: Backend ECP
     children:
-      74: NoAuth:deny
-    id: 73
-    lang_graph_attack_step: Identity:delete
-    name: delete
+      168: CVE-2021-27065:abuse
+    id: 16
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
     parents:
-      72: NoAuth:write
+      65: Backen IIS - Backend ECP:attemptCommunication
     ttc: null
     type: or
-  NoAuth:deny:
-    asset: NoAuth
-    children: {}
-    id: 74
-    lang_graph_attack_step: Identity:deny
-    name: deny
-    parents:
-      73: NoAuth:delete
-    ttc: null
-    type: or
-  NoAuth:extract:
-    asset: NoAuth
-    children: {}
-    id: 75
-    lang_graph_attack_step: Identity:extract
-    name: extract
-    parents: {}
-    ttc: null
-    type: or
-  NoAuth:read:
-    asset: NoAuth
-    children: {}
-    id: 71
-    lang_graph_attack_step: Identity:read
-    name: read
-    parents: {}
-    ttc: null
-    type: or
-  NoAuth:write:
-    asset: NoAuth
+  CVE-2021-26855:abuse:
+    asset: CVE-2021-26855
     children:
-      73: NoAuth:delete
-    id: 72
-    lang_graph_attack_step: Identity:write
-    name: write
-    parents: {}
-    ttc: null
-    type: or
-  PrivEsc:abuse:
-    asset: PrivEsc
-    children:
-      43: PrivEsc:impact
-    id: 68
+      92: CVE-2021-26855:impact
+    id: 117
     lang_graph_attack_step: CWEVulnerability:abuse
     name: abuse
     parents:
-      15: CoreModule:connectToModule
+      14: Frontend:connectToModule
     ttc: null
     type: or
-  PrivEsc:alterExecutionLogic:
-    asset: PrivEsc
+  CVE-2021-26855:alterExecutionLogic:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 60
+      17: Header:read
+      18: Header:write
+    id: 109
     lang_graph_attack_step: CWEVulnerability:alterExecutionLogic
     name: alterExecutionLogic
     parents:
-      35: PrivEsc:alterExecutionLogicImpactLimitation
-      43: PrivEsc:impact
+      84: CVE-2021-26855:alterExecutionLogicImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:alterExecutionLogicImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:alterExecutionLogicImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      60: PrivEsc:alterExecutionLogic
-    id: 35
+      109: CVE-2021-26855:alterExecutionLogic
+    id: 84
     lang_graph_attack_step: CWEVulnerability:alterExecutionLogicImpactLimitation
     name: alterExecutionLogicImpactLimitation
     parents: {}
@@ -206,22 +85,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:bypassProtectionMechanism:
-    asset: PrivEsc
-    children: {}
-    id: 58
+  CVE-2021-26855:bypassProtectionMechanism:
+    asset: CVE-2021-26855
+    children:
+      15: Backen IIS:connectToModule
+    id: 107
     lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanism
     name: bypassProtectionMechanism
     parents:
-      33: PrivEsc:bypassProtectionMechanismImpactLimitation
-      43: PrivEsc:impact
+      82: CVE-2021-26855:bypassProtectionMechanismImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:bypassProtectionMechanismImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:bypassProtectionMechanismImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      58: PrivEsc:bypassProtectionMechanism
-    id: 33
+      107: CVE-2021-26855:bypassProtectionMechanism
+    id: 82
     lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanismImpactLimitation
     name: bypassProtectionMechanismImpactLimitation
     parents: {}
@@ -229,27 +109,27 @@ attack_steps:
     - suppress
     ttc:
       arguments:
-      - 1.0
+      - 0.0
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:contextDependent:
-    asset: PrivEsc
+  CVE-2021-26855:contextDependent:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 63
+      118: CVE-2021-26855:null
+    id: 112
     lang_graph_attack_step: CWEVulnerability:contextDependent
     name: contextDependent
     parents:
-      38: PrivEsc:contextDependentImpactLimitation
-      43: PrivEsc:impact
+      87: CVE-2021-26855:contextDependentImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:contextDependentImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:contextDependentImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      63: PrivEsc:contextDependent
-    id: 38
+      112: CVE-2021-26855:contextDependent
+    id: 87
     lang_graph_attack_step: CWEVulnerability:contextDependentImpactLimitation
     name: contextDependentImpactLimitation
     parents: {}
@@ -261,23 +141,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:dosAmplification:
-    asset: PrivEsc
+  CVE-2021-26855:dosAmplification:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 51
+      118: CVE-2021-26855:null
+    id: 100
     lang_graph_attack_step: CWEVulnerability:dosAmplification
     name: dosAmplification
     parents:
-      26: PrivEsc:dosAmplificationImpactLimitation
-      43: PrivEsc:impact
+      75: CVE-2021-26855:dosAmplificationImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:dosAmplificationImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:dosAmplificationImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      51: PrivEsc:dosAmplification
-    id: 26
+      100: CVE-2021-26855:dosAmplification
+    id: 75
     lang_graph_attack_step: CWEVulnerability:dosAmplificationImpactLimitation
     name: dosAmplificationImpactLimitation
     parents: {}
@@ -289,23 +169,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:dosCrashExitRestart:
-    asset: PrivEsc
+  CVE-2021-26855:dosCrashExitRestart:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 50
+      118: CVE-2021-26855:null
+    id: 99
     lang_graph_attack_step: CWEVulnerability:dosCrashExitRestart
     name: dosCrashExitRestart
     parents:
-      25: PrivEsc:dosCrashOrRestartImpactLimitation
-      43: PrivEsc:impact
+      74: CVE-2021-26855:dosCrashOrRestartImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:dosCrashOrRestartImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:dosCrashOrRestartImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      50: PrivEsc:dosCrashExitRestart
-    id: 25
+      99: CVE-2021-26855:dosCrashExitRestart
+    id: 74
     lang_graph_attack_step: CWEVulnerability:dosCrashOrRestartImpactLimitation
     name: dosCrashOrRestartImpactLimitation
     parents: {}
@@ -317,23 +197,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:dosInstability:
-    asset: PrivEsc
+  CVE-2021-26855:dosInstability:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 52
+      118: CVE-2021-26855:null
+    id: 101
     lang_graph_attack_step: CWEVulnerability:dosInstability
     name: dosInstability
     parents:
-      27: PrivEsc:dosInstabilityImpactLimitation
-      43: PrivEsc:impact
+      76: CVE-2021-26855:dosInstabilityImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:dosInstabilityImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:dosInstabilityImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      52: PrivEsc:dosInstability
-    id: 27
+      101: CVE-2021-26855:dosInstability
+    id: 76
     lang_graph_attack_step: CWEVulnerability:dosInstabilityImpactLimitation
     name: dosInstabilityImpactLimitation
     parents: {}
@@ -345,23 +225,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:dosResourceCpu:
-    asset: PrivEsc
+  CVE-2021-26855:dosResourceCpu:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 53
+      118: CVE-2021-26855:null
+    id: 102
     lang_graph_attack_step: CWEVulnerability:dosResourceCpu
     name: dosResourceCpu
     parents:
-      28: PrivEsc:dosResourceCpuImpactLimitation
-      43: PrivEsc:impact
+      77: CVE-2021-26855:dosResourceCpuImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:dosResourceCpuImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:dosResourceCpuImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      53: PrivEsc:dosResourceCpu
-    id: 28
+      102: CVE-2021-26855:dosResourceCpu
+    id: 77
     lang_graph_attack_step: CWEVulnerability:dosResourceCpuImpactLimitation
     name: dosResourceCpuImpactLimitation
     parents: {}
@@ -373,23 +253,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:dosResourceMemory:
-    asset: PrivEsc
+  CVE-2021-26855:dosResourceMemory:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 54
+      118: CVE-2021-26855:null
+    id: 103
     lang_graph_attack_step: CWEVulnerability:dosResourceMemory
     name: dosResourceMemory
     parents:
-      29: PrivEsc:dosResourceMemoryImpactLimitation
-      43: PrivEsc:impact
+      78: CVE-2021-26855:dosResourceMemoryImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:dosResourceMemoryImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:dosResourceMemoryImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      54: PrivEsc:dosResourceMemory
-    id: 29
+      103: CVE-2021-26855:dosResourceMemory
+    id: 78
     lang_graph_attack_step: CWEVulnerability:dosResourceMemoryImpactLimitation
     name: dosResourceMemoryImpactLimitation
     parents: {}
@@ -401,23 +281,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:dosResourceOther:
-    asset: PrivEsc
+  CVE-2021-26855:dosResourceOther:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 55
+      118: CVE-2021-26855:null
+    id: 104
     lang_graph_attack_step: CWEVulnerability:dosResourceOther
     name: dosResourceOther
     parents:
-      30: PrivEsc:dosResourceOtherImpactLimitation
-      43: PrivEsc:impact
+      79: CVE-2021-26855:dosResourceOtherImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:dosResourceOtherImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:dosResourceOtherImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      55: PrivEsc:dosResourceOther
-    id: 30
+      104: CVE-2021-26855:dosResourceOther
+    id: 79
     lang_graph_attack_step: CWEVulnerability:dosResourceOtherImpactLimitation
     name: dosResourceOtherImpactLimitation
     parents: {}
@@ -429,52 +309,26 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:executeUnauthorizedCode:
-    asset: PrivEsc
-    children: {}
-    id: 56
+  CVE-2021-26855:executeUnauthorizedCode:
+    asset: CVE-2021-26855
+    children:
+      17: Header:read
+      18: Header:write
+    id: 105
     lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCode
     name: executeUnauthorizedCode
     parents:
-      31: PrivEsc:executeUnauthorizedCodeImpactLimitation
-      43: PrivEsc:impact
+      80: CVE-2021-26855:executeUnauthorizedCodeImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:executeUnauthorizedCodeImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:executeUnauthorizedCodeImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      56: PrivEsc:executeUnauthorizedCode
-    id: 31
+      105: CVE-2021-26855:executeUnauthorizedCode
+    id: 80
     lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCodeImpactLimitation
     name: executeUnauthorizedCodeImpactLimitation
-    parents: {}
-    tags:
-    - suppress
-    ttc:
-      arguments:
-      - 1.0
-      name: Bernoulli
-      type: function
-    type: defense
-  PrivEsc:gainPrivilegesOrAssumeIdentity:
-    asset: PrivEsc
-    children:
-      9: Admin:assumeIdentity
-    id: 57
-    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentity
-    name: gainPrivilegesOrAssumeIdentity
-    parents:
-      32: PrivEsc:gainPrivilegesOrAssumeIdentityImpactLimitation
-      43: PrivEsc:impact
-    ttc: null
-    type: and
-  PrivEsc:gainPrivilegesOrAssumeIdentityImpactLimitation:
-    asset: PrivEsc
-    children:
-      57: PrivEsc:gainPrivilegesOrAssumeIdentity
-    id: 32
-    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentityImpactLimitation
-    name: gainPrivilegesOrAssumeIdentityImpactLimitation
     parents: {}
     tags:
     - suppress
@@ -484,23 +338,51 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:hideActivities:
-    asset: PrivEsc
+  CVE-2021-26855:gainPrivilegesOrAssumeIdentity:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 59
+      26: DOMAIN:assumeIdentity
+    id: 106
+    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentity
+    name: gainPrivilegesOrAssumeIdentity
+    parents:
+      81: CVE-2021-26855:gainPrivilegesOrAssumeIdentityImpactLimitation
+      92: CVE-2021-26855:impact
+    ttc: null
+    type: and
+  CVE-2021-26855:gainPrivilegesOrAssumeIdentityImpactLimitation:
+    asset: CVE-2021-26855
+    children:
+      106: CVE-2021-26855:gainPrivilegesOrAssumeIdentity
+    id: 81
+    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentityImpactLimitation
+    name: gainPrivilegesOrAssumeIdentityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-26855:hideActivities:
+    asset: CVE-2021-26855
+    children:
+      118: CVE-2021-26855:null
+    id: 108
     lang_graph_attack_step: CWEVulnerability:hideActivities
     name: hideActivities
     parents:
-      34: PrivEsc:hideActivitiesImpactLimitation
-      43: PrivEsc:impact
+      83: CVE-2021-26855:hideActivitiesImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:hideActivitiesImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:hideActivitiesImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      59: PrivEsc:hideActivities
-    id: 34
+      108: CVE-2021-26855:hideActivities
+    id: 83
     lang_graph_attack_step: CWEVulnerability:hideActivitiesImpactLimitation
     name: hideActivitiesImpactLimitation
     parents: {}
@@ -512,57 +394,57 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:impact:
-    asset: PrivEsc
+  CVE-2021-26855:impact:
+    asset: CVE-2021-26855
     children:
-      44: PrivEsc:modifyMemory
-      45: PrivEsc:readMemory
-      46: PrivEsc:modifyFilesOrDirectories
-      47: PrivEsc:readFilesOrDirectories
-      48: PrivEsc:modifyModuleData
-      49: PrivEsc:readModuleData
-      50: PrivEsc:dosCrashExitRestart
-      51: PrivEsc:dosAmplification
-      52: PrivEsc:dosInstability
-      53: PrivEsc:dosResourceCpu
-      54: PrivEsc:dosResourceMemory
-      55: PrivEsc:dosResourceOther
-      56: PrivEsc:executeUnauthorizedCode
-      57: PrivEsc:gainPrivilegesOrAssumeIdentity
-      58: PrivEsc:bypassProtectionMechanism
-      59: PrivEsc:hideActivities
-      60: PrivEsc:alterExecutionLogic
-      61: PrivEsc:qualityDegradation
-      62: PrivEsc:unexpectedState
-      63: PrivEsc:contextDependent
-      64: PrivEsc:increaseAnalyticalComplexity
-      65: PrivEsc:reduceMaintainability
-      66: PrivEsc:reducePerformance
-      67: PrivEsc:reduceReliability
-    id: 43
+      93: CVE-2021-26855:modifyMemory
+      94: CVE-2021-26855:readMemory
+      95: CVE-2021-26855:modifyFilesOrDirectories
+      96: CVE-2021-26855:readFilesOrDirectories
+      97: CVE-2021-26855:modifyModuleData
+      98: CVE-2021-26855:readModuleData
+      99: CVE-2021-26855:dosCrashExitRestart
+      100: CVE-2021-26855:dosAmplification
+      101: CVE-2021-26855:dosInstability
+      102: CVE-2021-26855:dosResourceCpu
+      103: CVE-2021-26855:dosResourceMemory
+      104: CVE-2021-26855:dosResourceOther
+      105: CVE-2021-26855:executeUnauthorizedCode
+      106: CVE-2021-26855:gainPrivilegesOrAssumeIdentity
+      107: CVE-2021-26855:bypassProtectionMechanism
+      108: CVE-2021-26855:hideActivities
+      109: CVE-2021-26855:alterExecutionLogic
+      110: CVE-2021-26855:qualityDegradation
+      111: CVE-2021-26855:unexpectedState
+      112: CVE-2021-26855:contextDependent
+      113: CVE-2021-26855:increaseAnalyticalComplexity
+      114: CVE-2021-26855:reduceMaintainability
+      115: CVE-2021-26855:reducePerformance
+      116: CVE-2021-26855:reduceReliability
+    id: 92
     lang_graph_attack_step: CWEVulnerability:impact
     name: impact
     parents:
-      68: PrivEsc:abuse
+      117: CVE-2021-26855:abuse
     ttc: null
     type: or
-  PrivEsc:increaseAnalyticalComplexity:
-    asset: PrivEsc
+  CVE-2021-26855:increaseAnalyticalComplexity:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 64
+      118: CVE-2021-26855:null
+    id: 113
     lang_graph_attack_step: CWEVulnerability:increaseAnalyticalComplexity
     name: increaseAnalyticalComplexity
     parents:
-      39: PrivEsc:increaseAnalyticalComplexityImpactLimitation
-      43: PrivEsc:impact
+      88: CVE-2021-26855:increaseAnalyticalComplexityImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:increaseAnalyticalComplexityImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:increaseAnalyticalComplexityImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      64: PrivEsc:increaseAnalyticalComplexity
-    id: 39
+      113: CVE-2021-26855:increaseAnalyticalComplexity
+    id: 88
     lang_graph_attack_step: CWEVulnerability:increaseAnalyticalComplexityImpactLimitation
     name: increaseAnalyticalComplexityImpactLimitation
     parents: {}
@@ -574,22 +456,24 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:modifyFilesOrDirectories:
-    asset: PrivEsc
-    children: {}
-    id: 46
+  CVE-2021-26855:modifyFilesOrDirectories:
+    asset: CVE-2021-26855
+    children:
+      17: Header:read
+      18: Header:write
+    id: 95
     lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectories
     name: modifyFilesOrDirectories
     parents:
-      21: PrivEsc:modifyFilesOrDirectoriesImpactLimitation
-      43: PrivEsc:impact
+      70: CVE-2021-26855:modifyFilesOrDirectoriesImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:modifyFilesOrDirectoriesImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:modifyFilesOrDirectoriesImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      46: PrivEsc:modifyFilesOrDirectories
-    id: 21
+      95: CVE-2021-26855:modifyFilesOrDirectories
+    id: 70
     lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectoriesImpactLimitation
     name: modifyFilesOrDirectoriesImpactLimitation
     parents: {}
@@ -601,23 +485,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:modifyMemory:
-    asset: PrivEsc
+  CVE-2021-26855:modifyMemory:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 44
+      18: Header:write
+    id: 93
     lang_graph_attack_step: CWEVulnerability:modifyMemory
     name: modifyMemory
     parents:
-      19: PrivEsc:modifyMemoryImpactLimitation
-      43: PrivEsc:impact
+      68: CVE-2021-26855:modifyMemoryImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:modifyMemoryImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:modifyMemoryImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      44: PrivEsc:modifyMemory
-    id: 19
+      93: CVE-2021-26855:modifyMemory
+    id: 68
     lang_graph_attack_step: CWEVulnerability:modifyMemoryImpactLimitation
     name: modifyMemoryImpactLimitation
     parents: {}
@@ -629,22 +513,24 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:modifyModuleData:
-    asset: PrivEsc
-    children: {}
-    id: 48
+  CVE-2021-26855:modifyModuleData:
+    asset: CVE-2021-26855
+    children:
+      17: Header:read
+      18: Header:write
+    id: 97
     lang_graph_attack_step: CWEVulnerability:modifyModuleData
     name: modifyModuleData
     parents:
-      23: PrivEsc:modifyModuleDataImpactLimitation
-      43: PrivEsc:impact
+      72: CVE-2021-26855:modifyModuleDataImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:modifyModuleDataImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:modifyModuleDataImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      48: PrivEsc:modifyModuleData
-    id: 23
+      97: CVE-2021-26855:modifyModuleData
+    id: 72
     lang_graph_attack_step: CWEVulnerability:modifyModuleDataImpactLimitation
     name: modifyModuleDataImpactLimitation
     parents: {}
@@ -656,49 +542,46 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:null:
-    asset: PrivEsc
+  CVE-2021-26855:null:
+    asset: CVE-2021-26855
     children: {}
-    id: 69
+    id: 118
     lang_graph_attack_step: CWEVulnerability:null
     name: 'null'
     parents:
-      44: PrivEsc:modifyMemory
-      45: PrivEsc:readMemory
-      50: PrivEsc:dosCrashExitRestart
-      51: PrivEsc:dosAmplification
-      52: PrivEsc:dosInstability
-      53: PrivEsc:dosResourceCpu
-      54: PrivEsc:dosResourceMemory
-      55: PrivEsc:dosResourceOther
-      59: PrivEsc:hideActivities
-      60: PrivEsc:alterExecutionLogic
-      61: PrivEsc:qualityDegradation
-      62: PrivEsc:unexpectedState
-      63: PrivEsc:contextDependent
-      64: PrivEsc:increaseAnalyticalComplexity
-      65: PrivEsc:reduceMaintainability
-      66: PrivEsc:reducePerformance
-      67: PrivEsc:reduceReliability
+      99: CVE-2021-26855:dosCrashExitRestart
+      100: CVE-2021-26855:dosAmplification
+      101: CVE-2021-26855:dosInstability
+      102: CVE-2021-26855:dosResourceCpu
+      103: CVE-2021-26855:dosResourceMemory
+      104: CVE-2021-26855:dosResourceOther
+      108: CVE-2021-26855:hideActivities
+      110: CVE-2021-26855:qualityDegradation
+      111: CVE-2021-26855:unexpectedState
+      112: CVE-2021-26855:contextDependent
+      113: CVE-2021-26855:increaseAnalyticalComplexity
+      114: CVE-2021-26855:reduceMaintainability
+      115: CVE-2021-26855:reducePerformance
+      116: CVE-2021-26855:reduceReliability
     ttc: null
     type: and
-  PrivEsc:qualityDegradation:
-    asset: PrivEsc
+  CVE-2021-26855:qualityDegradation:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 61
+      118: CVE-2021-26855:null
+    id: 110
     lang_graph_attack_step: CWEVulnerability:qualityDegradation
     name: qualityDegradation
     parents:
-      36: PrivEsc:qualityDegradationImpactLimitation
-      43: PrivEsc:impact
+      85: CVE-2021-26855:qualityDegradationImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:qualityDegradationImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:qualityDegradationImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      61: PrivEsc:qualityDegradation
-    id: 36
+      110: CVE-2021-26855:qualityDegradation
+    id: 85
     lang_graph_attack_step: CWEVulnerability:qualityDegradationImpactLimitation
     name: qualityDegradationImpactLimitation
     parents: {}
@@ -710,22 +593,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:readFilesOrDirectories:
-    asset: PrivEsc
-    children: {}
-    id: 47
+  CVE-2021-26855:readFilesOrDirectories:
+    asset: CVE-2021-26855
+    children:
+      17: Header:read
+    id: 96
     lang_graph_attack_step: CWEVulnerability:readFilesOrDirectories
     name: readFilesOrDirectories
     parents:
-      22: PrivEsc:readFilesOrDirectoriesImpactLimitation
-      43: PrivEsc:impact
+      71: CVE-2021-26855:readFilesOrDirectoriesImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:readFilesOrDirectoriesImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:readFilesOrDirectoriesImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      47: PrivEsc:readFilesOrDirectories
-    id: 22
+      96: CVE-2021-26855:readFilesOrDirectories
+    id: 71
     lang_graph_attack_step: CWEVulnerability:readFilesOrDirectoriesImpactLimitation
     name: readFilesOrDirectoriesImpactLimitation
     parents: {}
@@ -737,23 +621,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:readMemory:
-    asset: PrivEsc
+  CVE-2021-26855:readMemory:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 45
+      17: Header:read
+    id: 94
     lang_graph_attack_step: CWEVulnerability:readMemory
     name: readMemory
     parents:
-      20: PrivEsc:readMemoryImpactLimitation
-      43: PrivEsc:impact
+      69: CVE-2021-26855:readMemoryImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:readMemoryImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:readMemoryImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      45: PrivEsc:readMemory
-    id: 20
+      94: CVE-2021-26855:readMemory
+    id: 69
     lang_graph_attack_step: CWEVulnerability:readMemoryImpactLimitation
     name: readMemoryImpactLimitation
     parents: {}
@@ -765,22 +649,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:readModuleData:
-    asset: PrivEsc
-    children: {}
-    id: 49
+  CVE-2021-26855:readModuleData:
+    asset: CVE-2021-26855
+    children:
+      17: Header:read
+    id: 98
     lang_graph_attack_step: CWEVulnerability:readModuleData
     name: readModuleData
     parents:
-      24: PrivEsc:readModuleDataImpactLimitation
-      43: PrivEsc:impact
+      73: CVE-2021-26855:readModuleDataImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:readModuleDataImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:readModuleDataImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      49: PrivEsc:readModuleData
-    id: 24
+      98: CVE-2021-26855:readModuleData
+    id: 73
     lang_graph_attack_step: CWEVulnerability:readModuleDataImpactLimitation
     name: readModuleDataImpactLimitation
     parents: {}
@@ -788,27 +673,27 @@ attack_steps:
     - suppress
     ttc:
       arguments:
-      - 1.0
+      - 0.0
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:reduceMaintainability:
-    asset: PrivEsc
+  CVE-2021-26855:reduceMaintainability:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 65
+      118: CVE-2021-26855:null
+    id: 114
     lang_graph_attack_step: CWEVulnerability:reduceMaintainability
     name: reduceMaintainability
     parents:
-      40: PrivEsc:reduceMaintainabilityImpactLimitation
-      43: PrivEsc:impact
+      89: CVE-2021-26855:reduceMaintainabilityImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:reduceMaintainabilityImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:reduceMaintainabilityImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      65: PrivEsc:reduceMaintainability
-    id: 40
+      114: CVE-2021-26855:reduceMaintainability
+    id: 89
     lang_graph_attack_step: CWEVulnerability:reduceMaintainabilityImpactLimitation
     name: reduceMaintainabilityImpactLimitation
     parents: {}
@@ -820,23 +705,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:reducePerformance:
-    asset: PrivEsc
+  CVE-2021-26855:reducePerformance:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 66
+      118: CVE-2021-26855:null
+    id: 115
     lang_graph_attack_step: CWEVulnerability:reducePerformance
     name: reducePerformance
     parents:
-      41: PrivEsc:reducePerformanceImpactLimitation
-      43: PrivEsc:impact
+      90: CVE-2021-26855:reducePerformanceImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:reducePerformanceImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:reducePerformanceImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      66: PrivEsc:reducePerformance
-    id: 41
+      115: CVE-2021-26855:reducePerformance
+    id: 90
     lang_graph_attack_step: CWEVulnerability:reducePerformanceImpactLimitation
     name: reducePerformanceImpactLimitation
     parents: {}
@@ -848,23 +733,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:reduceReliability:
-    asset: PrivEsc
+  CVE-2021-26855:reduceReliability:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 67
+      118: CVE-2021-26855:null
+    id: 116
     lang_graph_attack_step: CWEVulnerability:reduceReliability
     name: reduceReliability
     parents:
-      42: PrivEsc:reduceReliabilityImpactLimitation
-      43: PrivEsc:impact
+      91: CVE-2021-26855:reduceReliabilityImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:reduceReliabilityImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:reduceReliabilityImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      67: PrivEsc:reduceReliability
-    id: 42
+      116: CVE-2021-26855:reduceReliability
+    id: 91
     lang_graph_attack_step: CWEVulnerability:reduceReliabilityImpactLimitation
     name: reduceReliabilityImpactLimitation
     parents: {}
@@ -876,23 +761,23 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  PrivEsc:unexpectedState:
-    asset: PrivEsc
+  CVE-2021-26855:unexpectedState:
+    asset: CVE-2021-26855
     children:
-      69: PrivEsc:null
-    id: 62
+      118: CVE-2021-26855:null
+    id: 111
     lang_graph_attack_step: CWEVulnerability:unexpectedState
     name: unexpectedState
     parents:
-      37: PrivEsc:unexpectedStateImpactLimitation
-      43: PrivEsc:impact
+      86: CVE-2021-26855:unexpectedStateImpactLimitation
+      92: CVE-2021-26855:impact
     ttc: null
     type: and
-  PrivEsc:unexpectedStateImpactLimitation:
-    asset: PrivEsc
+  CVE-2021-26855:unexpectedStateImpactLimitation:
+    asset: CVE-2021-26855
     children:
-      62: PrivEsc:unexpectedState
-    id: 37
+      111: CVE-2021-26855:unexpectedState
+    id: 86
     lang_graph_attack_step: CWEVulnerability:unexpectedStateImpactLimitation
     name: unexpectedStateImpactLimitation
     parents: {}
@@ -904,98 +789,1419 @@ attack_steps:
       name: Bernoulli
       type: function
     type: defense
-  Root:assumePrivilege:
-    asset: Root
+  CVE-2021-27065:abuse:
+    asset: CVE-2021-27065
     children:
-      1: app3-CoreModule:attemptAuthenticatedCommunication
-    id: 3
-    lang_graph_attack_step: Privilege:assumePrivilege
-    name: assumePrivilege
+      143: CVE-2021-27065:impact
+    id: 168
+    lang_graph_attack_step: CWEVulnerability:abuse
+    name: abuse
     parents:
-      9: Admin:assumeIdentity
+      16: Backend ECP:connectToModule
     ttc: null
     type: or
-  Root:delete:
-    asset: Root
+  CVE-2021-27065:alterExecutionLogic:
+    asset: CVE-2021-27065
     children:
-      7: Root:deny
-    id: 6
-    lang_graph_attack_step: Privilege:delete
+      13: MS-Exchange:interactWithSupervisor
+    id: 160
+    lang_graph_attack_step: CWEVulnerability:alterExecutionLogic
+    name: alterExecutionLogic
+    parents:
+      135: CVE-2021-27065:alterExecutionLogicImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:alterExecutionLogicImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      160: CVE-2021-27065:alterExecutionLogic
+    id: 135
+    lang_graph_attack_step: CWEVulnerability:alterExecutionLogicImpactLimitation
+    name: alterExecutionLogicImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:bypassProtectionMechanism:
+    asset: CVE-2021-27065
+    children: {}
+    id: 158
+    lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanism
+    name: bypassProtectionMechanism
+    parents:
+      133: CVE-2021-27065:bypassProtectionMechanismImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:bypassProtectionMechanismImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      158: CVE-2021-27065:bypassProtectionMechanism
+    id: 133
+    lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanismImpactLimitation
+    name: bypassProtectionMechanismImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:contextDependent:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 163
+    lang_graph_attack_step: CWEVulnerability:contextDependent
+    name: contextDependent
+    parents:
+      138: CVE-2021-27065:contextDependentImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:contextDependentImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      163: CVE-2021-27065:contextDependent
+    id: 138
+    lang_graph_attack_step: CWEVulnerability:contextDependentImpactLimitation
+    name: contextDependentImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:dosAmplification:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 151
+    lang_graph_attack_step: CWEVulnerability:dosAmplification
+    name: dosAmplification
+    parents:
+      126: CVE-2021-27065:dosAmplificationImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:dosAmplificationImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      151: CVE-2021-27065:dosAmplification
+    id: 126
+    lang_graph_attack_step: CWEVulnerability:dosAmplificationImpactLimitation
+    name: dosAmplificationImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:dosCrashExitRestart:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 150
+    lang_graph_attack_step: CWEVulnerability:dosCrashExitRestart
+    name: dosCrashExitRestart
+    parents:
+      125: CVE-2021-27065:dosCrashOrRestartImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:dosCrashOrRestartImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      150: CVE-2021-27065:dosCrashExitRestart
+    id: 125
+    lang_graph_attack_step: CWEVulnerability:dosCrashOrRestartImpactLimitation
+    name: dosCrashOrRestartImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:dosInstability:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 152
+    lang_graph_attack_step: CWEVulnerability:dosInstability
+    name: dosInstability
+    parents:
+      127: CVE-2021-27065:dosInstabilityImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:dosInstabilityImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      152: CVE-2021-27065:dosInstability
+    id: 127
+    lang_graph_attack_step: CWEVulnerability:dosInstabilityImpactLimitation
+    name: dosInstabilityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:dosResourceCpu:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 153
+    lang_graph_attack_step: CWEVulnerability:dosResourceCpu
+    name: dosResourceCpu
+    parents:
+      128: CVE-2021-27065:dosResourceCpuImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:dosResourceCpuImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      153: CVE-2021-27065:dosResourceCpu
+    id: 128
+    lang_graph_attack_step: CWEVulnerability:dosResourceCpuImpactLimitation
+    name: dosResourceCpuImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:dosResourceMemory:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 154
+    lang_graph_attack_step: CWEVulnerability:dosResourceMemory
+    name: dosResourceMemory
+    parents:
+      129: CVE-2021-27065:dosResourceMemoryImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:dosResourceMemoryImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      154: CVE-2021-27065:dosResourceMemory
+    id: 129
+    lang_graph_attack_step: CWEVulnerability:dosResourceMemoryImpactLimitation
+    name: dosResourceMemoryImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:dosResourceOther:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 155
+    lang_graph_attack_step: CWEVulnerability:dosResourceOther
+    name: dosResourceOther
+    parents:
+      130: CVE-2021-27065:dosResourceOtherImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:dosResourceOtherImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      155: CVE-2021-27065:dosResourceOther
+    id: 130
+    lang_graph_attack_step: CWEVulnerability:dosResourceOtherImpactLimitation
+    name: dosResourceOtherImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:executeUnauthorizedCode:
+    asset: CVE-2021-27065
+    children:
+      13: MS-Exchange:interactWithSupervisor
+    id: 156
+    lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCode
+    name: executeUnauthorizedCode
+    parents:
+      131: CVE-2021-27065:executeUnauthorizedCodeImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:executeUnauthorizedCodeImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      156: CVE-2021-27065:executeUnauthorizedCode
+    id: 131
+    lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCodeImpactLimitation
+    name: executeUnauthorizedCodeImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 0.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:gainPrivilegesOrAssumeIdentity:
+    asset: CVE-2021-27065
+    children: {}
+    id: 157
+    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentity
+    name: gainPrivilegesOrAssumeIdentity
+    parents:
+      132: CVE-2021-27065:gainPrivilegesOrAssumeIdentityImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:gainPrivilegesOrAssumeIdentityImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      157: CVE-2021-27065:gainPrivilegesOrAssumeIdentity
+    id: 132
+    lang_graph_attack_step: CWEVulnerability:gainPrivilegesOrAssumeIdentityImpactLimitation
+    name: gainPrivilegesOrAssumeIdentityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:hideActivities:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 159
+    lang_graph_attack_step: CWEVulnerability:hideActivities
+    name: hideActivities
+    parents:
+      134: CVE-2021-27065:hideActivitiesImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:hideActivitiesImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      159: CVE-2021-27065:hideActivities
+    id: 134
+    lang_graph_attack_step: CWEVulnerability:hideActivitiesImpactLimitation
+    name: hideActivitiesImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:impact:
+    asset: CVE-2021-27065
+    children:
+      144: CVE-2021-27065:modifyMemory
+      145: CVE-2021-27065:readMemory
+      146: CVE-2021-27065:modifyFilesOrDirectories
+      147: CVE-2021-27065:readFilesOrDirectories
+      148: CVE-2021-27065:modifyModuleData
+      149: CVE-2021-27065:readModuleData
+      150: CVE-2021-27065:dosCrashExitRestart
+      151: CVE-2021-27065:dosAmplification
+      152: CVE-2021-27065:dosInstability
+      153: CVE-2021-27065:dosResourceCpu
+      154: CVE-2021-27065:dosResourceMemory
+      155: CVE-2021-27065:dosResourceOther
+      156: CVE-2021-27065:executeUnauthorizedCode
+      157: CVE-2021-27065:gainPrivilegesOrAssumeIdentity
+      158: CVE-2021-27065:bypassProtectionMechanism
+      159: CVE-2021-27065:hideActivities
+      160: CVE-2021-27065:alterExecutionLogic
+      161: CVE-2021-27065:qualityDegradation
+      162: CVE-2021-27065:unexpectedState
+      163: CVE-2021-27065:contextDependent
+      164: CVE-2021-27065:increaseAnalyticalComplexity
+      165: CVE-2021-27065:reduceMaintainability
+      166: CVE-2021-27065:reducePerformance
+      167: CVE-2021-27065:reduceReliability
+    id: 143
+    lang_graph_attack_step: CWEVulnerability:impact
+    name: impact
+    parents:
+      168: CVE-2021-27065:abuse
+    ttc: null
+    type: or
+  CVE-2021-27065:increaseAnalyticalComplexity:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 164
+    lang_graph_attack_step: CWEVulnerability:increaseAnalyticalComplexity
+    name: increaseAnalyticalComplexity
+    parents:
+      139: CVE-2021-27065:increaseAnalyticalComplexityImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:increaseAnalyticalComplexityImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      164: CVE-2021-27065:increaseAnalyticalComplexity
+    id: 139
+    lang_graph_attack_step: CWEVulnerability:increaseAnalyticalComplexityImpactLimitation
+    name: increaseAnalyticalComplexityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:modifyFilesOrDirectories:
+    asset: CVE-2021-27065
+    children: {}
+    id: 146
+    lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectories
+    name: modifyFilesOrDirectories
+    parents:
+      121: CVE-2021-27065:modifyFilesOrDirectoriesImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:modifyFilesOrDirectoriesImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      146: CVE-2021-27065:modifyFilesOrDirectories
+    id: 121
+    lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectoriesImpactLimitation
+    name: modifyFilesOrDirectoriesImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 0.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:modifyMemory:
+    asset: CVE-2021-27065
+    children: {}
+    id: 144
+    lang_graph_attack_step: CWEVulnerability:modifyMemory
+    name: modifyMemory
+    parents:
+      119: CVE-2021-27065:modifyMemoryImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:modifyMemoryImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      144: CVE-2021-27065:modifyMemory
+    id: 119
+    lang_graph_attack_step: CWEVulnerability:modifyMemoryImpactLimitation
+    name: modifyMemoryImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:modifyModuleData:
+    asset: CVE-2021-27065
+    children: {}
+    id: 148
+    lang_graph_attack_step: CWEVulnerability:modifyModuleData
+    name: modifyModuleData
+    parents:
+      123: CVE-2021-27065:modifyModuleDataImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:modifyModuleDataImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      148: CVE-2021-27065:modifyModuleData
+    id: 123
+    lang_graph_attack_step: CWEVulnerability:modifyModuleDataImpactLimitation
+    name: modifyModuleDataImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:null:
+    asset: CVE-2021-27065
+    children: {}
+    id: 169
+    lang_graph_attack_step: CWEVulnerability:null
+    name: 'null'
+    parents:
+      150: CVE-2021-27065:dosCrashExitRestart
+      151: CVE-2021-27065:dosAmplification
+      152: CVE-2021-27065:dosInstability
+      153: CVE-2021-27065:dosResourceCpu
+      154: CVE-2021-27065:dosResourceMemory
+      155: CVE-2021-27065:dosResourceOther
+      159: CVE-2021-27065:hideActivities
+      161: CVE-2021-27065:qualityDegradation
+      162: CVE-2021-27065:unexpectedState
+      163: CVE-2021-27065:contextDependent
+      164: CVE-2021-27065:increaseAnalyticalComplexity
+      165: CVE-2021-27065:reduceMaintainability
+      166: CVE-2021-27065:reducePerformance
+      167: CVE-2021-27065:reduceReliability
+    ttc: null
+    type: and
+  CVE-2021-27065:qualityDegradation:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 161
+    lang_graph_attack_step: CWEVulnerability:qualityDegradation
+    name: qualityDegradation
+    parents:
+      136: CVE-2021-27065:qualityDegradationImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:qualityDegradationImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      161: CVE-2021-27065:qualityDegradation
+    id: 136
+    lang_graph_attack_step: CWEVulnerability:qualityDegradationImpactLimitation
+    name: qualityDegradationImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:readFilesOrDirectories:
+    asset: CVE-2021-27065
+    children: {}
+    id: 147
+    lang_graph_attack_step: CWEVulnerability:readFilesOrDirectories
+    name: readFilesOrDirectories
+    parents:
+      122: CVE-2021-27065:readFilesOrDirectoriesImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:readFilesOrDirectoriesImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      147: CVE-2021-27065:readFilesOrDirectories
+    id: 122
+    lang_graph_attack_step: CWEVulnerability:readFilesOrDirectoriesImpactLimitation
+    name: readFilesOrDirectoriesImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 0.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:readMemory:
+    asset: CVE-2021-27065
+    children: {}
+    id: 145
+    lang_graph_attack_step: CWEVulnerability:readMemory
+    name: readMemory
+    parents:
+      120: CVE-2021-27065:readMemoryImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:readMemoryImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      145: CVE-2021-27065:readMemory
+    id: 120
+    lang_graph_attack_step: CWEVulnerability:readMemoryImpactLimitation
+    name: readMemoryImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:readModuleData:
+    asset: CVE-2021-27065
+    children: {}
+    id: 149
+    lang_graph_attack_step: CWEVulnerability:readModuleData
+    name: readModuleData
+    parents:
+      124: CVE-2021-27065:readModuleDataImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:readModuleDataImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      149: CVE-2021-27065:readModuleData
+    id: 124
+    lang_graph_attack_step: CWEVulnerability:readModuleDataImpactLimitation
+    name: readModuleDataImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:reduceMaintainability:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 165
+    lang_graph_attack_step: CWEVulnerability:reduceMaintainability
+    name: reduceMaintainability
+    parents:
+      140: CVE-2021-27065:reduceMaintainabilityImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:reduceMaintainabilityImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      165: CVE-2021-27065:reduceMaintainability
+    id: 140
+    lang_graph_attack_step: CWEVulnerability:reduceMaintainabilityImpactLimitation
+    name: reduceMaintainabilityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:reducePerformance:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 166
+    lang_graph_attack_step: CWEVulnerability:reducePerformance
+    name: reducePerformance
+    parents:
+      141: CVE-2021-27065:reducePerformanceImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:reducePerformanceImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      166: CVE-2021-27065:reducePerformance
+    id: 141
+    lang_graph_attack_step: CWEVulnerability:reducePerformanceImpactLimitation
+    name: reducePerformanceImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:reduceReliability:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 167
+    lang_graph_attack_step: CWEVulnerability:reduceReliability
+    name: reduceReliability
+    parents:
+      142: CVE-2021-27065:reduceReliabilityImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:reduceReliabilityImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      167: CVE-2021-27065:reduceReliability
+    id: 142
+    lang_graph_attack_step: CWEVulnerability:reduceReliabilityImpactLimitation
+    name: reduceReliabilityImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  CVE-2021-27065:unexpectedState:
+    asset: CVE-2021-27065
+    children:
+      169: CVE-2021-27065:null
+    id: 162
+    lang_graph_attack_step: CWEVulnerability:unexpectedState
+    name: unexpectedState
+    parents:
+      137: CVE-2021-27065:unexpectedStateImpactLimitation
+      143: CVE-2021-27065:impact
+    ttc: null
+    type: and
+  CVE-2021-27065:unexpectedStateImpactLimitation:
+    asset: CVE-2021-27065
+    children:
+      162: CVE-2021-27065:unexpectedState
+    id: 137
+    lang_graph_attack_step: CWEVulnerability:unexpectedStateImpactLimitation
+    name: unexpectedStateImpactLimitation
+    parents: {}
+    tags:
+    - suppress
+    ttc:
+      arguments:
+      - 1.0
+      name: Bernoulli
+      type: function
+    type: defense
+  DOMAIN:assumeIdentity:
+    asset: DOMAIN
+    children:
+      6: NoPriv:assumePrivilege
+      32: Token-Serialization:assumePrivilege
+    id: 26
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      106: CVE-2021-26855:gainPrivilegesOrAssumeIdentity
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  DOMAIN:delete:
+    asset: DOMAIN
+    children:
+      30: DOMAIN:deny
+    id: 29
+    lang_graph_attack_step: Identity:delete
     name: delete
     parents:
-      5: Root:write
+      28: DOMAIN:write
     ttc: null
     type: or
-  Root:deny:
-    asset: Root
+  DOMAIN:deny:
+    asset: DOMAIN
     children: {}
-    id: 7
-    lang_graph_attack_step: Privilege:deny
+    id: 30
+    lang_graph_attack_step: Identity:deny
     name: deny
     parents:
-      6: Root:delete
+      29: DOMAIN:delete
     ttc: null
     type: or
-  Root:extract:
-    asset: Root
+  DOMAIN:extract:
+    asset: DOMAIN
     children: {}
-    id: 8
-    lang_graph_attack_step: Privilege:extract
+    id: 31
+    lang_graph_attack_step: Identity:extract
     name: extract
     parents: {}
     ttc: null
     type: or
-  Root:read:
-    asset: Root
+  DOMAIN:read:
+    asset: DOMAIN
     children: {}
-    id: 4
-    lang_graph_attack_step: Privilege:read
+    id: 27
+    lang_graph_attack_step: Identity:read
     name: read
     parents: {}
     ttc: null
     type: or
-  Root:write:
-    asset: Root
+  DOMAIN:write:
+    asset: DOMAIN
     children:
-      6: Root:delete
-    id: 5
-    lang_graph_attack_step: Privilege:write
+      29: DOMAIN:delete
+    id: 28
+    lang_graph_attack_step: Identity:write
     name: write
     parents: {}
     ttc: null
     type: or
-  app3-CoreModule:attemptAuthenticatedCommunication:
-    asset: app3-CoreModule
+  Frontend - Backen IIS:attemptAuthenticatedCommunication:
+    asset: Frontend - Backen IIS
     children:
-      2: app3-CoreModule:attemptCommunication
-    id: 1
+      63: Frontend - Backen IIS:attemptCommunication
+    id: 62
     lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
     name: attemptAuthenticatedCommunication
     parents:
-      3: Root:assumePrivilege
+      14: Frontend:connectToModule
+      32: Token-Serialization:assumePrivilege
     ttc: null
     type: and
-  app3-CoreModule:attemptCommunication:
-    asset: app3-CoreModule
+  Frontend - Backen IIS:attemptCommunication:
+    asset: Frontend - Backen IIS
     children:
-      15: CoreModule:connectToModule
-    id: 2
+      15: Backen IIS:connectToModule
+    id: 63
     lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
     name: attemptCommunication
     parents:
-      0: app3:interactWithApplication
-      1: app3-CoreModule:attemptAuthenticatedCommunication
+      62: Frontend - Backen IIS:attemptAuthenticatedCommunication
     ttc: null
     type: or
-  app3:interactWithApplication:
-    asset: app3
+  Frontend:connectToModule:
+    asset: Frontend
     children:
-      2: app3-CoreModule:attemptCommunication
-    id: 0
+      62: Frontend - Backen IIS:attemptAuthenticatedCommunication
+      117: CVE-2021-26855:abuse
+    id: 14
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
+    parents:
+      67: MS-Exchange-Frontend:attemptCommunication
+    ttc: null
+    type: or
+  Header Info:delete:
+    asset: Header Info
+    children:
+      24: Header Info:deny
+    id: 23
+    lang_graph_attack_step: Information:delete
+    name: delete
+    parents:
+      19: Header:delete
+      22: Header Info:write
+    ttc: null
+    type: or
+  Header Info:deny:
+    asset: Header Info
+    children: {}
+    id: 24
+    lang_graph_attack_step: Information:deny
+    name: deny
+    parents:
+      20: Header:deny
+      23: Header Info:delete
+    ttc: null
+    type: or
+  Header Info:extract:
+    asset: Header Info
+    children: {}
+    id: 25
+    lang_graph_attack_step: Information:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  Header Info:read:
+    asset: Header Info
+    children: {}
+    id: 21
+    lang_graph_attack_step: Information:read
+    name: read
+    parents:
+      17: Header:read
+    ttc: null
+    type: or
+  Header Info:write:
+    asset: Header Info
+    children:
+      23: Header Info:delete
+      38: NT/SYSTEM-Backend:assumeIdentity
+    id: 22
+    lang_graph_attack_step: Information:write
+    name: write
+    parents:
+      18: Header:write
+    ttc: null
+    type: or
+  Header:delete:
+    asset: Header
+    children:
+      20: Header:deny
+      23: Header Info:delete
+    id: 19
+    lang_graph_attack_step: Data:delete
+    name: delete
+    parents:
+      18: Header:write
+    ttc: null
+    type: or
+  Header:deny:
+    asset: Header
+    children:
+      24: Header Info:deny
+    id: 20
+    lang_graph_attack_step: Data:deny
+    name: deny
+    parents:
+      19: Header:delete
+    ttc: null
+    type: or
+  Header:read:
+    asset: Header
+    children:
+      21: Header Info:read
+    id: 17
+    lang_graph_attack_step: Data:read
+    name: read
+    parents:
+      94: CVE-2021-26855:readMemory
+      95: CVE-2021-26855:modifyFilesOrDirectories
+      96: CVE-2021-26855:readFilesOrDirectories
+      97: CVE-2021-26855:modifyModuleData
+      98: CVE-2021-26855:readModuleData
+      105: CVE-2021-26855:executeUnauthorizedCode
+      109: CVE-2021-26855:alterExecutionLogic
+    ttc: null
+    type: or
+  Header:write:
+    asset: Header
+    children:
+      19: Header:delete
+      22: Header Info:write
+    id: 18
+    lang_graph_attack_step: Data:write
+    name: write
+    parents:
+      93: CVE-2021-26855:modifyMemory
+      95: CVE-2021-26855:modifyFilesOrDirectories
+      97: CVE-2021-26855:modifyModuleData
+      105: CVE-2021-26855:executeUnauthorizedCode
+      109: CVE-2021-26855:alterExecutionLogic
+    ttc: null
+    type: or
+  MS-Exchange-Frontend:attemptAuthenticatedCommunication:
+    asset: MS-Exchange-Frontend
+    children:
+      67: MS-Exchange-Frontend:attemptCommunication
+    id: 66
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      6: NoPriv:assumePrivilege
+      12: MS-Exchange:interactWithApplication
+    ttc: null
+    type: and
+  MS-Exchange-Frontend:attemptCommunication:
+    asset: MS-Exchange-Frontend
+    children:
+      14: Frontend:connectToModule
+    id: 67
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  MS-Exchange:interactWithApplication:
+    asset: MS-Exchange
+    children:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    id: 12
     lang_graph_attack_step: Application:interactWithApplication
     name: interactWithApplication
     parents: {}
     tags:
     - entrypoint
+    ttc: null
+    type: or
+  MS-Exchange:interactWithSupervisor:
+    asset: MS-Exchange
+    children: {}
+    id: 13
+    lang_graph_attack_step: Application:interactWithSupervisor
+    name: interactWithSupervisor
+    parents:
+      156: CVE-2021-27065:executeUnauthorizedCode
+      160: CVE-2021-27065:alterExecutionLogic
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:assumeIdentity:
+    asset: NT/SYSTEM-Backend
+    children:
+      6: NoPriv:assumePrivilege
+      44: SYSTEM-Backend:assumePrivilege
+      50: NT/SYSTEM:assumeIdentity
+    id: 38
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      22: Header Info:write
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:delete:
+    asset: NT/SYSTEM-Backend
+    children:
+      42: NT/SYSTEM-Backend:deny
+    id: 41
+    lang_graph_attack_step: Identity:delete
+    name: delete
+    parents:
+      40: NT/SYSTEM-Backend:write
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:deny:
+    asset: NT/SYSTEM-Backend
+    children: {}
+    id: 42
+    lang_graph_attack_step: Identity:deny
+    name: deny
+    parents:
+      41: NT/SYSTEM-Backend:delete
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:extract:
+    asset: NT/SYSTEM-Backend
+    children: {}
+    id: 43
+    lang_graph_attack_step: Identity:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:read:
+    asset: NT/SYSTEM-Backend
+    children: {}
+    id: 39
+    lang_graph_attack_step: Identity:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:write:
+    asset: NT/SYSTEM-Backend
+    children:
+      41: NT/SYSTEM-Backend:delete
+    id: 40
+    lang_graph_attack_step: Identity:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  NT/SYSTEM:assumeIdentity:
+    asset: NT/SYSTEM
+    children:
+      6: NoPriv:assumePrivilege
+      56: SYSTEM:assumePrivilege
+    id: 50
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      38: NT/SYSTEM-Backend:assumeIdentity
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NT/SYSTEM:delete:
+    asset: NT/SYSTEM
+    children:
+      54: NT/SYSTEM:deny
+    id: 53
+    lang_graph_attack_step: Identity:delete
+    name: delete
+    parents:
+      52: NT/SYSTEM:write
+    ttc: null
+    type: or
+  NT/SYSTEM:deny:
+    asset: NT/SYSTEM
+    children: {}
+    id: 54
+    lang_graph_attack_step: Identity:deny
+    name: deny
+    parents:
+      53: NT/SYSTEM:delete
+    ttc: null
+    type: or
+  NT/SYSTEM:extract:
+    asset: NT/SYSTEM
+    children: {}
+    id: 55
+    lang_graph_attack_step: Identity:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  NT/SYSTEM:read:
+    asset: NT/SYSTEM
+    children: {}
+    id: 51
+    lang_graph_attack_step: Identity:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  NT/SYSTEM:write:
+    asset: NT/SYSTEM
+    children:
+      53: NT/SYSTEM:delete
+    id: 52
+    lang_graph_attack_step: Identity:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  NoAuth:assumeIdentity:
+    asset: NoAuth
+    children:
+      6: NoPriv:assumePrivilege
+    id: 0
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NoAuth:delete:
+    asset: NoAuth
+    children:
+      4: NoAuth:deny
+    id: 3
+    lang_graph_attack_step: Identity:delete
+    name: delete
+    parents:
+      2: NoAuth:write
+    ttc: null
+    type: or
+  NoAuth:deny:
+    asset: NoAuth
+    children: {}
+    id: 4
+    lang_graph_attack_step: Identity:deny
+    name: deny
+    parents:
+      3: NoAuth:delete
+    ttc: null
+    type: or
+  NoAuth:extract:
+    asset: NoAuth
+    children: {}
+    id: 5
+    lang_graph_attack_step: Identity:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  NoAuth:read:
+    asset: NoAuth
+    children: {}
+    id: 1
+    lang_graph_attack_step: Identity:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  NoAuth:write:
+    asset: NoAuth
+    children:
+      3: NoAuth:delete
+    id: 2
+    lang_graph_attack_step: Identity:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  NoPriv:assumePrivilege:
+    asset: NoPriv
+    children:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    id: 6
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      0: NoAuth:assumeIdentity
+      26: DOMAIN:assumeIdentity
+      38: NT/SYSTEM-Backend:assumeIdentity
+      50: NT/SYSTEM:assumeIdentity
+    ttc: null
+    type: or
+  NoPriv:delete:
+    asset: NoPriv
+    children:
+      10: NoPriv:deny
+    id: 9
+    lang_graph_attack_step: Privilege:delete
+    name: delete
+    parents:
+      8: NoPriv:write
+    ttc: null
+    type: or
+  NoPriv:deny:
+    asset: NoPriv
+    children: {}
+    id: 10
+    lang_graph_attack_step: Privilege:deny
+    name: deny
+    parents:
+      9: NoPriv:delete
+    ttc: null
+    type: or
+  NoPriv:extract:
+    asset: NoPriv
+    children: {}
+    id: 11
+    lang_graph_attack_step: Privilege:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  NoPriv:read:
+    asset: NoPriv
+    children: {}
+    id: 7
+    lang_graph_attack_step: Privilege:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  NoPriv:write:
+    asset: NoPriv
+    children:
+      9: NoPriv:delete
+    id: 8
+    lang_graph_attack_step: Privilege:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  SYSTEM-Backend:assumePrivilege:
+    asset: SYSTEM-Backend
+    children: {}
+    id: 44
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      38: NT/SYSTEM-Backend:assumeIdentity
+    ttc: null
+    type: or
+  SYSTEM-Backend:delete:
+    asset: SYSTEM-Backend
+    children:
+      48: SYSTEM-Backend:deny
+    id: 47
+    lang_graph_attack_step: Privilege:delete
+    name: delete
+    parents:
+      46: SYSTEM-Backend:write
+    ttc: null
+    type: or
+  SYSTEM-Backend:deny:
+    asset: SYSTEM-Backend
+    children: {}
+    id: 48
+    lang_graph_attack_step: Privilege:deny
+    name: deny
+    parents:
+      47: SYSTEM-Backend:delete
+    ttc: null
+    type: or
+  SYSTEM-Backend:extract:
+    asset: SYSTEM-Backend
+    children: {}
+    id: 49
+    lang_graph_attack_step: Privilege:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  SYSTEM-Backend:read:
+    asset: SYSTEM-Backend
+    children: {}
+    id: 45
+    lang_graph_attack_step: Privilege:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  SYSTEM-Backend:write:
+    asset: SYSTEM-Backend
+    children:
+      47: SYSTEM-Backend:delete
+    id: 46
+    lang_graph_attack_step: Privilege:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  SYSTEM:assumePrivilege:
+    asset: SYSTEM
+    children:
+      64: Backen IIS - Backend ECP:attemptAuthenticatedCommunication
+    id: 56
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      50: NT/SYSTEM:assumeIdentity
+    ttc: null
+    type: or
+  SYSTEM:delete:
+    asset: SYSTEM
+    children:
+      60: SYSTEM:deny
+    id: 59
+    lang_graph_attack_step: Privilege:delete
+    name: delete
+    parents:
+      58: SYSTEM:write
+    ttc: null
+    type: or
+  SYSTEM:deny:
+    asset: SYSTEM
+    children: {}
+    id: 60
+    lang_graph_attack_step: Privilege:deny
+    name: deny
+    parents:
+      59: SYSTEM:delete
+    ttc: null
+    type: or
+  SYSTEM:extract:
+    asset: SYSTEM
+    children: {}
+    id: 61
+    lang_graph_attack_step: Privilege:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  SYSTEM:read:
+    asset: SYSTEM
+    children: {}
+    id: 57
+    lang_graph_attack_step: Privilege:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  SYSTEM:write:
+    asset: SYSTEM
+    children:
+      59: SYSTEM:delete
+    id: 58
+    lang_graph_attack_step: Privilege:write
+    name: write
+    parents: {}
+    ttc: null
+    type: or
+  Token-Serialization:assumePrivilege:
+    asset: Token-Serialization
+    children:
+      62: Frontend - Backen IIS:attemptAuthenticatedCommunication
+    id: 32
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      26: DOMAIN:assumeIdentity
+    ttc: null
+    type: or
+  Token-Serialization:delete:
+    asset: Token-Serialization
+    children:
+      36: Token-Serialization:deny
+    id: 35
+    lang_graph_attack_step: Privilege:delete
+    name: delete
+    parents:
+      34: Token-Serialization:write
+    ttc: null
+    type: or
+  Token-Serialization:deny:
+    asset: Token-Serialization
+    children: {}
+    id: 36
+    lang_graph_attack_step: Privilege:deny
+    name: deny
+    parents:
+      35: Token-Serialization:delete
+    ttc: null
+    type: or
+  Token-Serialization:extract:
+    asset: Token-Serialization
+    children: {}
+    id: 37
+    lang_graph_attack_step: Privilege:extract
+    name: extract
+    parents: {}
+    ttc: null
+    type: or
+  Token-Serialization:read:
+    asset: Token-Serialization
+    children: {}
+    id: 33
+    lang_graph_attack_step: Privilege:read
+    name: read
+    parents: {}
+    ttc: null
+    type: or
+  Token-Serialization:write:
+    asset: Token-Serialization
+    children:
+      35: Token-Serialization:delete
+    id: 34
+    lang_graph_attack_step: Privilege:write
+    name: write
+    parents: {}
     ttc: null
     type: or

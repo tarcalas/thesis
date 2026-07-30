@@ -1,0 +1,393 @@
+attack_steps:
+  Backen IIS - Backend ECP:attemptAuthenticatedCommunication:
+    asset: Backen IIS - Backend ECP
+    children:
+      65: Backen IIS - Backend ECP:attemptCommunication
+    id: 64
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      15: Backen IIS:connectToModule
+      56: SYSTEM:assumePrivilege
+    ttc: null
+    type: and
+  Backen IIS - Backend ECP:attemptCommunication:
+    asset: Backen IIS - Backend ECP
+    children:
+      16: Backend ECP:connectToModule
+    id: 65
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      64: Backen IIS - Backend ECP:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  Backen IIS:connectToModule:
+    asset: Backen IIS
+    children:
+      64: Backen IIS - Backend ECP:attemptAuthenticatedCommunication
+    id: 15
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
+    parents:
+      107: SSRF:bypassProtectionMechanism
+    ttc: null
+    type: or
+  Backend ECP:connectToModule:
+    asset: Backend ECP
+    children:
+      168: PostAuthFW:abuse
+    id: 16
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
+    parents:
+      65: Backen IIS - Backend ECP:attemptCommunication
+    ttc: null
+    type: or
+  Frontend:connectToModule:
+    asset: Frontend
+    children:
+      117: SSRF:abuse
+    id: 14
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
+    parents:
+      67: MS-Exchange-Frontend:attemptCommunication
+    ttc: null
+    type: or
+  Header Info:delete:
+    asset: Header Info
+    children:
+      24: Header Info:deny
+    id: 23
+    lang_graph_attack_step: Information:delete
+    name: delete
+    parents:
+      19: Header:delete
+      22: Header Info:write
+    ttc: null
+    type: or
+  Header Info:deny:
+    asset: Header Info
+    children: {}
+    id: 24
+    lang_graph_attack_step: Information:deny
+    name: deny
+    parents:
+      20: Header:deny
+      23: Header Info:delete
+    ttc: null
+    type: or
+  Header Info:read:
+    asset: Header Info
+    children: {}
+    id: 21
+    lang_graph_attack_step: Information:read
+    name: read
+    parents:
+      17: Header:read
+    ttc: null
+    type: or
+  Header Info:write:
+    asset: Header Info
+    children:
+      23: Header Info:delete
+      38: NT/SYSTEM-Backend:assumeIdentity
+    id: 22
+    lang_graph_attack_step: Information:write
+    name: write
+    parents:
+      18: Header:write
+    ttc: null
+    type: or
+  Header:delete:
+    asset: Header
+    children:
+      20: Header:deny
+      23: Header Info:delete
+    id: 19
+    lang_graph_attack_step: Data:delete
+    name: delete
+    parents:
+      18: Header:write
+    ttc: null
+    type: or
+  Header:deny:
+    asset: Header
+    children:
+      24: Header Info:deny
+    id: 20
+    lang_graph_attack_step: Data:deny
+    name: deny
+    parents:
+      19: Header:delete
+    ttc: null
+    type: or
+  Header:read:
+    asset: Header
+    children:
+      21: Header Info:read
+    id: 17
+    lang_graph_attack_step: Data:read
+    name: read
+    parents:
+      98: SSRF:readModuleData
+      105: SSRF:executeUnauthorizedCode
+    ttc: null
+    type: or
+  Header:write:
+    asset: Header
+    children:
+      19: Header:delete
+      22: Header Info:write
+    id: 18
+    lang_graph_attack_step: Data:write
+    name: write
+    parents:
+      105: SSRF:executeUnauthorizedCode
+    ttc: null
+    type: or
+  MS-Exchange-Frontend:attemptAuthenticatedCommunication:
+    asset: MS-Exchange-Frontend
+    children:
+      67: MS-Exchange-Frontend:attemptCommunication
+    id: 66
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      6: NoPriv:assumePrivilege
+      12: MS-Exchange:interactWithApplication
+    ttc: null
+    type: and
+  MS-Exchange-Frontend:attemptCommunication:
+    asset: MS-Exchange-Frontend
+    children:
+      14: Frontend:connectToModule
+    id: 67
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  MS-Exchange:interactWithApplication:
+    asset: MS-Exchange
+    children:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    id: 12
+    lang_graph_attack_step: Application:interactWithApplication
+    name: interactWithApplication
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  MS-Exchange:interactWithSupervisor:
+    asset: MS-Exchange
+    children: {}
+    id: 13
+    lang_graph_attack_step: Application:interactWithSupervisor
+    name: interactWithSupervisor
+    parents:
+      156: PostAuthFW:executeUnauthorizedCode
+    ttc: null
+    type: or
+  NT/SYSTEM-Backend:assumeIdentity:
+    asset: NT/SYSTEM-Backend
+    children:
+      6: NoPriv:assumePrivilege
+      44: SYSTEM-Backend:assumePrivilege
+      50: NT/SYSTEM:assumeIdentity
+    id: 38
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      22: Header Info:write
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NT/SYSTEM:assumeIdentity:
+    asset: NT/SYSTEM
+    children:
+      6: NoPriv:assumePrivilege
+      56: SYSTEM:assumePrivilege
+    id: 50
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents:
+      38: NT/SYSTEM-Backend:assumeIdentity
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NoAuth:assumeIdentity:
+    asset: NoAuth
+    children:
+      6: NoPriv:assumePrivilege
+    id: 0
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NoPriv:assumePrivilege:
+    asset: NoPriv
+    children:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    id: 6
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      0: NoAuth:assumeIdentity
+      38: NT/SYSTEM-Backend:assumeIdentity
+      50: NT/SYSTEM:assumeIdentity
+    ttc: null
+    type: or
+  PostAuthFW:abuse:
+    asset: PostAuthFW
+    children:
+      143: PostAuthFW:impact
+    id: 168
+    lang_graph_attack_step: CWEVulnerability:abuse
+    name: abuse
+    parents:
+      16: Backend ECP:connectToModule
+    ttc: null
+    type: or
+  PostAuthFW:dosCrashExitRestart:
+    asset: PostAuthFW
+    children: {}
+    id: 150
+    lang_graph_attack_step: CWEVulnerability:dosCrashExitRestart
+    name: dosCrashExitRestart
+    parents:
+      143: PostAuthFW:impact
+    ttc: null
+    type: and
+  PostAuthFW:executeUnauthorizedCode:
+    asset: PostAuthFW
+    children:
+      13: MS-Exchange:interactWithSupervisor
+    id: 156
+    lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCode
+    name: executeUnauthorizedCode
+    parents:
+      143: PostAuthFW:impact
+    ttc: null
+    type: and
+  PostAuthFW:impact:
+    asset: PostAuthFW
+    children:
+      146: PostAuthFW:modifyFilesOrDirectories
+      147: PostAuthFW:readFilesOrDirectories
+      150: PostAuthFW:dosCrashExitRestart
+      156: PostAuthFW:executeUnauthorizedCode
+    id: 143
+    lang_graph_attack_step: CWEVulnerability:impact
+    name: impact
+    parents:
+      168: PostAuthFW:abuse
+    ttc: null
+    type: or
+  PostAuthFW:modifyFilesOrDirectories:
+    asset: PostAuthFW
+    children: {}
+    id: 146
+    lang_graph_attack_step: CWEVulnerability:modifyFilesOrDirectories
+    name: modifyFilesOrDirectories
+    parents:
+      143: PostAuthFW:impact
+    ttc: null
+    type: and
+  PostAuthFW:readFilesOrDirectories:
+    asset: PostAuthFW
+    children: {}
+    id: 147
+    lang_graph_attack_step: CWEVulnerability:readFilesOrDirectories
+    name: readFilesOrDirectories
+    parents:
+      143: PostAuthFW:impact
+    ttc: null
+    type: and
+  SSRF:abuse:
+    asset: SSRF
+    children:
+      92: SSRF:impact
+    id: 117
+    lang_graph_attack_step: CWEVulnerability:abuse
+    name: abuse
+    parents:
+      14: Frontend:connectToModule
+    ttc: null
+    type: or
+  SSRF:bypassProtectionMechanism:
+    asset: SSRF
+    children:
+      15: Backen IIS:connectToModule
+    id: 107
+    lang_graph_attack_step: CWEVulnerability:bypassProtectionMechanism
+    name: bypassProtectionMechanism
+    parents:
+      92: SSRF:impact
+    ttc: null
+    type: and
+  SSRF:executeUnauthorizedCode:
+    asset: SSRF
+    children:
+      17: Header:read
+      18: Header:write
+    id: 105
+    lang_graph_attack_step: CWEVulnerability:executeUnauthorizedCode
+    name: executeUnauthorizedCode
+    parents:
+      92: SSRF:impact
+    ttc: null
+    type: and
+  SSRF:impact:
+    asset: SSRF
+    children:
+      98: SSRF:readModuleData
+      105: SSRF:executeUnauthorizedCode
+      107: SSRF:bypassProtectionMechanism
+    id: 92
+    lang_graph_attack_step: CWEVulnerability:impact
+    name: impact
+    parents:
+      117: SSRF:abuse
+    ttc: null
+    type: or
+  SSRF:readModuleData:
+    asset: SSRF
+    children:
+      17: Header:read
+    id: 98
+    lang_graph_attack_step: CWEVulnerability:readModuleData
+    name: readModuleData
+    parents:
+      92: SSRF:impact
+    ttc: null
+    type: and
+  SYSTEM-Backend:assumePrivilege:
+    asset: SYSTEM-Backend
+    children: {}
+    id: 44
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      38: NT/SYSTEM-Backend:assumeIdentity
+    ttc: null
+    type: or
+  SYSTEM:assumePrivilege:
+    asset: SYSTEM
+    children:
+      64: Backen IIS - Backend ECP:attemptAuthenticatedCommunication
+    id: 56
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      50: NT/SYSTEM:assumeIdentity
+    ttc: null
+    type: or

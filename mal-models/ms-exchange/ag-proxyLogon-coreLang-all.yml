@@ -1,0 +1,2019 @@
+attack_steps:
+  AttackerApp:accessNetworkAndConnections:
+    asset: AttackerApp
+    children:
+      376: CR2:attemptAccessNetworksUninspected
+      377: CR2:attemptAccessNetworksInspected
+      382: CR2:attemptConnectToApplicationsUninspected
+      383: CR2:attemptConnectToApplicationsInspected
+    id: 279
+    lang_graph_attack_step: Application:accessNetworkAndConnections
+    name: accessNetworkAndConnections
+    parents:
+      284: AttackerApp:specificAccess
+      290: AttackerApp:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:applicationRespondConnectThroughData:
+    asset: AttackerApp
+    children: {}
+    id: 320
+    lang_graph_attack_step: Application:applicationRespondConnectThroughData
+    name: applicationRespondConnectThroughData
+    parents:
+      319: AttackerApp:successfulApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptApplicationRespondConnectThroughData:
+    asset: AttackerApp
+    children:
+      319: AttackerApp:successfulApplicationRespondConnectThroughData
+    id: 318
+    lang_graph_attack_step: Application:attemptApplicationRespondConnectThroughData
+    name: attemptApplicationRespondConnectThroughData
+    parents:
+      290: AttackerApp:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptAuthorizedApplicationRespondConnectThroughData:
+    asset: AttackerApp
+    children:
+      322: AttackerApp:successfulAuthorizedApplicationRespondConnectThroughData
+    id: 321
+    lang_graph_attack_step: Application:attemptAuthorizedApplicationRespondConnectThroughData
+    name: attemptAuthorizedApplicationRespondConnectThroughData
+    parents:
+      284: AttackerApp:specificAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptDeny:
+    asset: AttackerApp
+    children:
+      333: AttackerApp:successfulDeny
+    id: 332
+    lang_graph_attack_step: Application:attemptDeny
+    name: attemptDeny
+    parents:
+      290: AttackerApp:fullAccess
+      336: AttackerApp:denyFromNetworkingAsset
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptModify:
+    asset: AttackerApp
+    children:
+      329: AttackerApp:successfulModify
+    id: 328
+    lang_graph_attack_step: Application:attemptModify
+    name: attemptModify
+    parents:
+      290: AttackerApp:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptRead:
+    asset: AttackerApp
+    children:
+      325: AttackerApp:successfulRead
+    id: 324
+    lang_graph_attack_step: Application:attemptRead
+    name: attemptRead
+    parents:
+      290: AttackerApp:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptReverseReach:
+    asset: AttackerApp
+    children:
+      272: AttackerApp:successfulReverseReach
+    id: 271
+    lang_graph_attack_step: Application:attemptReverseReach
+    name: attemptReverseReach
+    parents:
+      375: CR2:reverseReach
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  AttackerApp:attemptSoftwareProductAbuse:
+    asset: AttackerApp
+    children: {}
+    id: 313
+    lang_graph_attack_step: Application:attemptSoftwareProductAbuse
+    name: attemptSoftwareProductAbuse
+    parents:
+      270: AttackerApp:useVulnerability
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:attemptUseVulnerability:
+    asset: AttackerApp
+    children:
+      269: AttackerApp:successfulUseVulnerability
+    id: 268
+    lang_graph_attack_step: Application:attemptUseVulnerability
+    name: attemptUseVulnerability
+    parents:
+      275: AttackerApp:networkConnectUninspected
+      284: AttackerApp:specificAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:authorizedApplicationRespondConnectThroughData:
+    asset: AttackerApp
+    children: {}
+    id: 323
+    lang_graph_attack_step: Application:authorizedApplicationRespondConnectThroughData
+    name: authorizedApplicationRespondConnectThroughData
+    parents:
+      322: AttackerApp:successfulAuthorizedApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:bypassContainerization:
+    asset: AttackerApp
+    children: {}
+    id: 285
+    lang_graph_attack_step: Application:bypassContainerization
+    name: bypassContainerization
+    parents:
+      284: AttackerApp:specificAccess
+    ttc:
+      arguments: []
+      name: HardAndUncertain
+      type: function
+    type: or
+  AttackerApp:deny:
+    asset: AttackerApp
+    children: {}
+    id: 334
+    lang_graph_attack_step: Application:deny
+    name: deny
+    parents:
+      333: AttackerApp:successfulDeny
+    ttc: null
+    type: or
+  AttackerApp:denyFromNetworkingAsset:
+    asset: AttackerApp
+    children:
+      332: AttackerApp:attemptDeny
+    id: 336
+    lang_graph_attack_step: Application:denyFromNetworkingAsset
+    name: denyFromNetworkingAsset
+    parents:
+      354: Internet:deny
+      387: CR2:deny
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:fullAccess:
+    asset: AttackerApp
+    children:
+      279: AttackerApp:accessNetworkAndConnections
+      284: AttackerApp:specificAccess
+      318: AttackerApp:attemptApplicationRespondConnectThroughData
+      324: AttackerApp:attemptRead
+      328: AttackerApp:attemptModify
+      332: AttackerApp:attemptDeny
+    id: 290
+    lang_graph_attack_step: Application:fullAccess
+    name: fullAccess
+    parents:
+      330: AttackerApp:modify
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  AttackerApp:modify:
+    asset: AttackerApp
+    children:
+      290: AttackerApp:fullAccess
+    id: 330
+    lang_graph_attack_step: Application:modify
+    name: modify
+    parents:
+      329: AttackerApp:successfulModify
+    ttc: null
+    type: or
+  AttackerApp:networkConnect:
+    asset: AttackerApp
+    children: {}
+    id: 277
+    lang_graph_attack_step: Application:networkConnect
+    name: networkConnect
+    parents:
+      275: AttackerApp:networkConnectUninspected
+      276: AttackerApp:networkConnectInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:networkConnectInspected:
+    asset: AttackerApp
+    children:
+      277: AttackerApp:networkConnect
+      278: AttackerApp:specificAccessNetworkConnect
+    id: 276
+    lang_graph_attack_step: Application:networkConnectInspected
+    name: networkConnectInspected
+    parents:
+      384: CR2:connectToApplicationsUninspected
+      385: CR2:connectToApplicationsInspected
+    ttc: null
+    type: or
+  AttackerApp:networkConnectUninspected:
+    asset: AttackerApp
+    children:
+      268: AttackerApp:attemptUseVulnerability
+      277: AttackerApp:networkConnect
+      278: AttackerApp:specificAccessNetworkConnect
+      308: AttackerApp:softwareProductVulnerabilityNetworkAccessAchieved
+    id: 275
+    lang_graph_attack_step: Application:networkConnectUninspected
+    name: networkConnectUninspected
+    parents:
+      384: CR2:connectToApplicationsUninspected
+    ttc: null
+    type: or
+  AttackerApp:read:
+    asset: AttackerApp
+    children: {}
+    id: 326
+    lang_graph_attack_step: Application:read
+    name: read
+    parents:
+      325: AttackerApp:successfulRead
+    ttc: null
+    type: or
+  AttackerApp:reverseReach:
+    asset: AttackerApp
+    children:
+      374: CR2:attemptReverseReach
+    id: 273
+    lang_graph_attack_step: Application:reverseReach
+    name: reverseReach
+    parents:
+      272: AttackerApp:successfulReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:softwareProductVulnerabilityNetworkAccessAchieved:
+    asset: AttackerApp
+    children: {}
+    id: 308
+    lang_graph_attack_step: Application:softwareProductVulnerabilityNetworkAccessAchieved
+    name: softwareProductVulnerabilityNetworkAccessAchieved
+    parents:
+      275: AttackerApp:networkConnectUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:specificAccess:
+    asset: AttackerApp
+    children:
+      268: AttackerApp:attemptUseVulnerability
+      279: AttackerApp:accessNetworkAndConnections
+      285: AttackerApp:bypassContainerization
+      321: AttackerApp:attemptAuthorizedApplicationRespondConnectThroughData
+      327: AttackerApp:specificAccessRead
+      331: AttackerApp:specificAccessModify
+      335: AttackerApp:specificAccessDelete
+    id: 284
+    lang_graph_attack_step: Application:specificAccess
+    name: specificAccess
+    parents:
+      290: AttackerApp:fullAccess
+    ttc: null
+    type: or
+  AttackerApp:specificAccessDelete:
+    asset: AttackerApp
+    children: {}
+    id: 335
+    lang_graph_attack_step: Application:specificAccessDelete
+    name: specificAccessDelete
+    parents:
+      284: AttackerApp:specificAccess
+    ttc: null
+    type: or
+  AttackerApp:specificAccessModify:
+    asset: AttackerApp
+    children: {}
+    id: 331
+    lang_graph_attack_step: Application:specificAccessModify
+    name: specificAccessModify
+    parents:
+      284: AttackerApp:specificAccess
+    ttc: null
+    type: or
+  AttackerApp:specificAccessNetworkConnect:
+    asset: AttackerApp
+    children: {}
+    id: 278
+    lang_graph_attack_step: Application:specificAccessNetworkConnect
+    name: specificAccessNetworkConnect
+    parents:
+      275: AttackerApp:networkConnectUninspected
+      276: AttackerApp:networkConnectInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  AttackerApp:specificAccessRead:
+    asset: AttackerApp
+    children: {}
+    id: 327
+    lang_graph_attack_step: Application:specificAccessRead
+    name: specificAccessRead
+    parents:
+      284: AttackerApp:specificAccess
+    ttc: null
+    type: or
+  AttackerApp:successfulApplicationRespondConnectThroughData:
+    asset: AttackerApp
+    children:
+      320: AttackerApp:applicationRespondConnectThroughData
+    id: 319
+    lang_graph_attack_step: Application:successfulApplicationRespondConnectThroughData
+    name: successfulApplicationRespondConnectThroughData
+    parents:
+      318: AttackerApp:attemptApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:successfulAuthorizedApplicationRespondConnectThroughData:
+    asset: AttackerApp
+    children:
+      323: AttackerApp:authorizedApplicationRespondConnectThroughData
+    id: 322
+    lang_graph_attack_step: Application:successfulAuthorizedApplicationRespondConnectThroughData
+    name: successfulAuthorizedApplicationRespondConnectThroughData
+    parents:
+      321: AttackerApp:attemptAuthorizedApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:successfulDeny:
+    asset: AttackerApp
+    children:
+      334: AttackerApp:deny
+    id: 333
+    lang_graph_attack_step: Application:successfulDeny
+    name: successfulDeny
+    parents:
+      332: AttackerApp:attemptDeny
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:successfulModify:
+    asset: AttackerApp
+    children:
+      330: AttackerApp:modify
+    id: 329
+    lang_graph_attack_step: Application:successfulModify
+    name: successfulModify
+    parents:
+      328: AttackerApp:attemptModify
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:successfulRead:
+    asset: AttackerApp
+    children:
+      326: AttackerApp:read
+    id: 325
+    lang_graph_attack_step: Application:successfulRead
+    name: successfulRead
+    parents:
+      324: AttackerApp:attemptRead
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:successfulReverseReach:
+    asset: AttackerApp
+    children:
+      273: AttackerApp:reverseReach
+    id: 272
+    lang_graph_attack_step: Application:successfulReverseReach
+    name: successfulReverseReach
+    parents:
+      271: AttackerApp:attemptReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:successfulUseVulnerability:
+    asset: AttackerApp
+    children:
+      270: AttackerApp:useVulnerability
+    id: 269
+    lang_graph_attack_step: Application:successfulUseVulnerability
+    name: successfulUseVulnerability
+    parents:
+      268: AttackerApp:attemptUseVulnerability
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  AttackerApp:useVulnerability:
+    asset: AttackerApp
+    children:
+      313: AttackerApp:attemptSoftwareProductAbuse
+    id: 270
+    lang_graph_attack_step: Application:useVulnerability
+    name: useVulnerability
+    parents:
+      269: AttackerApp:successfulUseVulnerability
+    ttc: null
+    type: or
+  CR1:accessNetworksInspected:
+    asset: CR1
+    children:
+      349: Internet:accessInspected
+    id: 401
+    lang_graph_attack_step: ConnectionRule:accessNetworksInspected
+    name: accessNetworksInspected
+    parents:
+      399: CR1:successfulAccessNetworksInspected
+      400: CR1:accessNetworksUninspected
+    ttc: null
+    type: or
+  CR1:accessNetworksUninspected:
+    asset: CR1
+    children:
+      348: Internet:accessUninspected
+      401: CR1:accessNetworksInspected
+    id: 400
+    lang_graph_attack_step: ConnectionRule:accessNetworksUninspected
+    name: accessNetworksUninspected
+    parents:
+      398: CR1:successfulAccessNetworksUninspected
+    ttc: null
+    type: or
+  CR1:attemptAccessNetworksInspected:
+    asset: CR1
+    children:
+      389: CR1:bypassRestricted
+      399: CR1:successfulAccessNetworksInspected
+    id: 397
+    lang_graph_attack_step: ConnectionRule:attemptAccessNetworksInspected
+    name: attemptAccessNetworksInspected
+    parents:
+      83: MS-Exchange:accessNetworkAndConnections
+      353: Internet:networkForwardingInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR1:attemptAccessNetworksUninspected:
+    asset: CR1
+    children:
+      389: CR1:bypassRestricted
+      398: CR1:successfulAccessNetworksUninspected
+    id: 396
+    lang_graph_attack_step: ConnectionRule:attemptAccessNetworksUninspected
+    name: attemptAccessNetworksUninspected
+    parents:
+      83: MS-Exchange:accessNetworkAndConnections
+      352: Internet:networkForwardingUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR1:attemptConnectToApplicationsInspected:
+    asset: CR1
+    children:
+      389: CR1:bypassRestricted
+      405: CR1:connectToApplicationsInspected
+    id: 403
+    lang_graph_attack_step: ConnectionRule:attemptConnectToApplicationsInspected
+    name: attemptConnectToApplicationsInspected
+    parents:
+      83: MS-Exchange:accessNetworkAndConnections
+      349: Internet:accessInspected
+      353: Internet:networkForwardingInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR1:attemptConnectToApplicationsUninspected:
+    asset: CR1
+    children:
+      389: CR1:bypassRestricted
+      404: CR1:connectToApplicationsUninspected
+    id: 402
+    lang_graph_attack_step: ConnectionRule:attemptConnectToApplicationsUninspected
+    name: attemptConnectToApplicationsUninspected
+    parents:
+      83: MS-Exchange:accessNetworkAndConnections
+      348: Internet:accessUninspected
+      352: Internet:networkForwardingUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR1:attemptDeny:
+    asset: CR1
+    children:
+      389: CR1:bypassRestricted
+      407: CR1:deny
+    id: 406
+    lang_graph_attack_step: ConnectionRule:attemptDeny
+    name: attemptDeny
+    parents:
+      354: Internet:deny
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR1:attemptReverseReach:
+    asset: CR1
+    children:
+      389: CR1:bypassRestricted
+      395: CR1:reverseReach
+    id: 394
+    lang_graph_attack_step: ConnectionRule:attemptReverseReach
+    name: attemptReverseReach
+    parents:
+      77: MS-Exchange:reverseReach
+      351: Internet:reverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR1:bypassRestricted:
+    asset: CR1
+    children: {}
+    id: 389
+    lang_graph_attack_step: ConnectionRule:bypassRestricted
+    name: bypassRestricted
+    parents:
+      394: CR1:attemptReverseReach
+      396: CR1:attemptAccessNetworksUninspected
+      397: CR1:attemptAccessNetworksInspected
+      402: CR1:attemptConnectToApplicationsUninspected
+      403: CR1:attemptConnectToApplicationsInspected
+      406: CR1:attemptDeny
+    ttc:
+      arguments: []
+      name: VeryHardAndUncertain
+      type: function
+    type: or
+  CR1:connectToApplicationsInspected:
+    asset: CR1
+    children:
+      80: MS-Exchange:networkConnectInspected
+    id: 405
+    lang_graph_attack_step: ConnectionRule:connectToApplicationsInspected
+    name: connectToApplicationsInspected
+    parents:
+      403: CR1:attemptConnectToApplicationsInspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR1:connectToApplicationsUninspected:
+    asset: CR1
+    children:
+      79: MS-Exchange:networkConnectUninspected
+      80: MS-Exchange:networkConnectInspected
+    id: 404
+    lang_graph_attack_step: ConnectionRule:connectToApplicationsUninspected
+    name: connectToApplicationsUninspected
+    parents:
+      402: CR1:attemptConnectToApplicationsUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR1:deny:
+    asset: CR1
+    children:
+      140: MS-Exchange:denyFromNetworkingAsset
+    id: 407
+    lang_graph_attack_step: ConnectionRule:deny
+    name: deny
+    parents:
+      406: CR1:attemptDeny
+    ttc: null
+    type: and
+  CR1:reverseReach:
+    asset: CR1
+    children:
+      75: MS-Exchange:attemptReverseReach
+      350: Internet:attemptReverseReach
+    id: 395
+    lang_graph_attack_step: ConnectionRule:reverseReach
+    name: reverseReach
+    parents:
+      394: CR1:attemptReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR1:successfulAccessNetworksInspected:
+    asset: CR1
+    children:
+      401: CR1:accessNetworksInspected
+    id: 399
+    lang_graph_attack_step: ConnectionRule:successfulAccessNetworksInspected
+    name: successfulAccessNetworksInspected
+    parents:
+      397: CR1:attemptAccessNetworksInspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR1:successfulAccessNetworksUninspected:
+    asset: CR1
+    children:
+      400: CR1:accessNetworksUninspected
+    id: 398
+    lang_graph_attack_step: ConnectionRule:successfulAccessNetworksUninspected
+    name: successfulAccessNetworksUninspected
+    parents:
+      396: CR1:attemptAccessNetworksUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR2:accessNetworksInspected:
+    asset: CR2
+    children:
+      349: Internet:accessInspected
+    id: 381
+    lang_graph_attack_step: ConnectionRule:accessNetworksInspected
+    name: accessNetworksInspected
+    parents:
+      379: CR2:successfulAccessNetworksInspected
+      380: CR2:accessNetworksUninspected
+    ttc: null
+    type: or
+  CR2:accessNetworksUninspected:
+    asset: CR2
+    children:
+      348: Internet:accessUninspected
+      381: CR2:accessNetworksInspected
+    id: 380
+    lang_graph_attack_step: ConnectionRule:accessNetworksUninspected
+    name: accessNetworksUninspected
+    parents:
+      378: CR2:successfulAccessNetworksUninspected
+    ttc: null
+    type: or
+  CR2:attemptAccessNetworksInspected:
+    asset: CR2
+    children:
+      379: CR2:successfulAccessNetworksInspected
+    id: 377
+    lang_graph_attack_step: ConnectionRule:attemptAccessNetworksInspected
+    name: attemptAccessNetworksInspected
+    parents:
+      279: AttackerApp:accessNetworkAndConnections
+      353: Internet:networkForwardingInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR2:attemptAccessNetworksUninspected:
+    asset: CR2
+    children:
+      372: CR2:bypassPayloadInspection
+      378: CR2:successfulAccessNetworksUninspected
+    id: 376
+    lang_graph_attack_step: ConnectionRule:attemptAccessNetworksUninspected
+    name: attemptAccessNetworksUninspected
+    parents:
+      279: AttackerApp:accessNetworkAndConnections
+      352: Internet:networkForwardingUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR2:attemptConnectToApplicationsInspected:
+    asset: CR2
+    children:
+      385: CR2:connectToApplicationsInspected
+    id: 383
+    lang_graph_attack_step: ConnectionRule:attemptConnectToApplicationsInspected
+    name: attemptConnectToApplicationsInspected
+    parents:
+      279: AttackerApp:accessNetworkAndConnections
+      349: Internet:accessInspected
+      353: Internet:networkForwardingInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR2:attemptConnectToApplicationsUninspected:
+    asset: CR2
+    children:
+      372: CR2:bypassPayloadInspection
+      384: CR2:connectToApplicationsUninspected
+    id: 382
+    lang_graph_attack_step: ConnectionRule:attemptConnectToApplicationsUninspected
+    name: attemptConnectToApplicationsUninspected
+    parents:
+      279: AttackerApp:accessNetworkAndConnections
+      348: Internet:accessUninspected
+      352: Internet:networkForwardingUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR2:attemptDeny:
+    asset: CR2
+    children:
+      387: CR2:deny
+    id: 386
+    lang_graph_attack_step: ConnectionRule:attemptDeny
+    name: attemptDeny
+    parents:
+      354: Internet:deny
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR2:attemptReverseReach:
+    asset: CR2
+    children:
+      372: CR2:bypassPayloadInspection
+      375: CR2:reverseReach
+    id: 374
+    lang_graph_attack_step: ConnectionRule:attemptReverseReach
+    name: attemptReverseReach
+    parents:
+      273: AttackerApp:reverseReach
+      351: Internet:reverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  CR2:bypassPayloadInspection:
+    asset: CR2
+    children: {}
+    id: 372
+    lang_graph_attack_step: ConnectionRule:bypassPayloadInspection
+    name: bypassPayloadInspection
+    parents:
+      374: CR2:attemptReverseReach
+      376: CR2:attemptAccessNetworksUninspected
+      382: CR2:attemptConnectToApplicationsUninspected
+    ttc:
+      arguments: []
+      name: VeryHardAndUncertain
+      type: function
+    type: or
+  CR2:connectToApplicationsInspected:
+    asset: CR2
+    children:
+      276: AttackerApp:networkConnectInspected
+    id: 385
+    lang_graph_attack_step: ConnectionRule:connectToApplicationsInspected
+    name: connectToApplicationsInspected
+    parents:
+      383: CR2:attemptConnectToApplicationsInspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR2:connectToApplicationsUninspected:
+    asset: CR2
+    children:
+      275: AttackerApp:networkConnectUninspected
+      276: AttackerApp:networkConnectInspected
+    id: 384
+    lang_graph_attack_step: ConnectionRule:connectToApplicationsUninspected
+    name: connectToApplicationsUninspected
+    parents:
+      382: CR2:attemptConnectToApplicationsUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR2:deny:
+    asset: CR2
+    children:
+      336: AttackerApp:denyFromNetworkingAsset
+    id: 387
+    lang_graph_attack_step: ConnectionRule:deny
+    name: deny
+    parents:
+      386: CR2:attemptDeny
+    ttc: null
+    type: and
+  CR2:reverseReach:
+    asset: CR2
+    children:
+      271: AttackerApp:attemptReverseReach
+      350: Internet:attemptReverseReach
+    id: 375
+    lang_graph_attack_step: ConnectionRule:reverseReach
+    name: reverseReach
+    parents:
+      374: CR2:attemptReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR2:successfulAccessNetworksInspected:
+    asset: CR2
+    children:
+      381: CR2:accessNetworksInspected
+    id: 379
+    lang_graph_attack_step: ConnectionRule:successfulAccessNetworksInspected
+    name: successfulAccessNetworksInspected
+    parents:
+      377: CR2:attemptAccessNetworksInspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  CR2:successfulAccessNetworksUninspected:
+    asset: CR2
+    children:
+      380: CR2:accessNetworksUninspected
+    id: 378
+    lang_graph_attack_step: ConnectionRule:successfulAccessNetworksUninspected
+    name: successfulAccessNetworksUninspected
+    parents:
+      376: CR2:attemptAccessNetworksUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  Internet:accessInspected:
+    asset: Internet
+    children:
+      353: Internet:networkForwardingInspected
+      354: Internet:deny
+      355: Internet:accessNetworkData
+      383: CR2:attemptConnectToApplicationsInspected
+      403: CR1:attemptConnectToApplicationsInspected
+    id: 349
+    lang_graph_attack_step: Network:accessInspected
+    name: accessInspected
+    parents:
+      381: CR2:accessNetworksInspected
+      401: CR1:accessNetworksInspected
+    ttc: null
+    type: or
+  Internet:accessNetworkData:
+    asset: Internet
+    children:
+      359: Internet:attemptEavesdrop
+      365: Internet:attemptAdversaryInTheMiddle
+    id: 355
+    lang_graph_attack_step: Network:accessNetworkData
+    name: accessNetworkData
+    parents:
+      348: Internet:accessUninspected
+      349: Internet:accessInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Internet:accessUninspected:
+    asset: Internet
+    children:
+      350: Internet:attemptReverseReach
+      352: Internet:networkForwardingUninspected
+      354: Internet:deny
+      355: Internet:accessNetworkData
+      382: CR2:attemptConnectToApplicationsUninspected
+      402: CR1:attemptConnectToApplicationsUninspected
+    id: 348
+    lang_graph_attack_step: Network:accessUninspected
+    name: accessUninspected
+    parents:
+      380: CR2:accessNetworksUninspected
+      400: CR1:accessNetworksUninspected
+    ttc: null
+    type: or
+  Internet:adversaryInTheMiddle:
+    asset: Internet
+    children:
+      361: Internet:eavesdrop
+    id: 367
+    lang_graph_attack_step: Network:adversaryInTheMiddle
+    name: adversaryInTheMiddle
+    parents:
+      366: Internet:successfulAdversaryInTheMiddle
+    ttc: null
+    type: or
+  Internet:attemptAdversaryInTheMiddle:
+    asset: Internet
+    children:
+      366: Internet:successfulAdversaryInTheMiddle
+    id: 365
+    lang_graph_attack_step: Network:attemptAdversaryInTheMiddle
+    name: attemptAdversaryInTheMiddle
+    parents:
+      355: Internet:accessNetworkData
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Internet:attemptEavesdrop:
+    asset: Internet
+    children:
+      357: Internet:bypassEavesdropDefense
+      360: Internet:successfulEavesdrop
+    id: 359
+    lang_graph_attack_step: Network:attemptEavesdrop
+    name: attemptEavesdrop
+    parents:
+      355: Internet:accessNetworkData
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Internet:attemptReverseReach:
+    asset: Internet
+    children:
+      351: Internet:reverseReach
+    id: 350
+    lang_graph_attack_step: Network:attemptReverseReach
+    name: attemptReverseReach
+    parents:
+      348: Internet:accessUninspected
+      375: CR2:reverseReach
+      395: CR1:reverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Internet:bypassEavesdropDefense:
+    asset: Internet
+    children: {}
+    id: 357
+    lang_graph_attack_step: Network:bypassEavesdropDefense
+    name: bypassEavesdropDefense
+    parents:
+      359: Internet:attemptEavesdrop
+    ttc:
+      arguments: []
+      name: VeryHardAndUncertain
+      type: function
+    type: or
+  Internet:deny:
+    asset: Internet
+    children:
+      140: MS-Exchange:denyFromNetworkingAsset
+      336: AttackerApp:denyFromNetworkingAsset
+      386: CR2:attemptDeny
+      406: CR1:attemptDeny
+    id: 354
+    lang_graph_attack_step: Network:deny
+    name: deny
+    parents:
+      348: Internet:accessUninspected
+      349: Internet:accessInspected
+    ttc: null
+    type: or
+  Internet:eavesdrop:
+    asset: Internet
+    children: {}
+    id: 361
+    lang_graph_attack_step: Network:eavesdrop
+    name: eavesdrop
+    parents:
+      360: Internet:successfulEavesdrop
+      367: Internet:adversaryInTheMiddle
+    ttc: null
+    type: or
+  Internet:networkForwardingInspected:
+    asset: Internet
+    children:
+      377: CR2:attemptAccessNetworksInspected
+      383: CR2:attemptConnectToApplicationsInspected
+      397: CR1:attemptAccessNetworksInspected
+      403: CR1:attemptConnectToApplicationsInspected
+    id: 353
+    lang_graph_attack_step: Network:networkForwardingInspected
+    name: networkForwardingInspected
+    parents:
+      349: Internet:accessInspected
+      352: Internet:networkForwardingUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Internet:networkForwardingUninspected:
+    asset: Internet
+    children:
+      353: Internet:networkForwardingInspected
+      376: CR2:attemptAccessNetworksUninspected
+      382: CR2:attemptConnectToApplicationsUninspected
+      396: CR1:attemptAccessNetworksUninspected
+      402: CR1:attemptConnectToApplicationsUninspected
+    id: 352
+    lang_graph_attack_step: Network:networkForwardingUninspected
+    name: networkForwardingUninspected
+    parents:
+      348: Internet:accessUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Internet:reverseReach:
+    asset: Internet
+    children:
+      374: CR2:attemptReverseReach
+      394: CR1:attemptReverseReach
+    id: 351
+    lang_graph_attack_step: Network:reverseReach
+    name: reverseReach
+    parents:
+      350: Internet:attemptReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  Internet:successfulAdversaryInTheMiddle:
+    asset: Internet
+    children:
+      367: Internet:adversaryInTheMiddle
+    id: 366
+    lang_graph_attack_step: Network:successfulAdversaryInTheMiddle
+    name: successfulAdversaryInTheMiddle
+    parents:
+      365: Internet:attemptAdversaryInTheMiddle
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  Internet:successfulEavesdrop:
+    asset: Internet
+    children:
+      361: Internet:eavesdrop
+    id: 360
+    lang_graph_attack_step: Network:successfulEavesdrop
+    name: successfulEavesdrop
+    parents:
+      359: Internet:attemptEavesdrop
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:accessNetworkAndConnections:
+    asset: MS-Exchange
+    children:
+      396: CR1:attemptAccessNetworksUninspected
+      397: CR1:attemptAccessNetworksInspected
+      402: CR1:attemptConnectToApplicationsUninspected
+      403: CR1:attemptConnectToApplicationsInspected
+    id: 83
+    lang_graph_attack_step: Application:accessNetworkAndConnections
+    name: accessNetworkAndConnections
+    parents:
+      88: MS-Exchange:specificAccess
+      94: MS-Exchange:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:applicationRespondConnectThroughData:
+    asset: MS-Exchange
+    children: {}
+    id: 124
+    lang_graph_attack_step: Application:applicationRespondConnectThroughData
+    name: applicationRespondConnectThroughData
+    parents:
+      123: MS-Exchange:successfulApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptApplicationRespondConnectThroughData:
+    asset: MS-Exchange
+    children:
+      123: MS-Exchange:successfulApplicationRespondConnectThroughData
+    id: 122
+    lang_graph_attack_step: Application:attemptApplicationRespondConnectThroughData
+    name: attemptApplicationRespondConnectThroughData
+    parents:
+      94: MS-Exchange:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptAuthorizedApplicationRespondConnectThroughData:
+    asset: MS-Exchange
+    children:
+      126: MS-Exchange:successfulAuthorizedApplicationRespondConnectThroughData
+    id: 125
+    lang_graph_attack_step: Application:attemptAuthorizedApplicationRespondConnectThroughData
+    name: attemptAuthorizedApplicationRespondConnectThroughData
+    parents:
+      88: MS-Exchange:specificAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptDeny:
+    asset: MS-Exchange
+    children:
+      137: MS-Exchange:successfulDeny
+    id: 136
+    lang_graph_attack_step: Application:attemptDeny
+    name: attemptDeny
+    parents:
+      94: MS-Exchange:fullAccess
+      140: MS-Exchange:denyFromNetworkingAsset
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptModify:
+    asset: MS-Exchange
+    children:
+      133: MS-Exchange:successfulModify
+    id: 132
+    lang_graph_attack_step: Application:attemptModify
+    name: attemptModify
+    parents:
+      94: MS-Exchange:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptRead:
+    asset: MS-Exchange
+    children:
+      129: MS-Exchange:successfulRead
+    id: 128
+    lang_graph_attack_step: Application:attemptRead
+    name: attemptRead
+    parents:
+      94: MS-Exchange:fullAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptReverseReach:
+    asset: MS-Exchange
+    children:
+      76: MS-Exchange:successfulReverseReach
+    id: 75
+    lang_graph_attack_step: Application:attemptReverseReach
+    name: attemptReverseReach
+    parents:
+      395: CR1:reverseReach
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  MS-Exchange:attemptSoftwareProductAbuse:
+    asset: MS-Exchange
+    children: {}
+    id: 117
+    lang_graph_attack_step: Application:attemptSoftwareProductAbuse
+    name: attemptSoftwareProductAbuse
+    parents:
+      74: MS-Exchange:useVulnerability
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:attemptUseVulnerability:
+    asset: MS-Exchange
+    children:
+      73: MS-Exchange:successfulUseVulnerability
+    id: 72
+    lang_graph_attack_step: Application:attemptUseVulnerability
+    name: attemptUseVulnerability
+    parents:
+      79: MS-Exchange:networkConnectUninspected
+      88: MS-Exchange:specificAccess
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:authenticate:
+    asset: MS-Exchange
+    children:
+      93: MS-Exchange:networkAccess
+      115: MS-Exchange:softwareProductVulnerabilityHighPrivilegesAchieved
+    id: 90
+    lang_graph_attack_step: Application:authenticate
+    name: authenticate
+    parents:
+      192: NoPriv:assume
+    ttc: null
+    type: or
+  MS-Exchange:authorizedApplicationRespondConnectThroughData:
+    asset: MS-Exchange
+    children: {}
+    id: 127
+    lang_graph_attack_step: Application:authorizedApplicationRespondConnectThroughData
+    name: authorizedApplicationRespondConnectThroughData
+    parents:
+      126: MS-Exchange:successfulAuthorizedApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:bypassContainerization:
+    asset: MS-Exchange
+    children:
+      1: OS:attemptUseVulnerability
+    id: 89
+    lang_graph_attack_step: Application:bypassContainerization
+    name: bypassContainerization
+    parents:
+      88: MS-Exchange:specificAccess
+    ttc:
+      arguments: []
+      name: HardAndUncertain
+      type: function
+    type: or
+  MS-Exchange:deny:
+    asset: MS-Exchange
+    children: {}
+    id: 138
+    lang_graph_attack_step: Application:deny
+    name: deny
+    parents:
+      137: MS-Exchange:successfulDeny
+      231: SSRF:deny
+      259: Post Auth FW:deny
+    ttc: null
+    type: or
+  MS-Exchange:denyFromNetworkingAsset:
+    asset: MS-Exchange
+    children:
+      136: MS-Exchange:attemptDeny
+    id: 140
+    lang_graph_attack_step: Application:denyFromNetworkingAsset
+    name: denyFromNetworkingAsset
+    parents:
+      354: Internet:deny
+      407: CR1:deny
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:fullAccess:
+    asset: MS-Exchange
+    children:
+      7: OS:localConnect
+      83: MS-Exchange:accessNetworkAndConnections
+      88: MS-Exchange:specificAccess
+      122: MS-Exchange:attemptApplicationRespondConnectThroughData
+      128: MS-Exchange:attemptRead
+      132: MS-Exchange:attemptModify
+      136: MS-Exchange:attemptDeny
+      196: NoPriv:attemptAssume
+    id: 94
+    lang_graph_attack_step: Application:fullAccess
+    name: fullAccess
+    parents:
+      93: MS-Exchange:networkAccess
+      134: MS-Exchange:modify
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  MS-Exchange:modify:
+    asset: MS-Exchange
+    children:
+      94: MS-Exchange:fullAccess
+    id: 134
+    lang_graph_attack_step: Application:modify
+    name: modify
+    parents:
+      133: MS-Exchange:successfulModify
+      230: SSRF:modify
+      258: Post Auth FW:modify
+    ttc: null
+    type: or
+  MS-Exchange:networkAccess:
+    asset: MS-Exchange
+    children:
+      94: MS-Exchange:fullAccess
+    id: 93
+    lang_graph_attack_step: Application:networkAccess
+    name: networkAccess
+    parents:
+      81: MS-Exchange:networkConnect
+      90: MS-Exchange:authenticate
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:networkConnect:
+    asset: MS-Exchange
+    children:
+      93: MS-Exchange:networkAccess
+    id: 81
+    lang_graph_attack_step: Application:networkConnect
+    name: networkConnect
+    parents:
+      79: MS-Exchange:networkConnectUninspected
+      80: MS-Exchange:networkConnectInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:networkConnectInspected:
+    asset: MS-Exchange
+    children:
+      81: MS-Exchange:networkConnect
+      82: MS-Exchange:specificAccessNetworkConnect
+    id: 80
+    lang_graph_attack_step: Application:networkConnectInspected
+    name: networkConnectInspected
+    parents:
+      404: CR1:connectToApplicationsUninspected
+      405: CR1:connectToApplicationsInspected
+    ttc: null
+    type: or
+  MS-Exchange:networkConnectUninspected:
+    asset: MS-Exchange
+    children:
+      72: MS-Exchange:attemptUseVulnerability
+      81: MS-Exchange:networkConnect
+      82: MS-Exchange:specificAccessNetworkConnect
+      112: MS-Exchange:softwareProductVulnerabilityNetworkAccessAchieved
+    id: 79
+    lang_graph_attack_step: Application:networkConnectUninspected
+    name: networkConnectUninspected
+    parents:
+      404: CR1:connectToApplicationsUninspected
+    ttc: null
+    type: or
+  MS-Exchange:read:
+    asset: MS-Exchange
+    children: {}
+    id: 130
+    lang_graph_attack_step: Application:read
+    name: read
+    parents:
+      129: MS-Exchange:successfulRead
+      229: SSRF:read
+      257: Post Auth FW:read
+    ttc: null
+    type: or
+  MS-Exchange:reverseReach:
+    asset: MS-Exchange
+    children:
+      394: CR1:attemptReverseReach
+    id: 77
+    lang_graph_attack_step: Application:reverseReach
+    name: reverseReach
+    parents:
+      76: MS-Exchange:successfulReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:softwareProductVulnerabilityHighPrivilegesAchieved:
+    asset: MS-Exchange
+    children: {}
+    id: 115
+    lang_graph_attack_step: Application:softwareProductVulnerabilityHighPrivilegesAchieved
+    name: softwareProductVulnerabilityHighPrivilegesAchieved
+    parents:
+      90: MS-Exchange:authenticate
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:softwareProductVulnerabilityNetworkAccessAchieved:
+    asset: MS-Exchange
+    children: {}
+    id: 112
+    lang_graph_attack_step: Application:softwareProductVulnerabilityNetworkAccessAchieved
+    name: softwareProductVulnerabilityNetworkAccessAchieved
+    parents:
+      79: MS-Exchange:networkConnectUninspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:specificAccess:
+    asset: MS-Exchange
+    children:
+      72: MS-Exchange:attemptUseVulnerability
+      83: MS-Exchange:accessNetworkAndConnections
+      89: MS-Exchange:bypassContainerization
+      125: MS-Exchange:attemptAuthorizedApplicationRespondConnectThroughData
+      131: MS-Exchange:specificAccessRead
+      135: MS-Exchange:specificAccessModify
+      139: MS-Exchange:specificAccessDelete
+    id: 88
+    lang_graph_attack_step: Application:specificAccess
+    name: specificAccess
+    parents:
+      94: MS-Exchange:fullAccess
+    ttc: null
+    type: or
+  MS-Exchange:specificAccessDelete:
+    asset: MS-Exchange
+    children: {}
+    id: 139
+    lang_graph_attack_step: Application:specificAccessDelete
+    name: specificAccessDelete
+    parents:
+      88: MS-Exchange:specificAccess
+    ttc: null
+    type: or
+  MS-Exchange:specificAccessModify:
+    asset: MS-Exchange
+    children: {}
+    id: 135
+    lang_graph_attack_step: Application:specificAccessModify
+    name: specificAccessModify
+    parents:
+      88: MS-Exchange:specificAccess
+    ttc: null
+    type: or
+  MS-Exchange:specificAccessNetworkConnect:
+    asset: MS-Exchange
+    children: {}
+    id: 82
+    lang_graph_attack_step: Application:specificAccessNetworkConnect
+    name: specificAccessNetworkConnect
+    parents:
+      79: MS-Exchange:networkConnectUninspected
+      80: MS-Exchange:networkConnectInspected
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  MS-Exchange:specificAccessRead:
+    asset: MS-Exchange
+    children: {}
+    id: 131
+    lang_graph_attack_step: Application:specificAccessRead
+    name: specificAccessRead
+    parents:
+      88: MS-Exchange:specificAccess
+    ttc: null
+    type: or
+  MS-Exchange:successfulApplicationRespondConnectThroughData:
+    asset: MS-Exchange
+    children:
+      124: MS-Exchange:applicationRespondConnectThroughData
+    id: 123
+    lang_graph_attack_step: Application:successfulApplicationRespondConnectThroughData
+    name: successfulApplicationRespondConnectThroughData
+    parents:
+      122: MS-Exchange:attemptApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:successfulAuthorizedApplicationRespondConnectThroughData:
+    asset: MS-Exchange
+    children:
+      127: MS-Exchange:authorizedApplicationRespondConnectThroughData
+    id: 126
+    lang_graph_attack_step: Application:successfulAuthorizedApplicationRespondConnectThroughData
+    name: successfulAuthorizedApplicationRespondConnectThroughData
+    parents:
+      125: MS-Exchange:attemptAuthorizedApplicationRespondConnectThroughData
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:successfulDeny:
+    asset: MS-Exchange
+    children:
+      138: MS-Exchange:deny
+    id: 137
+    lang_graph_attack_step: Application:successfulDeny
+    name: successfulDeny
+    parents:
+      136: MS-Exchange:attemptDeny
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:successfulModify:
+    asset: MS-Exchange
+    children:
+      134: MS-Exchange:modify
+    id: 133
+    lang_graph_attack_step: Application:successfulModify
+    name: successfulModify
+    parents:
+      132: MS-Exchange:attemptModify
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:successfulRead:
+    asset: MS-Exchange
+    children:
+      130: MS-Exchange:read
+    id: 129
+    lang_graph_attack_step: Application:successfulRead
+    name: successfulRead
+    parents:
+      128: MS-Exchange:attemptRead
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:successfulReverseReach:
+    asset: MS-Exchange
+    children:
+      77: MS-Exchange:reverseReach
+    id: 76
+    lang_graph_attack_step: Application:successfulReverseReach
+    name: successfulReverseReach
+    parents:
+      75: MS-Exchange:attemptReverseReach
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:successfulUseVulnerability:
+    asset: MS-Exchange
+    children:
+      74: MS-Exchange:useVulnerability
+    id: 73
+    lang_graph_attack_step: Application:successfulUseVulnerability
+    name: successfulUseVulnerability
+    parents:
+      72: MS-Exchange:attemptUseVulnerability
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  MS-Exchange:useVulnerability:
+    asset: MS-Exchange
+    children:
+      117: MS-Exchange:attemptSoftwareProductAbuse
+      232: SSRF:attemptAbuse
+      260: Post Auth FW:attemptAbuse
+    id: 74
+    lang_graph_attack_step: Application:useVulnerability
+    name: useVulnerability
+    parents:
+      73: MS-Exchange:successfulUseVulnerability
+    ttc: null
+    type: or
+  NoAuth:assume:
+    asset: NoAuth
+    children:
+      196: NoPriv:attemptAssume
+    id: 170
+    lang_graph_attack_step: Identity:assume
+    name: assume
+    parents:
+      178: NoAuth:successfulAssume
+    ttc: null
+    type: or
+  NoAuth:attemptAssume:
+    asset: NoAuth
+    children:
+      178: NoAuth:successfulAssume
+    id: 177
+    lang_graph_attack_step: Identity:attemptAssume
+    name: attemptAssume
+    parents:
+      192: NoPriv:assume
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  NoAuth:successfulAssume:
+    asset: NoAuth
+    children:
+      170: NoAuth:assume
+    id: 178
+    lang_graph_attack_step: Identity:successfulAssume
+    name: successfulAssume
+    parents:
+      177: NoAuth:attemptAssume
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  NoPriv:assume:
+    asset: NoPriv
+    children:
+      90: MS-Exchange:authenticate
+      177: NoAuth:attemptAssume
+    id: 192
+    lang_graph_attack_step: Privileges:assume
+    name: assume
+    parents:
+      197: NoPriv:successfulAssume
+    ttc: null
+    type: or
+  NoPriv:attemptAssume:
+    asset: NoPriv
+    children:
+      197: NoPriv:successfulAssume
+    id: 196
+    lang_graph_attack_step: Privileges:attemptAssume
+    name: attemptAssume
+    parents:
+      94: MS-Exchange:fullAccess
+      170: NoAuth:assume
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  NoPriv:successfulAssume:
+    asset: NoPriv
+    children:
+      192: NoPriv:assume
+    id: 197
+    lang_graph_attack_step: Privileges:successfulAssume
+    name: successfulAssume
+    parents:
+      196: NoPriv:attemptAssume
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  OS:attemptSoftwareProductAbuse:
+    asset: OS
+    children: {}
+    id: 46
+    lang_graph_attack_step: Application:attemptSoftwareProductAbuse
+    name: attemptSoftwareProductAbuse
+    parents:
+      3: OS:useVulnerability
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  OS:attemptUseVulnerability:
+    asset: OS
+    children:
+      2: OS:successfulUseVulnerability
+    id: 1
+    lang_graph_attack_step: Application:attemptUseVulnerability
+    name: attemptUseVulnerability
+    parents:
+      7: OS:localConnect
+      89: MS-Exchange:bypassContainerization
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  OS:localConnect:
+    asset: OS
+    children:
+      1: OS:attemptUseVulnerability
+      40: OS:softwareProductVulnerabilityLocalAccessAchieved
+    id: 7
+    lang_graph_attack_step: Application:localConnect
+    name: localConnect
+    parents:
+      94: MS-Exchange:fullAccess
+    ttc: null
+    type: or
+  OS:softwareProductVulnerabilityLocalAccessAchieved:
+    asset: OS
+    children: {}
+    id: 40
+    lang_graph_attack_step: Application:softwareProductVulnerabilityLocalAccessAchieved
+    name: softwareProductVulnerabilityLocalAccessAchieved
+    parents:
+      7: OS:localConnect
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  OS:successfulUseVulnerability:
+    asset: OS
+    children:
+      3: OS:useVulnerability
+    id: 2
+    lang_graph_attack_step: Application:successfulUseVulnerability
+    name: successfulUseVulnerability
+    parents:
+      1: OS:attemptUseVulnerability
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  OS:useVulnerability:
+    asset: OS
+    children:
+      46: OS:attemptSoftwareProductAbuse
+    id: 3
+    lang_graph_attack_step: Application:useVulnerability
+    name: useVulnerability
+    parents:
+      2: OS:successfulUseVulnerability
+    ttc: null
+    type: or
+  Post Auth FW:abuse:
+    asset: Post Auth FW
+    children:
+      261: Post Auth FW:attemptExploit
+    id: 265
+    lang_graph_attack_step: SoftwareVulnerability:abuse
+    name: abuse
+    parents:
+      255: Post Auth FW:userInteractionAchieved
+      260: Post Auth FW:attemptAbuse
+    ttc: null
+    type: and
+  Post Auth FW:attemptAbuse:
+    asset: Post Auth FW
+    children:
+      249: Post Auth FW:inherentUserInteraction
+      265: Post Auth FW:abuse
+    id: 260
+    lang_graph_attack_step: SoftwareVulnerability:attemptAbuse
+    name: attemptAbuse
+    parents:
+      74: MS-Exchange:useVulnerability
+    tags:
+    - hidden
+    - hidden
+    ttc: null
+    type: or
+  Post Auth FW:attemptExploit:
+    asset: Post Auth FW
+    children:
+      262: Post Auth FW:exploitTrivially
+      263: Post Auth FW:exploitWithEffort
+    id: 261
+    lang_graph_attack_step: SoftwareVulnerability:attemptExploit
+    name: attemptExploit
+    parents:
+      265: Post Auth FW:abuse
+    tags:
+    - hidden
+    - Override
+    ttc: null
+    type: or
+  Post Auth FW:deny:
+    asset: Post Auth FW
+    children:
+      138: MS-Exchange:deny
+    id: 259
+    lang_graph_attack_step: SoftwareVulnerability:deny
+    name: deny
+    parents:
+      256: Post Auth FW:impact
+    ttc: null
+    type: and
+  Post Auth FW:exploit:
+    asset: Post Auth FW
+    children:
+      256: Post Auth FW:impact
+    id: 266
+    lang_graph_attack_step: SoftwareVulnerability:exploit
+    name: exploit
+    parents:
+      262: Post Auth FW:exploitTrivially
+      263: Post Auth FW:exploitWithEffort
+    ttc: null
+    type: or
+  Post Auth FW:exploitTrivially:
+    asset: Post Auth FW
+    children:
+      266: Post Auth FW:exploit
+    id: 262
+    lang_graph_attack_step: SoftwareVulnerability:exploitTrivially
+    name: exploitTrivially
+    parents:
+      261: Post Auth FW:attemptExploit
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  Post Auth FW:exploitWithEffort:
+    asset: Post Auth FW
+    children:
+      266: Post Auth FW:exploit
+    id: 263
+    lang_graph_attack_step: SoftwareVulnerability:exploitWithEffort
+    name: exploitWithEffort
+    parents:
+      261: Post Auth FW:attemptExploit
+    tags:
+    - hidden
+    ttc:
+      arguments:
+      - 0.01
+      name: Exponential
+      type: function
+    type: and
+  Post Auth FW:impact:
+    asset: Post Auth FW
+    children:
+      257: Post Auth FW:read
+      258: Post Auth FW:modify
+      259: Post Auth FW:deny
+    id: 256
+    lang_graph_attack_step: SoftwareVulnerability:impact
+    name: impact
+    parents:
+      266: Post Auth FW:exploit
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  Post Auth FW:inherentUserInteraction:
+    asset: Post Auth FW
+    children:
+      255: Post Auth FW:userInteractionAchieved
+    id: 249
+    lang_graph_attack_step: SoftwareVulnerability:inherentUserInteraction
+    name: inherentUserInteraction
+    parents:
+      260: Post Auth FW:attemptAbuse
+    ttc:
+      arguments: []
+      name: HardAndUncertain
+      type: function
+    type: or
+  Post Auth FW:modify:
+    asset: Post Auth FW
+    children:
+      134: MS-Exchange:modify
+    id: 258
+    lang_graph_attack_step: SoftwareVulnerability:modify
+    name: modify
+    parents:
+      256: Post Auth FW:impact
+    ttc: null
+    type: and
+  Post Auth FW:read:
+    asset: Post Auth FW
+    children:
+      130: MS-Exchange:read
+    id: 257
+    lang_graph_attack_step: SoftwareVulnerability:read
+    name: read
+    parents:
+      256: Post Auth FW:impact
+    ttc: null
+    type: and
+  Post Auth FW:userInteractionAchieved:
+    asset: Post Auth FW
+    children:
+      265: Post Auth FW:abuse
+    id: 255
+    lang_graph_attack_step: SoftwareVulnerability:userInteractionAchieved
+    name: userInteractionAchieved
+    parents:
+      249: Post Auth FW:inherentUserInteraction
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  SSRF:abuse:
+    asset: SSRF
+    children:
+      233: SSRF:attemptExploit
+    id: 237
+    lang_graph_attack_step: SoftwareVulnerability:abuse
+    name: abuse
+    parents:
+      232: SSRF:attemptAbuse
+    ttc: null
+    type: and
+  SSRF:attemptAbuse:
+    asset: SSRF
+    children:
+      237: SSRF:abuse
+    id: 232
+    lang_graph_attack_step: SoftwareVulnerability:attemptAbuse
+    name: attemptAbuse
+    parents:
+      74: MS-Exchange:useVulnerability
+    tags:
+    - hidden
+    - hidden
+    ttc: null
+    type: or
+  SSRF:attemptExploit:
+    asset: SSRF
+    children:
+      234: SSRF:exploitTrivially
+      235: SSRF:exploitWithEffort
+    id: 233
+    lang_graph_attack_step: SoftwareVulnerability:attemptExploit
+    name: attemptExploit
+    parents:
+      237: SSRF:abuse
+    tags:
+    - hidden
+    - Override
+    ttc: null
+    type: or
+  SSRF:deny:
+    asset: SSRF
+    children:
+      138: MS-Exchange:deny
+    id: 231
+    lang_graph_attack_step: SoftwareVulnerability:deny
+    name: deny
+    parents:
+      228: SSRF:impact
+    ttc: null
+    type: and
+  SSRF:exploit:
+    asset: SSRF
+    children:
+      228: SSRF:impact
+    id: 238
+    lang_graph_attack_step: SoftwareVulnerability:exploit
+    name: exploit
+    parents:
+      234: SSRF:exploitTrivially
+      235: SSRF:exploitWithEffort
+    ttc: null
+    type: or
+  SSRF:exploitTrivially:
+    asset: SSRF
+    children:
+      238: SSRF:exploit
+    id: 234
+    lang_graph_attack_step: SoftwareVulnerability:exploitTrivially
+    name: exploitTrivially
+    parents:
+      233: SSRF:attemptExploit
+    tags:
+    - hidden
+    ttc: null
+    type: and
+  SSRF:exploitWithEffort:
+    asset: SSRF
+    children:
+      238: SSRF:exploit
+    id: 235
+    lang_graph_attack_step: SoftwareVulnerability:exploitWithEffort
+    name: exploitWithEffort
+    parents:
+      233: SSRF:attemptExploit
+    tags:
+    - hidden
+    ttc:
+      arguments:
+      - 0.01
+      name: Exponential
+      type: function
+    type: and
+  SSRF:impact:
+    asset: SSRF
+    children:
+      229: SSRF:read
+      230: SSRF:modify
+      231: SSRF:deny
+    id: 228
+    lang_graph_attack_step: SoftwareVulnerability:impact
+    name: impact
+    parents:
+      238: SSRF:exploit
+    tags:
+    - hidden
+    ttc: null
+    type: or
+  SSRF:modify:
+    asset: SSRF
+    children:
+      134: MS-Exchange:modify
+    id: 230
+    lang_graph_attack_step: SoftwareVulnerability:modify
+    name: modify
+    parents:
+      228: SSRF:impact
+    ttc: null
+    type: and
+  SSRF:read:
+    asset: SSRF
+    children:
+      130: MS-Exchange:read
+    id: 229
+    lang_graph_attack_step: SoftwareVulnerability:read
+    name: read
+    parents:
+      228: SSRF:impact
+    ttc: null
+    type: and

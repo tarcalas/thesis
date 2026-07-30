@@ -1,0 +1,138 @@
+assets:
+  0:
+    associated_assets:
+      appExecutedApps:
+        1: MS-Exchange
+      hostHardware:
+        2: Device
+    extras:
+      position:
+        x: -369.0
+        y: -228.0
+    name: OS
+    type: Application
+  1:
+    associated_assets:
+      appConnections:
+        10: CR1
+      executionPrivIAMs:
+        4: NoPriv
+      hostApp:
+        0: OS
+      vulnerabilities:
+        5: SSRF
+        6: Post Auth FW
+    extras:
+      position:
+        x: -806.0
+        y: -164.0
+    name: MS-Exchange
+    type: Application
+  2:
+    associated_assets:
+      sysExecutedApps:
+        0: OS
+    extras:
+      position:
+        x: -144.0
+        y: -405.0
+    name: Device
+    type: Hardware
+  3:
+    associated_assets:
+      subprivileges:
+        4: NoPriv
+    extras:
+      position:
+        x: -966.0
+        y: -432.0
+    name: NoAuth
+    type: Identity
+  4:
+    associated_assets:
+      IAMOwners:
+        3: NoAuth
+      execPrivApps:
+        1: MS-Exchange
+    extras:
+      position:
+        x: -917.0
+        y: -309.0
+    name: NoPriv
+    type: Privileges
+  5:
+    associated_assets:
+      application:
+        1: MS-Exchange
+    defenses:
+      notPresent: 1.0
+    extras:
+      position:
+        x: -964.0
+        y: -54.0
+    name: SSRF
+    type: SoftwareVulnerability
+  6:
+    associated_assets:
+      application:
+        1: MS-Exchange
+    defenses:
+      userInteractionRequired: 0.5
+    extras:
+      position:
+        x: -647.0
+        y: -58.0
+    name: Post Auth FW
+    type: SoftwareVulnerability
+  7:
+    associated_assets:
+      appConnections:
+        9: CR2
+    extras:
+      position:
+        x: -696.0
+        y: -689.0
+    name: AttackerApp
+    type: Application
+  8:
+    associated_assets:
+      netConnections:
+        9: CR2
+        10: CR1
+    extras:
+      position:
+        x: -578.0
+        y: -418.0
+    name: Internet
+    type: Network
+  9:
+    associated_assets:
+      applications:
+        7: AttackerApp
+      networks:
+        8: Internet
+    extras:
+      position:
+        x: -599.0
+        y: -547.0
+    name: CR2
+    type: ConnectionRule
+  10:
+    associated_assets:
+      applications:
+        1: MS-Exchange
+      networks:
+        8: Internet
+    extras:
+      position:
+        x: -613.0
+        y: -303.0
+    name: CR1
+    type: ConnectionRule
+metadata:
+  MAL-Toolbox Version: 2.8.0
+  info: Created by the mal-toolbox model python module.
+  langID: org.mal-lang.coreLang
+  langVersion: 1.0.0
+  malVersion: 0.1.0-SNAPSHOT
+  name: proxyLogon-v3-noSSRF

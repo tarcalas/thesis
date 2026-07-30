@@ -13,7 +13,7 @@ assets:
     associated_assets:
       incomingAuthenticationRule:
         10: OS-app2
-      operatingSystem:
+      supervisorApp:
         2: OS
       outgoingAuthenticationRule:
         11: app2-420
@@ -47,7 +47,7 @@ assets:
       incomingAuthenticationRule:
         8: OS-app1
         20: 420-app1
-      operatingSystem:
+      supervisorApp:
         2: OS
     extras:
       position:
@@ -136,7 +136,7 @@ assets:
     type: AuthenticatedAccessChannel
   11:
     associated_assets:
-      outPort:
+      outDataChannel:
         19: '420'
       senderApp:
         1: app2
@@ -220,10 +220,10 @@ assets:
         x: -1156.5
         y: -1075.5
     name: '80'
-    type: Port
+    type: DataChannel
   18:
     associated_assets:
-      outPort:
+      outDataChannel:
         17: '80'
       privilege:
         6: Root
@@ -246,10 +246,10 @@ assets:
         x: -1446.0
         y: -991.5
     name: '420'
-    type: Port
+    type: DataChannel
   20:
     associated_assets:
-      inPort:
+      inDataChannel:
         19: '420'
       receiverApp:
         3: app1

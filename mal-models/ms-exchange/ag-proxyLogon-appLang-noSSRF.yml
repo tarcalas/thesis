@@ -1,0 +1,69 @@
+attack_steps:
+  Frontend:connectToModule:
+    asset: Frontend
+    children: {}
+    id: 14
+    lang_graph_attack_step: Module:connectToModule
+    name: connectToModule
+    parents:
+      67: MS-Exchange-Frontend:attemptCommunication
+    ttc: null
+    type: or
+  MS-Exchange-Frontend:attemptAuthenticatedCommunication:
+    asset: MS-Exchange-Frontend
+    children:
+      67: MS-Exchange-Frontend:attemptCommunication
+    id: 66
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptAuthenticatedCommunication
+    name: attemptAuthenticatedCommunication
+    parents:
+      6: NoPriv:assumePrivilege
+      12: MS-Exchange:interactWithApplication
+    ttc: null
+    type: and
+  MS-Exchange-Frontend:attemptCommunication:
+    asset: MS-Exchange-Frontend
+    children:
+      14: Frontend:connectToModule
+    id: 67
+    lang_graph_attack_step: AuthenticatedAccessChannel:attemptCommunication
+    name: attemptCommunication
+    parents:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    ttc: null
+    type: or
+  MS-Exchange:interactWithApplication:
+    asset: MS-Exchange
+    children:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    id: 12
+    lang_graph_attack_step: Application:interactWithApplication
+    name: interactWithApplication
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NoAuth:assumeIdentity:
+    asset: NoAuth
+    children:
+      6: NoPriv:assumePrivilege
+    id: 0
+    lang_graph_attack_step: Identity:assumeIdentity
+    name: assumeIdentity
+    parents: {}
+    tags:
+    - entrypoint
+    ttc: null
+    type: or
+  NoPriv:assumePrivilege:
+    asset: NoPriv
+    children:
+      66: MS-Exchange-Frontend:attemptAuthenticatedCommunication
+    id: 6
+    lang_graph_attack_step: Privilege:assumePrivilege
+    name: assumePrivilege
+    parents:
+      0: NoAuth:assumeIdentity
+    ttc: null
+    type: or

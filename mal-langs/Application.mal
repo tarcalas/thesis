@@ -7,7 +7,7 @@ category Component {
     asset Application
     {     
         | interactWithApplication @entrypoint //this should be used in parallel with the assumeIdentity entry point
-            -> outgoingAuthenticationRule.attemptCommunication
+            -> outgoingAuthenticationRule.attemptAuthenticatedCommunication
 
         | interactWithSupervisor //this signifies escaping from a sandbox
     }
@@ -99,7 +99,7 @@ category Vulnerability {
     abstract asset ModuleVulnerability
     {
         | abuse
-             -> impact //TODO
+             -> impact
 
         | impact
 
@@ -209,10 +209,10 @@ category Vulnerability {
         
         //The attack steps based on the defenses (the base case is no impact)
         & modifyMemory
-            -> null
+            -> module.writtenData.write
 
         & readMemory
-            -> null
+            -> module.readData.read
 
         & modifyFilesOrDirectories
             -> module.readData.read,
@@ -262,7 +262,10 @@ category Vulnerability {
             -> null
 
         & alterExecutionLogic
-            -> null
+            -> module.readData.read,
+            module.writtenData.write,
+            module.controlledAuthenticationRules.attemptCommunication,
+            module.ranApplication.interactWithSupervisor
 
         & qualityDegradation
             -> null

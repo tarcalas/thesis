@@ -11,9 +11,9 @@ import yaml
 
 def main():
     parser = argparse.ArgumentParser(description='Visualise an attack graph in Neo4j')
-    parser.add_argument('attack_graph_path', type=str, help='Path to the attack graph YAML file')
-    parser.add_argument('language_graph_path', type=str, help='Path to the language graph YAML file')
-    parser.add_argument('model_file_path', type=str, help='Path to the model file')
+    parser.add_argument('--attack_graph_path', type=str, help='Path to the attack graph YAML file')
+    parser.add_argument('--language_graph_path', type=str, help='Path to the language graph YAML file')
+    parser.add_argument('--model_file_path', type=str, help='Path to the model file')
     args = parser.parse_args()
 
     with open(args.attack_graph_path, 'r') as f:

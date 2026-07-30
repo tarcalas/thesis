@@ -1,26 +1,14 @@
 assets:
   0:
     associated_assets:
-      operatingSystem:
-        1: OS
       outgoingAuthenticationRule:
         2: app2-CoreModule
     extras:
       position:
-        x: -455.0
-        y: -461.0
+        x: -531.6245901639344
+        y: -166.027868852459
     name: app2
     type: Application
-  1:
-    associated_assets:
-      application:
-        0: app2
-    extras:
-      position:
-        x: -445.0
-        y: -633.0
-    name: OS
-    type: OperatingSystem
   2:
     associated_assets:
       app:
@@ -56,8 +44,8 @@ assets:
         3: NoPriv
     extras:
       position:
-        x: -1027.5
-        y: 1000.5
+        x: -706.0377049180329
+        y: 850.2639344262296
     name: NoAuth
     type: Identity
   5:
@@ -118,13 +106,13 @@ assets:
         10: CoreModule-80
     extras:
       position:
-        x: -958.5
-        y: -132.0
+        x: -930.7622950819674
+        y: -150.9344262295082
     name: '80'
-    type: Port
+    type: DataChannel
   10:
     associated_assets:
-      outPort:
+      outDataChannel:
         9: '80'
       privilege:
         3: NoPriv
@@ -142,13 +130,13 @@ assets:
         12: CoreModule-420
     extras:
       position:
-        x: -1576.5
-        y: 264.0
+        x: -1638.4770491803279
+        y: 270.00491803278686
     name: '420'
-    type: Port
+    type: DataChannel
   12:
     associated_assets:
-      outPort:
+      outDataChannel:
         11: '420'
       privilege:
         3: NoPriv
@@ -166,4 +154,4 @@ metadata:
   langID: tno-appLang
   langVersion: 1.0.0
   malVersion: 0.1.0-SNAPSHOT
-  name: app2-1.0
+  name: app2

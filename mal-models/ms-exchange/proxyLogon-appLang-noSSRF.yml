@@ -3,6 +3,10 @@ assets:
     associated_assets:
       privileges:
         1: NoPriv
+    extras:
+      position:
+        x: 1136.4862068965517
+        y: 1728.7574712643677
     name: NoAuth
     type: Identity
   1:
@@ -14,6 +18,10 @@ assets:
         8: DOMAIN
         10: NT/SYSTEM-Backend
         12: NT/SYSTEM
+    extras:
+      position:
+        x: 1173.0229885057472
+        y: 1921.0655172413792
     name: NoPriv
     type: Privilege
   2:
@@ -22,6 +30,10 @@ assets:
         5: Backend ECP
       outgoingAuthenticationRule:
         16: MS-Exchange-Frontend
+    extras:
+      position:
+        x: 1119.1793103448274
+        y: 2667.185057471265
     name: MS-Exchange
     type: Application
   3:
@@ -34,10 +46,12 @@ assets:
         14: Frontend - Backen IIS
       readData:
         6: Header
-      vulnerabilities:
-        17: CVE-2021-26855
       writtenData:
         6: Header
+    extras:
+      position:
+        x: 1136.4862068965517
+        y: 2328.7574712643673
     name: Frontend
     type: Module
   4:
@@ -46,6 +60,10 @@ assets:
         14: Frontend - Backen IIS
       outgoingAuthenticationRule:
         15: Backen IIS - Backend ECP
+    extras:
+      position:
+        x: 399.98160919540214
+        y: 2826.7931034482754
     name: Backen IIS
     type: Module
   5:
@@ -55,7 +73,11 @@ assets:
       ranApplication:
         2: MS-Exchange
       vulnerabilities:
-        18: CVE-2021-27065
+        18: PostAuthFW
+    extras:
+      position:
+        x: 788.4252873563216
+        y: 3007.554022988505
     name: Backend ECP
     type: Module
   6:
@@ -66,6 +88,10 @@ assets:
         3: Frontend
       writerModule:
         3: Frontend
+    extras:
+      position:
+        x: 1365.3218390804598
+        y: 2797.9482758620693
     name: Header
     type: Data
   7:
@@ -74,6 +100,10 @@ assets:
         6: Header
       dependentIdentity:
         10: NT/SYSTEM-Backend
+    extras:
+      position:
+        x: 1249.9425287356319
+        y: 3034.475862068965
     name: Header Info
     type: Information
   8:
@@ -83,6 +113,10 @@ assets:
       privileges:
         1: NoPriv
         9: Token-Serialization
+    extras:
+      position:
+        x: 626.8942528735631
+        y: 1747.9965517241376
     name: DOMAIN
     type: Identity
   9:
@@ -91,6 +125,10 @@ assets:
         14: Frontend - Backen IIS
       identity:
         8: DOMAIN
+    extras:
+      position:
+        x: 0.0
+        y: 1800.0
     name: Token-Serialization
     type: Privilege
   10:
@@ -102,12 +140,20 @@ assets:
         11: SYSTEM-Backend
       rightIdentities:
         12: NT/SYSTEM
+    extras:
+      position:
+        x: 498.05402298850566
+        y: 1928.757471264368
     name: NT/SYSTEM-Backend
     type: Identity
   11:
     associated_assets:
       identity:
         10: NT/SYSTEM-Backend
+    extras:
+      position:
+        x: -376.9057471264368
+        y: 2178.7459770114942
     name: SYSTEM-Backend
     type: Privilege
   12:
@@ -117,6 +163,10 @@ assets:
       privileges:
         1: NoPriv
         13: SYSTEM
+    extras:
+      position:
+        x: 396.135632183908
+        y: 2394.1206896551726
     name: NT/SYSTEM
     type: Identity
   13:
@@ -125,6 +175,10 @@ assets:
         15: Backen IIS - Backend ECP
       identity:
         12: NT/SYSTEM
+    extras:
+      position:
+        x: -386.5206896551724
+        y: 2730.643678160919
     name: SYSTEM
     type: Privilege
   14:
@@ -135,6 +189,10 @@ assets:
         4: Backen IIS
       senderModule:
         3: Frontend
+    extras:
+      position:
+        x: 123.07126436781608
+        y: 2692.1839080459768
     name: Frontend - Backen IIS
     type: AuthenticatedAccessChannel
   15:
@@ -145,6 +203,10 @@ assets:
         5: Backend ECP
       senderModule:
         4: Backen IIS
+    extras:
+      position:
+        x: 0.0
+        y: 3000.0
     name: Backen IIS - Backend ECP
     type: AuthenticatedAccessChannel
   16:
@@ -155,33 +217,31 @@ assets:
         1: NoPriv
       receiverModule:
         3: Frontend
+    extras:
+      position:
+        x: 1305.7091954022987
+        y: 2132.594252873563
     name: MS-Exchange-Frontend
     type: AuthenticatedAccessChannel
-  17:
-    associated_assets:
-      module:
-        3: Frontend
-    defenses:
-      bypassProtectionMechanismImpactLimitation: 0.0
-      executeUnauthorizedCodeImpactLimitation: 0.0
-      readModuleDataImpactLimitation: 0.0
-    name: CVE-2021-26855
-    type: CWEVulnerability
   18:
     associated_assets:
       module:
         5: Backend ECP
     defenses:
-      dosCrashExitRestartImpactLimitation: 0.0
+      dosCrashOrRestartImpactLimitation: 0.0
       executeUnauthorizedCodeImpactLimitation: 0.0
       modifyFilesOrDirectoriesImpactLimitation: 0.0
       readFilesOrDirectoriesImpactLimitation: 0.0
-    name: CVE-2021-27065
+    extras:
+      position:
+        x: 834.5770114942527
+        y: 3199.8528735632176
+    name: PostAuthFW
     type: CWEVulnerability
 metadata:
-  MAL-Toolbox Version: 2.8.1
+  MAL-Toolbox Version: 2.8.0
   info: Created by the mal-toolbox model python module.
   langID: tno-appLang
   langVersion: 1.0.0
   malVersion: 0.1.0-SNAPSHOT
-  name: generated-model
+  name: proxyLogon-appLang-noSSRF

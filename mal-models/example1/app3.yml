@@ -1,8 +1,6 @@
 assets:
   0:
     associated_assets:
-      operatingSystem:
-        1: OS
       outgoingAuthenticationRule:
         2: app3-CoreModule
     extras:
@@ -11,16 +9,6 @@ assets:
         y: -435.0
     name: app3
     type: Application
-  1:
-    associated_assets:
-      application:
-        0: app3
-    extras:
-      position:
-        x: -312.0
-        y: -164.0
-    name: OS
-    type: OperatingSystem
   2:
     associated_assets:
       app:
@@ -53,6 +41,7 @@ assets:
         5: CoreModule
       privileges:
         3: Root
+        10: NoPriv
     extras:
       position:
         x: -1497.0
@@ -83,10 +72,10 @@ assets:
         x: -759.0
         y: 154.0
     name: '80'
-    type: Port
+    type: DataChannel
   7:
     associated_assets:
-      inPort:
+      inDataChannel:
         6: '80'
       receiverModule:
         5: CoreModule
@@ -109,13 +98,26 @@ assets:
     name: PrivEsc
     type: CWEVulnerability
   9:
-    associated_assets: {}
+    associated_assets:
+      privileges:
+        10: NoPriv
     extras:
       position:
         x: -739.5
         y: -633.0
     name: NoAuth
     type: Identity
+  10:
+    associated_assets:
+      identity:
+        4: Admin
+        9: NoAuth
+    extras:
+      position:
+        x: -1070.688524590164
+        y: -721.6852459016394
+    name: NoPriv
+    type: Privilege
 metadata:
   MAL-Toolbox Version: 2.8.0
   info: Created by the mal-toolbox model python module.

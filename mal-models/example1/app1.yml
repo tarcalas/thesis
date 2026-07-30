@@ -1,8 +1,6 @@
 assets:
   0:
     associated_assets:
-      operatingSystem:
-        1: OS
       outgoingAuthenticationRule:
         2: app1-CoreModule
     extras:
@@ -11,16 +9,6 @@ assets:
         y: -462.0
     name: app1
     type: Application
-  1:
-    associated_assets:
-      application:
-        0: app1
-    extras:
-      position:
-        x: -445.0
-        y: -633.0
-    name: OS
-    type: OperatingSystem
   2:
     associated_assets:
       app:
@@ -51,6 +39,7 @@ assets:
     associated_assets:
       privileges:
         3: Root
+        9: NoPriv
     extras:
       position:
         x: -1497.0
@@ -77,10 +66,10 @@ assets:
         x: -781.0
         y: 128.0
     name: '420'
-    type: Port
+    type: DataChannel
   7:
     associated_assets:
-      inPort:
+      inDataChannel:
         6: '420'
       receiverModule:
         5: CoreModule
@@ -91,13 +80,26 @@ assets:
     name: 420-CoreModule
     type: AuthenticatedAccessChannel
   8:
-    associated_assets: {}
+    associated_assets:
+      privileges:
+        9: NoPriv
     extras:
       position:
-        x: -2014.875
-        y: -1042.875
+        x: -1705.5
+        y: -397.5
     name: NoAuth
     type: Identity
+  9:
+    associated_assets:
+      identity:
+        4: Admin
+        8: NoAuth
+    extras:
+      position:
+        x: -1296.0
+        y: -481.5
+    name: NoPriv
+    type: Privilege
 metadata:
   MAL-Toolbox Version: 2.8.0
   info: Created by the mal-toolbox model python module.

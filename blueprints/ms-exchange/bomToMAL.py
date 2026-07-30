@@ -15,9 +15,52 @@ import yaml
 import json
 from maltoolbox.model import Model
 from maltoolbox.language import LanguageGraph
+import requests
+from bs4 import BeautifulSoup
+import requests
+
+
 
 
 class BlueprintToMAL:
+    CWE_CONSEQUENCE_MAP = {
+    "Read Application Data": "readModuleData",
+    "Read Files or Directories": "readFilesOrDirectories",
+    "Modify Files or Directories": "modifyFilesOrDirectories",
+    "Execute Unauthorized Code or Commands":
+        "executeUnauthorizedCode",
+    "Gain Privileges or Assume Identity":
+        "gainPrivilegesOrAssumeIdentity",
+    "Bypass Protection Mechanism":
+        "bypassProtectionMechanism",
+    "Hide Activities":
+        "hideActivities",
+    "Modify Memory":
+        "modifyMemory",
+    "Read Memory":
+        "readMemory",
+    "Quality Degradation":
+        "qualityDegradation",
+    "Unexpected State":
+        "unexpectedState",
+    "Reduce Reliability":
+        "reduceReliability",
+    "Reduce Performance":
+        "reducePerformance",
+    "DoS: Crash, Exit, or Restart":
+        "dosCrashExitRestart",
+    "DoS: Amplification":
+        "dosAmplification",
+    "DoS: Instability":
+        "dosInstability",
+    "DoS: Resource Consumption (CPU)":
+        "dosResourceCpu",
+    "DoS: Resource Consumption (Memory)":
+        "dosResourceMemory",
+    "DoS: Resource Consumption (Other)":
+        "dosResourceOther"
+    }
+
     def __init__(self, blueprint_json):
         lang = LanguageGraph.load_from_file(
             "/workspaces/thesis/mal-langs/Application.mal"
@@ -45,6 +88,11 @@ class BlueprintToMAL:
         self.application = None
         self.public_module = None
 
+        self.blueprint_vulnerabilities = blueprint_json.get(
+         "vulnerabilities", []
+        )
+        self.vulnerabilities = {}
+        self.cwe_cache = {}
     # --------------------------------------------------
     # Helpers
     # --------------------------------------------------
@@ -496,6 +544,171 @@ class BlueprintToMAL:
                         {channel}
                     )
 
+ 
+    def get_cwe_common_consequences(self, cwe_id):
+        if cwe_id in self.cwe_cache:
+            return self.cwe_cache[cwe_id]
+
+        url = (
+            f"https://cwe-api.mitre.org/api/v1/cwe/weakness/{cwe_id}"
+        )
+
+        try:
+            response = requests.get(url, timeout=15)
+            response.raise_for_status()
+
+            data = response.json()
+
+        except Exception as e:
+            print(f"Failed to fetch CWE-{cwe_id}: {e}")
+
+            self.cwe_cache[cwe_id] = []
+            return []
+
+        consequences = set()
+
+        #
+        # API format:
+        #
+        # {
+        #   "Weaknesses": [
+        #     {
+        #       "CommonConsequences": [
+        #         {
+        #           "Impact": [
+        #             "Bypass Protection Mechanism",
+        #             "Read Application Data"
+        #           ]
+        #         }
+        #       ]
+        #     }
+        #   ]
+        # }
+        #
+
+        weaknesses = data.get("Weaknesses", [])
+
+        if not weaknesses:
+
+            self.cwe_cache[cwe_id] = []
+            return []
+
+        weakness = weaknesses[0]
+
+        for consequence in weakness.get(
+            "CommonConsequences",
+            []
+        ):
+
+            impacts = consequence.get(
+                "Impact",
+                []
+            )
+
+            if isinstance(impacts, str):
+                impacts = [impacts]
+
+            for impact in impacts:
+
+                impact = impact.strip()
+
+                if impact:
+                    consequences.add(impact)
+
+        consequences = list(consequences)
+
+        self.cwe_cache[cwe_id] = consequences
+
+        return consequences
+
+
+
+    def enable_impact(self, vuln_asset, impact_name):
+
+        defense_name = f"{impact_name}ImpactLimitation"
+
+        # maltoolbox uses defenses dictionary in generated models
+        if hasattr(vuln_asset, "defenses"):
+            vuln_asset.defenses[defense_name] = 0.0
+
+        elif hasattr(vuln_asset, "properties"):
+            vuln_asset.properties[defense_name] = 0.0
+
+
+    def build_vulnerabilities(self):
+
+        for vulnerability in self.blueprint_vulnerabilities:
+
+            vuln_name = vulnerability.get(
+                "id",
+                vulnerability["bom-ref"]
+            )
+
+            vuln_asset = self.create_asset(
+                vuln_name,
+                "CWEVulnerability"
+            )
+
+            self.vulnerabilities[
+                vulnerability["bom-ref"]
+            ] = vuln_asset
+
+            # --------------------------------------------------
+            # Link vulnerability to affected modules
+            # --------------------------------------------------
+            for affected in vulnerability.get(
+                "affects",
+                []
+            ):
+
+                module = self.mal_assets.get(
+                    affected["ref"]
+                )
+
+                if not module:
+                    continue
+
+                module.add_associated_assets(
+                    "vulnerabilities",
+                    {vuln_asset}
+                )
+
+            # --------------------------------------------------
+            # Retrieve impacts from CWE
+            # --------------------------------------------------
+            for weakness in vulnerability.get(
+                "weaknesses",
+                []
+            ):
+
+                cwe_id = weakness.get("cweId")
+
+                if not cwe_id:
+                    continue
+
+                consequences = (
+                    self.get_cwe_common_consequences(
+                        cwe_id
+                    )
+                )
+                print(consequences)
+
+                for consequence in consequences:
+
+                    attack_step = (
+                        self.CWE_CONSEQUENCE_MAP.get(
+                            consequence
+                        )
+                    )
+
+                    if not attack_step:
+                        continue
+
+                    self.enable_impact(
+                        vuln_asset,
+                        attack_step
+                    )
+
     # --------------------------------------------------
     # Build model
     # --------------------------------------------------
@@ -523,6 +736,7 @@ class BlueprintToMAL:
 
         self.link_channels()
 
+        self.build_vulnerabilities()
 
         return self.model
 # --------------------------------------------------

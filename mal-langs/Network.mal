@@ -6,6 +6,9 @@ category Component{
         | physicalAccess @entrypoint
 
         | attemptNetworkCommunication
+
+        | controlDevice @entrypoint
+            -> controlledAuthenticationRules.attemptCommunication
     }
 
     asset AuthenticatedAccessChannel {
@@ -30,10 +33,14 @@ category Component{
     }
 
     asset Privilege {
-
+        | assumePrivilege @entrypoint
+            -> attemptAuthenticatedCommunication
     }
 
     asset Identity {
+        | assumeIdentity @entrypoint
+            -> privileges.assumePrivilege,
+            rightIdentities.assumeIdentity
     }
 
 }
@@ -47,5 +54,5 @@ associations {
     Device [controllerDevice]    0..1<-- DeviceControlsAuthentication -->*    [controlledAuthenticationRules] AuthenticatedAccessChannel
     DataChannel [outDataChannel] *<-- DataChannelOutgoingCommunication -->*      [outgoingAuthenticationRule] AuthenticatedAccessChannel
     DataChannel [inDataChannel]   *<-- DataChannelIncomingCommunication -->*     [incomingAuthenticationRule] AuthenticatedAccessChannel
-    Device [device]                   1<--DeviceHasDataChannels-->*                                           [DataChannels] DataChannel
+    Device [device]                   1<--DeviceHasDataChannels-->*                                           [dataChannels] DataChannel
 }

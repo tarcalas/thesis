@@ -15,7 +15,7 @@ assets:
         5: app3-TargetData
       incomingAuthenticationRule:
         7: 80-app3
-      operatingSystem:
+      supervisorApp:
         2: OS
     extras:
       position:
@@ -87,10 +87,10 @@ assets:
         x: -1213.0
         y: -20.0
     name: '80'
-    type: Port
+    type: DataChannel
   7:
     associated_assets:
-      inPort:
+      inDataChannel:
         6: '80'
       receiverApp:
         1: app3

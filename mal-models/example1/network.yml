@@ -1,7 +1,7 @@
 assets:
   0:
     associated_assets:
-      ports:
+      dataChannels:
         1: dev1+80
     extras:
       position:
@@ -20,7 +20,7 @@ assets:
         x: -486.0
         y: -503.0
     name: dev1+80
-    type: Port
+    type: DataChannel
   2:
     associated_assets:
       device:
@@ -32,12 +32,12 @@ assets:
         x: -848.0
         y: -131.0
     name: dev2+80
-    type: Port
+    type: DataChannel
   3:
     associated_assets:
-      inPort:
+      inDataChannel:
         2: dev2+80
-      outPort:
+      outDataChannel:
         1: dev1+80
     extras:
       position:
@@ -47,7 +47,7 @@ assets:
     type: AuthenticatedAccessChannel
   4:
     associated_assets:
-      ports:
+      dataChannels:
         2: dev2+80
     extras:
       position:
